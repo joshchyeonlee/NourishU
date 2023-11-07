@@ -1,6 +1,6 @@
 import './App.css';
-// import axios from "axios";
-// import { useState, useEffect } from 'react';
+import axios from "axios";
+import { useState, useEffect } from 'react';
 import { BrowserRouter , Routes, Route } from "react-router-dom";
 import Dashboard from './pages/Dashboard.js'
 import Layout from './pages/Layout.js'
@@ -9,14 +9,15 @@ import Login from './pages/Login.js'
 
 function App() {
   //Ideally, you don't want too much stuff here, should be in components instead
-  // const [ingredients, setIngredients] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
 
-  // useEffect(() => {
-  //   axios.get("http://localhost:3001/ingredients").then((response) => {
-  //     console.log(response.data);
-  //     setIngredients(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    axios.get("http://localhost:3001/").then((response) => {
+      console.log(response.data);
+      setIngredients(response.data);
+    });
+  }, []);
+
   return (
     <BrowserRouter>
     <Routes>
