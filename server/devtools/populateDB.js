@@ -1,6 +1,17 @@
 console.log("get ready to get beaned!!");
 
 //based off of:
+//https://tableplus.com/blog/2018/08/mysql-how-to-drop-all-tables.html
+const findAllTables = 
+`SELECT * 
+FROM information_schema.tables
+WHERE table_schema = 'nourishudb';`
+const dropUserTable = `DROP TABLE IF EXISTS USER;`
+const dropFollowsTable = `DROP TABLE IF EXISTS FOLLOWS;`
+const dropForeignKeyCheck = `SET FOREIGN_KEY_CHECKS = 0;`
+const SETForeignKeyCheck = `SET FOREIGN_KEY_CHECKS = 1;`
+
+//based off of:
 //https://stackoverflow.com/questions/8829102/check-if-mysql-table-exists-without-using-select-from-syntax
 const checkUserTableExists =
 `SELECT * 
@@ -8,9 +19,6 @@ FROM information_schema.tables
 WHERE table_schema = 'nourishudb' 
     AND table_name = 'user'
 LIMIT 1;`
-
-const removeUsersFromUser = 
-`DELETE FROM User`
 
 const createUserTable =
 `CREATE TABLE USER (
@@ -46,6 +54,31 @@ VALUES(4, "beanman3000", "bean@nourishu.com", '1832-02-01', 300, 300, 420, "Bean
 
 const users = [addUser0, addUser1, addUser2, addUser3, addUser4];
 
+const checkFollowsTableExists =
+`SELECT * 
+FROM information_schema.tables
+WHERE table_schema = 'nourishudb' 
+    AND table_name = 'FOLLOWS'
+LIMIT 1;`;
+
+const createFollowsTable=
+`CREATE TABLE FOLLOWS (
+FollowerUserID   INT NOT NULL,
+FolloweeUserID  INT NOT NULL,
+PRIMARY KEY(FollowerUserID, FolloweeUserID),
+FOREIGN KEY(FollowerUserID) REFERENCES USER(UserID) ON UPDATE CASCADE,
+FOREIGN KEY(FolloweeUserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
+
+const addFollower0 = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (0,1);`;
+const addFollower1 = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (0,2);`;
+const addFollower2 = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (0,3);`;
+const addFollower3 = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (1,0);`;
+const addFollower4 = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (3,0);`;
+const addFollower5 = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (2,1);`;
+const addFollower6 = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (1,3);`;
+
+const followers = [addFollower0, addFollower1, addFollower2, addFollower3, addFollower4, addFollower5, addFollower6];
+
 const mysql = require('mysql2');
 const db = mysql.createConnection({
     host: "localhost",
@@ -58,11 +91,11 @@ db.connect((err) => {
     if(err){
         throw(err);
     }
-
+    
     console.log('MySQL connected');
 })
 
-query = (q) => {
+const query = (q) => {
     return new Promise((resolve, reject) => {
         db.query(q, (err, res) => {
             if(err){
@@ -73,22 +106,16 @@ query = (q) => {
     })
 }
 
-checkTable = (check, q, rem, data) => {
+const checkTable = (check, q, data) => {
     return new Promise((resolve, reject) => {
         db.query(check, async (err, res) => {
             if(err){
                 return reject(err);
             }
 
-            if(res[0]){
-                console.log("found table");
-                console.log("removing data in table");
-                await query(rem);
-            } else {
-                console.log("no table found");
-                console.log("creating table");
-                await query(q);
-            }
+            console.log("no table found");
+            console.log("creating table");
+            await query(q);
 
             console.log("adding data to table");
             data.forEach(async e => {
@@ -99,8 +126,20 @@ checkTable = (check, q, rem, data) => {
 }
 
 const runQueries = async () => {
-    const promise = [checkTable(checkUserTableExists, createUserTable, removeUsersFromUser, users)];
-    const result = await Promise.all(promise);
+    const dropForeginKeyCheckPromise = [query(dropForeignKeyCheck)];
+    const allTablesPromise = [query(findAllTables)];
+    await Promise.all(dropForeginKeyCheckPromise, allTablesPromise);
+
+    const dropUserTablePromise = [query(dropUserTable)];
+    const dropFollowsTablePromise = [query(dropFollowsTable)];
+    await Promise.all(dropUserTablePromise, dropFollowsTablePromise);
+
+    const setForeignKeyCheckPromise = [query(SETForeignKeyCheck)];
+    await Promise.all(setForeignKeyCheckPromise);
+
+    const userPromise = [checkTable(checkUserTableExists, createUserTable, users)];
+    const followsPromise = [checkTable(checkFollowsTableExists, createFollowsTable, followers)];
+    await Promise.all(userPromise, followsPromise);
 
     db.end((err) => {
         if(err){
