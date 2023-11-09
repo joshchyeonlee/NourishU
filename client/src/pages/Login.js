@@ -26,7 +26,6 @@ const Login = () => {
         fetchIngredients();
     }, []);
 
-    //date handling from https://www.geeksforgeeks.org/how-to-convert-javascript-datetime-to-mysql-datetime/
     const handleClick = async () => {
         const ingToAdd = {
             UserID: 98,
