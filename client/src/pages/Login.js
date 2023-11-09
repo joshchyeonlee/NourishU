@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Login = () => {
-    const [ingredients, setIngredients] = useState([]);
-    const [ingredientToAdd, setIngredientToAdd] = useState({
+    const [users, setUsers] = useState([]);
+    const [usersToAdd, setUserToAdd] = useState({
         id: 0,
         name: "",
         caloriesPerGram: 0,
@@ -16,7 +16,7 @@ const Login = () => {
         try{
             const res = await axios.get("http://localhost:3001/login")
             console.log(res);
-            setIngredients(res.data);
+            setUsers(res.data);
         } catch(err){
             throw(err);
         }
@@ -26,13 +26,19 @@ const Login = () => {
         fetchIngredients();
     }, []);
 
+    //date handling from https://www.geeksforgeeks.org/how-to-convert-javascript-datetime-to-mysql-datetime/
     const handleClick = async () => {
         const ingToAdd = {
-            id: 3,
-            name: "refried bean",
-            caloriesPerGram: 420,
-            createdAt: new Date(),
-            updatedAt: new Date()
+            UserID: 98,
+            UserName: "the bean guy",
+            UserEmail: "google@google.com",
+            UserBirthdate: "1999-08-19",
+            UserHeight: 290,
+            UserWeight: 135,
+            UserAge: 25,
+            DietName: "Professional Bean Consumer",
+            DietDescription: "Bean",
+            CookingConfidence: 3
         }
 
         try{
@@ -41,7 +47,7 @@ const Login = () => {
             throw(error);
         }
         
-        setIngredientToAdd(ingToAdd);
+        setUserToAdd(ingToAdd);
         fetchIngredients();
     }
 
@@ -50,9 +56,9 @@ const Login = () => {
             <Typography>Login</Typography>
             <Button onClick={handleClick}>Add new bean to ingredient</Button>
             <div>
-                {ingredients.map(ingredient => (<div>
-                    <Typography>Name: {ingredient.name}</Typography>
-                    <Typography>Calories Per Gram: {ingredient.caloriesPerGram}</Typography>
+                {users.map(user => (<div>
+                    <Typography>Name: {user.UserName}</Typography>
+                    <Typography>Diet Name: {user.DietName}</Typography>
                 </div>))}
             </div>
         </div>

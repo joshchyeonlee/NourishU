@@ -28,7 +28,8 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
-    database: "nourishudb"
+    database: "nourishudb",
+    dateStrings: 'date' //https://stackoverflow.com/questions/11187961/date-format-in-node-js
 });
 
 db.connect((err) => {
