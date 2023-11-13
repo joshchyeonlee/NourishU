@@ -29,6 +29,7 @@ The repo is divided into 2 directories, `client` represents the front-end and `s
 
 - Open a terminal session in the `server` directory. Run `npm start` this will automatically create a server session on `localhost:3001`.
 - Open a terminal session in the `client` directory. Run `npm start` to run the client on `localhost:3000`.
+- If you want dummy data for the database, run `npm run getbeans` from the `client` directory.
 
 You'll probably need both running at the same time unless you're only working on one part of it and it doesn't depend on the other side being live.
 Hopefully the `npm` stuff works within this repo without needing extra installations!
@@ -52,6 +53,9 @@ To set this up I used the following videos, it might be worth watching for more 
 1. https://www.youtube.com/watch?v=Hl7diL7SFw8&list=PLpPqplz6dKxUaZ630TY1BFIo5nP-_x-nL&index=2&ab_channel=PedroTech
 1. https://www.youtube.com/watch?v=pJx-HGwaL3w&list=PLpPqplz6dKxUaZ630TY1BFIo5nP-_x-nL&index=3&ab_channel=PedroTech
 1. https://www.youtube.com/watch?v=DO_wR1tx-O0&list=PLpPqplz6dKxUaZ630TY1BFIo5nP-_x-nL&index=3&ab_channel=PedroTech
+1. https://www.w3schools.com/react/react_router.asp
+
+Note that we're not allowed to use sequelize so I refactored the repo to exclude it. This should make it more intuitive for us anyways since it'll have similar structure to the sql stuff we've seen in lecture.
 
 ### More Detail
 
@@ -59,20 +63,17 @@ First of all, you will need to have MySql installed. I have configured the datab
 
 #### server
 
-The only parts that really matter are `models` `routes` and `index.js`
+The only part that really matters is`index.js` (and devtools contains the dummy data stuff)
 `index.js` is the main part of the server.
-For `models`: ignore the `index.js` - this is automatically created.
-
-- there is an `Ingredients.js` file that will automatically create a table in MySql called `Ingredients`. We can basically follow that to create the rest of the tables that we need
-  In `routes`: these are basically the API calls used for the BE and FE to communicate. There's an `Ingredients.js` here as well that we can mimic for other implementations
-  I think everything else, more or less, can be ignored.
 
 #### client
 
 Again, most of this can probably be ignored. The only thing we really need to be concerned about is `src/App.js` which basically acts as the root of the FE. Currently there's way more stuff in there with the `UseEffect` which we will likely need to move into `src/components` after.
-In react, you'll most likely be making a bunch of modular `components` that we can store in `src/components`. Using materialUI (mui) will be helpful for handling a lot of the styling, but we can also throw in css files for each component in `src/components`. There's a basic compoent wit ha mui button that increases the number every time you click on it if you run `npm start` which hopefully will give you a sense of how to use components if you're new to react.
+In react, you'll most likely be making a bunch of modular `components` that we can store in `src/components`. Using materialUI (mui) will be helpful for handling a lot of the styling, but we can also throw in css files for each component in `src/components`. There's a basic component with a mui button that increases the number every time you click on it if you run `npm start` which hopefully will give you a sense of how to use components if you're new to react.
 
 I always find having [mui documentation](https://mui.com/material-ui/react-button/) helpful for building components
+
+Also added react routes for routing between pages in the FE!
 
 Pro tips:
 
