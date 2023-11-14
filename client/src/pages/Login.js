@@ -12,7 +12,7 @@ const Login = () => {
         updatedAt: null
     });
 
-    const fetchIngredients = async () => {
+    const fetchUsers = async () => {
         try{
             const res = await axios.get("http://localhost:3001/login")
             console.log(res);
@@ -23,7 +23,7 @@ const Login = () => {
     }
 
     useEffect(() => {
-        fetchIngredients();
+        fetchUsers();
     }, []);
 
     const handleClick = async () => {
@@ -47,7 +47,7 @@ const Login = () => {
         }
         
         setUserToAdd(ingToAdd);
-        fetchIngredients();
+        fetchUsers();
     }
 
     return (
