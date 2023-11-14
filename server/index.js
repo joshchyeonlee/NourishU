@@ -57,6 +57,50 @@ app.post('/login', (req,res) => {
     })
 })
 
+app.post('/getUserInfo', (req, res) => {
+    const userId = req.body.UserID;
+    let sql = `SELECT * FROM USER WHERE UserID = ?`;
+    // console.log(req);
+    console.log(req);
+    console.log("user")
+    console.log(userId);
+    db.query(sql, userId, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/getFollowingCount', (req, res) => {
+    const userId = req.body.UserID;
+    let sql = `SELECT UserName FROM FOLLOWS JOIN USER ON UserID = FolloweeUserID WHERE FollowerUserID = ?`;
+    // console.log(req);
+    console.log(req);
+    db.query(sql, userId, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/getFollowerCount', (req, res) => {
+    const userId = req.body.UserID;
+    let sql = `SELECT UserName FROM FOLLOWS JOIN USER ON UserID = FollowerUserID WHERE FolloweeUserID = ?`;
+    // console.log(req);
+    console.log(req);
+    db.query(sql, userId, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });

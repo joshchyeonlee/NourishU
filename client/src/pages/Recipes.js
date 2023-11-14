@@ -1,4 +1,4 @@
-import { Typography, Button, Box, Stack } from "@mui/material";
+import { Typography, Button, Stack } from "@mui/material";
 
 const Recipes = () => {
     return (
