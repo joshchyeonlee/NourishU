@@ -1,8 +1,9 @@
-import { Button, Box, Typography, Modal } from "@mui/material";
+import { Button, Box, Typography, Grid } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import Propagation from "../components/propagation";
+import ListModal from "../components/ListModal";
 
 const Profile = () => {
     const [userId, setUserId] = useState("0");
@@ -10,7 +11,9 @@ const Profile = () => {
     const [followingCount, setFollowingCount] = useState();
     const [followerCount, setFollowerCount] = useState();
     const [followingOpen, setFollowingOpen] = useState(false);
+    const [followerOpen, setFollowerOpen] = useState(false);
     const [following, setFollowing] = useState([]);
+    const [followers, setFollowers] = useState([]);
 
     const fetchUsers = async () => {
         const uid = {
@@ -47,6 +50,7 @@ const Profile = () => {
             const res = await axios.post("http://localhost:3001/getFollowerCount", uid)
             console.log(res);
             setFollowerCount(res.data.length);
+            setFollowers(res.data);
         } catch(err){
             throw(err);
         }
@@ -60,43 +64,55 @@ const Profile = () => {
 
     const handleFollowingOpen = () => setFollowingOpen(true);
     const handleFollowingClose = () => setFollowingOpen(false);
-    
-    const modalFormat = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-    };
+    const handleFollowerOpen = () => setFollowerOpen(true);
+    const handleFollowerClose = () => setFollowerOpen(false);
 
     return(
         <div>
-            <Modal open={followingOpen} onClose={handleFollowingClose}>
-                <Box sx={modalFormat}>
-                <Typography>Following</Typography>
-                <div>
-                    {following.map((value, key)=> {
-                        return(<Typography key={key}>{value.UserName}</Typography>)
-                    })}
-                </div>
-                </Box>
-            </Modal>
-            <Button variant="outlined" startIcon={<EditIcon/>}>
+            <ListModal open={followingOpen} onClose={handleFollowingClose} values={following}/>
+            <ListModal open={followerOpen} onClose={handleFollowerClose} values={followers}/>
+            <Button variant="outlined" startIcon={<EditIcon/>} sx={{position:"fixed", top:10, right:10}}>
                 Edit
             </Button>
-            <Typography>Welcome {userName}</Typography>
-            <Button variant="outlined" onClick={handleFollowingOpen}>
-                Following {followingCount}
-            </Button>
-            <Button variant="outlined">
-                Followers {followerCount}
-            </Button>
-            <Box sx={{ border: 1, width: 1/2, minheight: 1/2}}>
-                <Typography>Recipes</Typography>
+            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={4}>
+                <Typography variant="h4">Welcome, {userName}!</Typography>
+                <Grid container spacing={4} padding={3} alignItems="center" justifyContent="center">
+                    <Grid item>
+                        <Button variant="outlined" onClick={handleFollowingOpen}>
+                            Following {followingCount}
+                        </Button>                                
+                    </Grid>
+                    <Grid item>
+                        <Button variant="outlined" onClick={handleFollowerOpen}>
+                            Followers {followerCount}
+                        </Button>
+                    </Grid>
+                </Grid>            
+                <Box sx={{ border: 1, width: "50%", height: "500px", overflow: "hidden", overflowY: "scroll"}} display="flex" flexDirection="column" alignItems="center">
+                    <Typography variant="h6" padding={2}>Your Recipes</Typography>
+                    <Grid container spacing={2} direction="column" justifyContent="center" alignItems="center">
+                        <Grid item>a</Grid>
+                        <Grid item>b</Grid>
+                        <Grid item>c</Grid>
+                        <Grid item>d</Grid>
+                        <Grid item>a</Grid>
+                        <Grid item>b</Grid>
+                        <Grid item>c</Grid>
+                        <Grid item>d</Grid>
+                        <Grid item>a</Grid>
+                        <Grid item>b</Grid>
+                        <Grid item>c</Grid>
+                        <Grid item>d</Grid>
+                        <Grid item>a</Grid>
+                        <Grid item>b</Grid>
+                        <Grid item>c</Grid>
+                        <Grid item>d</Grid>
+                        <Grid item>a</Grid>
+                        <Grid item>b</Grid>
+                        <Grid item>c</Grid>
+                        <Grid item>d</Grid>
+                    </Grid>
+                </Box>
             </Box>
             {/* <Propagation userName={userName}/> */}
         </div>
