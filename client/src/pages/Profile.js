@@ -2,8 +2,8 @@ import { Button, Box, Typography, Grid } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import Propagation from "../components/propagation";
 import ListModal from "../components/ListModal";
+import BottomNav from "../components/BottomNav";
 
 const Profile = () => {
     const [userId, setUserId] = useState("0");
@@ -114,7 +114,7 @@ const Profile = () => {
                     </Grid>
                 </Box>
             </Box>
-            {/* <Propagation userName={userName}/> */}
+            <BottomNav currentPage="Profile" value={2}/>
         </div>
     )
 }
