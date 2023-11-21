@@ -10,7 +10,7 @@ LIMIT 1;`;
 const createTable =
 `CREATE TABLE VITAMINS
 (IngredientID		INT	 		NOT NULL,
-VitaminName		VARCHAR		NOT NULL,
+VitaminName		    VARCHAR(50)	NOT NULL,
 PRIMARY KEY(IngredientID),
 FOREIGN KEY(IngredientID) REFERENCES INGREDIENT(IngredientID) 
 ON UPDATE CASCADE)
