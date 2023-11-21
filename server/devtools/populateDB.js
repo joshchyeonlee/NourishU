@@ -12,6 +12,7 @@ const dropAchievementTable = `DROP TABLE IF EXISTS ACHIEVEMENT;`;
 const dropAchievementsEarnedTable = `DROP TABLE IF EXISTS ACHIEVEMENTS_EARNED;`;
 const dropUserInterestsTable = `DROP TABLE IF EXISTS USER_INTERESTS;`;
 const dropGoalTable = `DROP TABLE IF EXISTS GOAL;`;
+const dropVitaminsTable = `DROP TABLE IF EXISTS VITAMINS`;
 //add more here
 
 const dropForeignKeyCheck = `SET FOREIGN_KEY_CHECKS = 0;`;
@@ -24,6 +25,7 @@ const achievement = require('./dummyAchievementData');
 const achievementsEarned = require('./dummyAchievementsEarnedData');
 const userInterests = require('./dummyUserInterestsData');
 const goal = require('./dummyGoalData');
+const vitamins = require('./dummyVitaminsData');
 //import here
 
 
@@ -85,9 +87,10 @@ const runQueries = async () => {
     const dropAchievementsEarnedTablePromise = [query(dropAchievementsEarnedTable)];
     const dropUserInterestsTablePromise = [query(dropUserInterestsTable)];
     const dropGoalTablePromise = [query(dropGoalTable)];
+    const dropVitaminsTablePromise = [query(dropVitaminsTable)];
 
     //add to end of this
-    await Promise.all(dropUserTablePromise, dropFollowsTablePromise, dropAchievementTablePromise, dropAchievementsEarnedTablePromise, dropUserInterestsTablePromise, dropGoalTablePromise);
+    await Promise.all(dropUserTablePromise, dropFollowsTablePromise, dropAchievementTablePromise, dropAchievementsEarnedTablePromise, dropUserInterestsTablePromise, dropGoalTablePromise, dropVitaminsTable);
 
     const setForeignKeyCheckPromise = [query(setForeignKeyCheck)];
     await Promise.all(setForeignKeyCheckPromise);
@@ -100,9 +103,10 @@ const runQueries = async () => {
     const achievementsEarnedPromise = [checkTable(achievementsEarned.checkTable, achievementsEarned.createTable, achievementsEarned.data)];
     const userInterestsPromise = [checkTable(userInterests.checkTable, userInterests.createTable, userInterests.data)];
     const goalPromise = [checkTable(goal.checkTable, goal.createTable, goal.data)];
+    const vitaminPromise = [checkTable(vitamins.checkTable, vitamins.createTable, vitamins.data)];
     
     //add to end of this
-    await Promise.all(userPromise, followsPromise, achievementPromise, achievementsEarnedPromise, userInterestsPromise, goalPromise);
+    await Promise.all(userPromise, followsPromise, achievementPromise, achievementsEarnedPromise, userInterestsPromise, goalPromise, vitaminPromise);
 
     db.end((err) => {
         if(err){
