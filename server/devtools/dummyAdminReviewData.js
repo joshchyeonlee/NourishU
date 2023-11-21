@@ -14,11 +14,10 @@ PRIMARY KEY(AdminID, ReviewID),
 FOREIGN KEY(AdminID) REFERENCES ADMIN(AdminID) ON UPDATE CASCADE,
 FOREIGN KEY(ReviewID) REFERENCES REVIEW(ReviewID) ON UPDATE CASCADE);`
 
-
 //repopulate this data with data from Admin and Review
-const data1 = `INSERT INTO TABLE ADMIN_REVIEW(AdminID, ReviewID, ReviewFlagged) VALUES (0, 0, 0)`;
-const data2 = `INSERT INTO TABLE ADMIN_REVIEW(AdminID, ReviewID, ReviewFlagged) VALUES (0, 0, 0)`;
-const data3 = `INSERT INTO TABLE ADMIN_REVIEW(AdminID, ReviewID, ReviewFlagged) VALUES (0, 0, 0)`;
+const data1 = `INSERT INTO ADMIN_REVIEW(AdminID, ReviewID, ReviewFlagged) VALUES (0, 0, 0)`;
+const data2 = `INSERT INTO ADMIN_REVIEW(AdminID, ReviewID, ReviewFlagged) VALUES (1, 2, 1)`;
+const data3 = `INSERT INTO ADMIN_REVIEW(AdminID, ReviewID, ReviewFlagged) VALUES (2, 1, 0)`;
 
 const data = [data1, data2, data3];
 
