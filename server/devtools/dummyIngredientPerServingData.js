@@ -16,21 +16,17 @@ CREATE TABLE INGREDIENT_PER_SERVING
     FOREIGN KEY (IngredientID) REFERENCES INGREDIENT(IngredientID) ON UPDATE CASCADE
 );`;
 
-const apple = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(01, 100)`
-const bean = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(02, 100)`
-const chicken = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(03, 100)`
-const beef = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(04, 100)`
-const salmon = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(05, 100)`
-const shrimp = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(06, 100)`
-const egg = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(07, 100)`
-const rice = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(08, 100)`
-const bread = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(09, 100)`
+const apple = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(1, 80)`
+const bean = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(2, 3)`
+const egg = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(7, 100)`
+const rice = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(8, 250)`
 const cheese = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(10, 100)`
-const strawberry = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(11, 100)`
+const strawberry = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(11, 90)`
 const banana = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(12, 100)`
+const proteinPowder = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(13, 100)`
 
 
 
-const data = [apple, bean, chicken, beef, salmon, shrimp, egg, rice, bread, cheese, strawberry, banana];
+const data = [apple, bean, egg, rice, cheese, strawberry, banana, proteinPowder];
 
 module.exports = { checkTable, createTable, data };
