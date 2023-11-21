@@ -12,7 +12,10 @@ const dropAchievementTable = `DROP TABLE IF EXISTS ACHIEVEMENT;`;
 const dropAchievementsEarnedTable = `DROP TABLE IF EXISTS ACHIEVEMENTS_EARNED;`;
 const dropUserInterestsTable = `DROP TABLE IF EXISTS USER_INTERESTS;`;
 const dropGoalTable = `DROP TABLE IF EXISTS GOAL;`;
-
+const dropIngredientTable = `DROP TABLE IF EXISTS INGREDIENT;`;
+const dropVitaminsTable = `DROP TABLE IF EXISTS VITAMINS;`;
+const dropIngredientPerServingTable = `DROP TABLE IF EXISTS INGREDIENT_PER_SERVING;`;
+const dropIngredientPer100gTable = `DROP TABLE IF EXISTS INGREDIENT_PER_100g`;
 const dropMealTable = `DROP TABLE IF EXISTS MEAL;`;
 const dropRecipeTable = `DROP TABLE IF EXISTS RECIPE;`;
 const dropMealContainsRecipeTable = `DROP TABLE IF EXISTS MEAL_CONTAINS_RECIPE;`;
@@ -28,10 +31,13 @@ const achievement = require('./dummyAchievementData');
 const achievementsEarned = require('./dummyAchievementsEarnedData');
 const userInterests = require('./dummyUserInterestsData');
 const goal = require('./dummyGoalData');
-
+const ingredient = require('./dummyIngredientData');
+const vitamins = require('./dummyVitaminsData');
+const ingredientPerServing = require('./dummyIngredientPerServingData');
+const ingredientPer100g = require('./dummyIngredientPer100g');
 const meal = require('./dummyMealData');
-const recipe = require('./dummyRecipeData')
-const mealContainsRecipe = require('./dummyMealContainsRecipeData')
+const recipe = require('./dummyRecipeData');
+const mealContainsRecipe = require('./dummyMealContainsRecipeData');
 //import here
 
 
@@ -93,13 +99,17 @@ const runQueries = async () => {
     const dropAchievementsEarnedTablePromise = [query(dropAchievementsEarnedTable)];
     const dropUserInterestsTablePromise = [query(dropUserInterestsTable)];
     const dropGoalTablePromise = [query(dropGoalTable)];
+    const dropIngredientTablePromise = [query(dropIngredientTable)];
+    const dropVitaminsTablePromise = [query(dropVitaminsTable)];
+    const dropIngredientPerServingTablePromise = [query(dropIngredientPerServingTable)];
+    const dropIngredientPer100gPromise = [query(dropIngredientPer100gTable)];
 
     const dropMealTablePromise = [query(dropMealTable)];
     const dropRecipeTablePromise = [query(dropRecipeTable)];
     const dropMealContainsRecipePromise = [query(dropMealContainsRecipeTable)];
 
     //add to end of this
-    await Promise.all(dropUserTablePromise, dropFollowsTablePromise, dropAchievementTablePromise, dropAchievementsEarnedTablePromise, dropUserInterestsTablePromise, dropGoalTablePromise, dropMealTablePromise, dropRecipeTablePromise, dropMealContainsRecipePromise);
+    await Promise.all(dropUserTablePromise, dropFollowsTablePromise, dropAchievementTablePromise, dropAchievementsEarnedTablePromise, dropUserInterestsTablePromise, dropGoalTablePromise, dropIngredientTablePromise, dropVitaminsTablePromise, dropIngredientPerServingTablePromise, dropIngredientPer100gPromise, dropMealTablePromise, dropRecipeTablePromise, dropMealContainsRecipePromise);
 
     const setForeignKeyCheckPromise = [query(setForeignKeyCheck)];
     await Promise.all(setForeignKeyCheckPromise);
@@ -112,13 +122,18 @@ const runQueries = async () => {
     const achievementsEarnedPromise = [checkTable(achievementsEarned.checkTable, achievementsEarned.createTable, achievementsEarned.data)];
     const userInterestsPromise = [checkTable(userInterests.checkTable, userInterests.createTable, userInterests.data)];
     const goalPromise = [checkTable(goal.checkTable, goal.createTable, goal.data)];
+    const ingredientPromise = [checkTable(ingredient.checkTable, ingredient.createTable, ingredient.data)];
+    const vitaminPromise = [checkTable(vitamins.checkTable, vitamins.createTable, vitamins.data)];
+    const ingredientPerServingPromise = [checkTable(ingredientPerServing.checkTable, ingredientPerServing.createTable, ingredientPerServing.data)];
+    const ingredientPer100gPromise = [checkTable(ingredientPer100g.checkTable, ingredientPer100g.createTable, ingredientPer100g.data)];
+    
 
     const mealPromise = [checkTable(meal.checkTable, meal.createTable, meal.data)];
     const recipePromise = [checkTable(recipe.checkTable, recipe.createTable, recipe.data)];
     const mealContainsRecipePromise = [checkTable(mealContainsRecipe.checkTable, mealContainsRecipe.createTable, mealContainsRecipe.data)];
     
     //add to end of this
-    await Promise.all(userPromise, followsPromise, achievementPromise, achievementsEarnedPromise, userInterestsPromise, goalPromise, mealPromise, recipePromise, mealContainsRecipePromise);
+    await Promise.all(userPromise, followsPromise, achievementPromise, achievementsEarnedPromise, userInterestsPromise, goalPromise, ingredientPromise, vitaminPromise, ingredientPerServingPromise, ingredientPer100gPromise, mealPromise, recipePromise, mealContainsRecipePromise);
 
     db.end((err) => {
         if(err){
