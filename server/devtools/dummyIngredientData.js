@@ -34,17 +34,8 @@ const bread = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Prote
 const cheese = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (10, "Cheese", 1.3, 25.0, 21.0, 12.0, 100, 402, 0, '2023-11-20');`;
 const strawberry = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (11, "Strawberry", 2.07, 0.18, 0.08, 0.0, 20, 6, 0, '2023-11-20');`;
 const banana = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (12, "Banana", 2.07, 0.18, 0.08, 0.0, 20, 6, 0, '2023-11-20');`;
-const vA = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (0, "Vitamin A", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vC = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (1, "Vitamin C", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vD = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (2, "Vitamin D", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vE = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (3, "Vitamin E", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vK = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (4, "Vitamin K", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vB1 = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (5, "Vitamin B1", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vB2 = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (6, "Vitamin B2", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vB6 = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (7, "Vitamin B6", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
-const vB12 = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (8, "Vitamin B12", 0.0, 0.1, 0.0, 0.0, 5, 0, 0, '2023-11-20');`;
 
+const data = [apple, bean, chicken, beef, salmon, shrimp, egg, rice, bread, cheese, strawberry, banana];
 
-const data = [apple, bean, chicken, beef, salmon, shrimp, egg, rice, bread, cheese, strawberry, banana, vA, vC, vD, vE, vK, vB1, vB2, vB6, vB12];
 
 module.exports = { checkTable, createTable, data };

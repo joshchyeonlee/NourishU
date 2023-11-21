@@ -11,23 +11,23 @@ const createTable = `
 CREATE TABLE INGREDIENT_PER_100g
 (
     IngredientID INT NOT NULL,
-    Weight INT NOT NULL,
+    ServingSize INT NOT NULL,
     PRIMARY KEY (IngredientID),
     FOREIGN KEY (IngredientID) REFERENCES INGREDIENT (IngredientID) ON UPDATE CASCADE
 );`;
 
-const apple = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(01, 100)`
-const bean = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(02, 100)`
-const chicken = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(03, 100)`
-const beef = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(04, 100)`
-const salmon = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(05, 100)`
-const shrimp = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(06, 100)`
-const egg = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(07, 100)`
-const rice = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(08, 100)`
-const bread = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(09, 100)`
-const cheese = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(10, 100)`
-const strawberry = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(11, 100)`
-const banana = `INSERT INTO INGREDIENT_PER_100g(IngredientID, Weight) VALUES(12, 100)`
+const apple = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(01, 100)`
+const bean = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(02, 100)`
+const chicken = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(03, 100)`
+const beef = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(04, 100)`
+const salmon = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(05, 100)`
+const shrimp = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(06, 100)`
+const egg = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(07, 100)`
+const rice = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(08, 100)`
+const bread = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(09, 100)`
+const cheese = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(10, 100)`
+const strawberry = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(11, 100)`
+const banana = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(12, 100)`
 
 const data = [apple, bean, chicken, beef, salmon, shrimp, egg, rice, bread, cheese, strawberry, banana];
 
