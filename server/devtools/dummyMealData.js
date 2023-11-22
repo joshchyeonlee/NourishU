@@ -7,11 +7,11 @@ LIMIT 1;`;
 
 const createTable = `
 CREATE TABLE MEAL
-(UserID     INT             NOT NULL,
-MealID      INT             NOT NULL,
+(MealID     INT             NOT NULL,
+UserID      INT             NOT NULL,
 DateTime    DATETIME        NOT NULL,
 MealTitle   VARCHAR(255)    NOT NULL,
-PRIMARY KEY(MealID, UserID),
+PRIMARY KEY(MealID),
 FOREIGN KEY (UserID) REFERENCES USER(UserID) ON UPDATE CASCADE );`;
 
 const meal0 = `INSERT INTO MEAL(UserID, MealID, DateTime, MealTitle) VALUES(0, 0, '2023-11-20 9:00:00', "Brekkie" );`;

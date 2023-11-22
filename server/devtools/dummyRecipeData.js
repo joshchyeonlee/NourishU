@@ -14,7 +14,7 @@ CookTime            INT			    NOT NULL,
 RecipeTitle         VARCHAR(50)	    NOT NULL,
 RecipeDescription   VARCHAR(300)    NOT NULL,
 ServingSize         INT			    NOT NULL,
-PRIMARY KEY(RecipeID, UserID),
+PRIMARY KEY(RecipeID),
 FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
 
 // Need to put easter egg of fave recipe 
