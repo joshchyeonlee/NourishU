@@ -101,6 +101,48 @@ app.post('/getFollowerCount', (req, res) => {
     })
 })
 
+app.post('/getUserMeals', (req, res) => {
+    const userId = req.body.UserID;
+    let sql = `SELECT * FROM MEAL WHERE MEAL.UserID = ?`
+    console.log(req);
+    db.query(sql, userId, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/getMealContains', (req, res) => {
+    const mealId = req.body.MealID;
+    let sql = `SELECT r.RecipeID, r.RecipeTitle, i.IngredientName
+    FROM MEAL as m, MEAL_CONTAINS_RECIPE as mr, RECIPE as  r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
+    WHERE m.MealID = mr.MealID AND mr.MealID = ? AND mr.RecipeID = r.RecipeID AND ri.RecipeID = r.RecipeID AND ri.IngredientID = i.IngredientID`
+    db.query(sql, mealId, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/getMealInfo', (req, res) => {
+    const mealId = req.body.MealID;
+    let sql = `SELECT m.RecipeID, sum(Carbs) as TotalCarbs, sum(Protein) as TotalProtein, sum(SaturatedFats) as TotalSatFat, sum(UnsaturatedFats) as TotalUnsatFat, sum(Calories) as TotalCalories
+    FROM MEAL_CONTAINS_RECIPE AS m, RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
+    WHERE m.MealID = ? AND m.RecipeID = r.RecipeID AND r.RecipeID = ri.RecipeID AND i.IngredientID = ri.IngredientID
+    GROUP BY m.RecipeID;`
+    db.query(sql, mealId, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
