@@ -1,6 +1,6 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from 'axios';
 
 const ViewMeal = () => {
@@ -10,11 +10,12 @@ const ViewMeal = () => {
     const [recipes, setRecipes] = useState([]);
     const [recipeTitles, setRecipeTitles] = useState([]);
     const [recipeIngredients, setRecipeIngredients] = useState([]);
-    const [totalCalories, setTotalCalories] = useState([]);
-    const [totalProtein, setTotalProtein] = useState([]);
-    const [totalCarbohydrates, setTotalCarbohydrates] = useState([]);
-    const [totalSaturatedFats, setTotalSaturatedFats] = useState([]);
-    const [totalUnsaturatedFats, setTotalUnsaturatedFats] = useState([]);
+    const [totalCalories, setTotalCalories] = useState(0);
+    const [totalProtein, setTotalProtein] = useState(0);
+    const [totalCarbohydrates, setTotalCarbohydrates] = useState(0);
+    const [totalSaturatedFats, setTotalSaturatedFats] = useState(0);
+    const [totalUnsaturatedFats, setTotalUnsaturatedFats] = useState(0);
+    // const [isEdit, setIsEdit] = useState(false);
 
     const formatData = (data) => {
         const rTitles = [...new Set(data.map(val => val.RecipeTitle))];
@@ -38,13 +39,12 @@ const ViewMeal = () => {
         setRecipeIngredients(recipeIngredients);
     }
 
-    const setTotalData = () => {
-        console.log(recipeInfo);
-        setTotalCalories(recipeInfo.reduce((c, {TotalCalories}) => c + parseInt(TotalCalories), 0));
-        setTotalCarbohydrates(recipeInfo.reduce((c, {TotalCarbs}) => c + TotalCarbs, 0))
-        setTotalProtein(recipeInfo.reduce((c, {TotalProtein}) => c + TotalProtein, 0));
-        setTotalSaturatedFats(recipeInfo.reduce((c, {TotalSatFat}) => c + TotalSatFat, 0));
-        setTotalUnsaturatedFats(recipeInfo.reduce((c, {TotalUnsatFat}) => c + TotalUnsatFat, 0));
+    const setTotalData = (d) => {
+        setTotalCalories(d.reduce((c, {TotalCalories}) => c + parseInt(TotalCalories), 0));
+        setTotalCarbohydrates(d.reduce((c, {TotalCarbs}) => c + TotalCarbs, 0).toFixed(2))
+        setTotalProtein(d.reduce((c, {TotalProtein}) => c + TotalProtein, 0).toFixed(2));
+        setTotalSaturatedFats(d.reduce((c, {TotalSatFat}) => c + TotalSatFat, 0).toFixed(2));
+        setTotalUnsaturatedFats(d.reduce((c, {TotalUnsatFat}) => c + TotalUnsatFat, 0).toFixed(2));
     }
 
     const fetchMealContains = async () => {
@@ -68,26 +68,35 @@ const ViewMeal = () => {
         try{
             const res = await axios.post("http://localhost:3001/getMealInfo", MealID);
             setRecipeInfo(res.data);
+            setTotalData(res.data);
         } catch(err) {
             throw(err);
         }
-        setTotalData();
     }
 
     const getCalories = (id) => {
         const filteredData = recipeInfo.filter(recipe => recipe.RecipeID = id)
-        return filteredData[0].TotalCalories;
+        try{
+            const calories = filteredData[0].TotalCalories;
+            return calories
+        } catch (err){
+            return 0;
+        }
     }
     
     const getTotalFats = () => {
-        return (totalSaturatedFats + totalUnsaturatedFats).toFixed(2);
+        return (parseInt(totalSaturatedFats) + parseInt(totalUnsaturatedFats));
     }
 
-    useEffect(() => {
+    const handleEdit = () => {
+        console.log("edit");
+    }
+
+    useEffect( () => {
         fetchMealContains();
         fetchMealInfo();
-    }, []);
-
+    },[]);
+    
 
     return(
         <div>
@@ -97,10 +106,10 @@ const ViewMeal = () => {
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                 <Typography variant="h6">{meal.MealTitle}</Typography>
                 <Box display="flex" flexDirection="column" paddingTop={4} sx={{ width: 1/2 }}>
-                    <Box display="flex" paddingBottom={2}>
+                    <Box display="flex">
                         <Typography variant="h6">Foods Consumed:</Typography>
                     </Box>
-                    <Box>
+                    <Box padding={1}>
                         {recipeIngredients.map((val, key) => {
                             return(<Box key={key} display="flex" flexDirection="row" justifyContent="space-between">
                                 <Typography>{val.recipeTitle}</Typography>
@@ -108,27 +117,23 @@ const ViewMeal = () => {
                             </Box>)
                         })}
                     </Box>
-                    <Box padding={2}>
+                    <Box padding={1}>
                         <Divider/>
                     </Box>
                     <Box display="flex" flexDirection="column">
                         <Typography variant="h6">Total Nutrients Consumed:</Typography>
-                        <Box paddingLeft={1} paddingRight={2}>
-                            <Box display="flex" flexDirection="row" justifyContent="space-between">
-                                <Typography>Calories</Typography>
-                                <Typography>{totalCalories}</Typography>
-                            </Box>
+                        <Box padding={1}>
                             <Box display="flex" flexDirection="row" justifyContent="space-between">
                                 <Typography>Calories</Typography>
                                 <Typography>{totalCalories}</Typography>
                             </Box>
                             <Box display="flex" flexDirection="row" justifyContent="space-between">
                                 <Typography>Protein</Typography>
-                                <Typography>{totalProtein.toFixed(2)}</Typography>
+                                <Typography>{totalProtein}</Typography>
                             </Box>
                             <Box display="flex" flexDirection="row" justifyContent="space-between">
                                 <Typography>Carbohydrates</Typography>
-                                <Typography>{totalCarbohydrates.toFixed(2)}</Typography>
+                                <Typography>{totalCarbohydrates}</Typography>
                             </Box>
                             <Box display="flex" flexDirection="row" justifyContent="space-between">
                                 <Typography>Fats</Typography>
@@ -137,14 +142,17 @@ const ViewMeal = () => {
                             <Box paddingLeft={1} display="flex" flexDirection="column">
                                 <Box display="flex" flexDirection="row" justifyContent="space-between">
                                     <Typography variant="caption">Saturated Fats</Typography>
-                                    <Typography variant="caption">{totalSaturatedFats.toFixed(2)}</Typography>
+                                    <Typography variant="caption">{totalSaturatedFats}</Typography>
                                 </Box>
                                 <Box display="flex" flexDirection="row" justifyContent="space-between">
                                     <Typography variant="caption">Unsaturated Fats</Typography>
-                                    <Typography variant="caption">{totalUnsaturatedFats.toFixed(2)}</Typography>
+                                    <Typography variant="caption">{totalUnsaturatedFats}</Typography>
                                 </Box>
                             </Box>
                         </Box>
+                    </Box>
+                    <Box display="flex" justifyContent="center" padding={4}>
+                        <Button variant="contained" onClick={(() => handleEdit())}>Edit</Button>
                     </Box>
                 </Box>
             </Box>
