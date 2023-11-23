@@ -85,7 +85,12 @@ const AddFood = () => {
                                 <Typography>{value.RecipeDescription}</Typography>
                             </Box>
                             <Box>
-                                <Button>Add</Button>
+                                <Box>
+                                    <Button>View</Button>
+                                </Box>
+                                <Box>
+                                    <Button>Add</Button>
+                                </Box>
                             </Box>
                         </Box>
                     )
