@@ -96,7 +96,12 @@ const AddFood = () => {
                     )
                 })}
             </Box>
-            }
+            }   
+            <Box position="absolute" bottom={20} width="50%" left="50%" marginLeft="-160px">
+                <Button variant="contained" sx={{ width:"320px" }}>
+                    Create Recipe
+                </Button>
+            </Box>
         </div>
     )
 }
