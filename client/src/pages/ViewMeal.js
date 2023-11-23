@@ -1,4 +1,5 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography, IconButton } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useLocation, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from 'axios';
@@ -93,6 +94,9 @@ const ViewMeal = () => {
     
     return(
         <div>
+            <IconButton sx={{position: "absolute", top:10, left: 10}} component={Link} to={{pathname:"/dashboard"}}>
+                <ArrowBackIcon fontSize="large"/>
+            </IconButton>
             <Box display="flex" flexDirection="column" padding={4} justifyContent="center" textAlign="center">
                 <Typography variant="h5">View Meal</Typography>
             </Box>

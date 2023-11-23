@@ -37,7 +37,6 @@ app.get('/login', (req,res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -46,13 +45,10 @@ app.get('/login', (req,res) => {
 app.post('/login', (req,res) => {
     let sql = "INSERT INTO USER(UserID, UserName, UserEmail, UserBirthdate, UserHeight, UserWeight, UserAge, DietName, DietDescription, CookingConfidence) VALUES(?)";
     const values = [req.body.UserID, req.body.UserName, req.body.UserEmail, req.body.UserBirthdate, req.body.UserHeight, req.body.UserWeight, req.body.UserAge, req.body.DietName, req.body.DietDescription, req.body.CookingConfidence];
-    console.log("here");
-    console.log(values);
     db.query(sql, [values], (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -60,15 +56,10 @@ app.post('/login', (req,res) => {
 app.post('/getUserInfo', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT * FROM USER WHERE UserID = ?`;
-    // console.log(req);
-    console.log(req);
-    console.log("user")
-    console.log(userId);
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -76,13 +67,10 @@ app.post('/getUserInfo', (req, res) => {
 app.post('/getFollowingCount', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT UserName FROM FOLLOWS JOIN USER ON UserID = FolloweeUserID WHERE FollowerUserID = ?`;
-    // console.log(req);
-    console.log(req);
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -90,13 +78,10 @@ app.post('/getFollowingCount', (req, res) => {
 app.post('/getFollowerCount', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT UserName FROM FOLLOWS JOIN USER ON UserID = FollowerUserID WHERE FolloweeUserID = ?`;
-    // console.log(req);
-    console.log(req);
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -104,12 +89,10 @@ app.post('/getFollowerCount', (req, res) => {
 app.post('/getUserMeals', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT * FROM MEAL WHERE MEAL.UserID = ?`
-    console.log(req);
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -123,7 +106,6 @@ app.post('/getMealContains', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -134,12 +116,35 @@ app.post('/editFood', (req, res) => {
     let sql = `UPDATE MEAL_CONTAINS_RECIPE
     SET QuantityConsumed = ${quantityConsumed}
     WHERE RecipeID = ${recipeID};`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/removeRecipeFromMeal', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const mealID = req.body.MealID;
+    let sql = `DELETE FROM MEAL_CONTAINS_RECIPE
+    WHERE MealID = ${mealID} AND RecipeID = ${recipeID}`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/updateMealTitle', (req, res) => {
+    const MealTitle = req.body.MealTitle;
+    const MealID = req.body.MealID;
+    let sql = `UPDATE MEAL SET MealTitle = "${MealTitle}" WHERE MealID = ${MealID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
         res.send(result);
     })
 })

@@ -6,6 +6,8 @@ import axios from 'axios';
 const EditFood = () => {
     const location = useLocation();
     const food = location.state.food;
+    const meal = location.state.meal;
+    const recipes = location.state.recipes;
 
     const [qConsumed, setQConsumed] = useState(food.quantityConsumed);
 
@@ -50,14 +52,12 @@ const EditFood = () => {
                 </Box>
                 <Box position="absolute" bottom={10} width="100%" left="50%" marginLeft="-160px">
                     <Box sx={{width:"320px"}} padding={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-                        <Button variant="contained" onClick={() => handleConfirm()}
-                        component={Link}
-                        to={{pathname:"/dashboard"}}>
+                        <Button variant="contained" onClick={() => handleConfirm()} component={Link} to={{pathname:"/dashboard"}}>
                             Confirm
                         </Button>
                     </Box>
                     <Box sx={{width:"320px"}} padding={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-                        <Button>
+                        <Button component={Link} to={{pathname: "/EditMeal"}} state={{ recipes:recipes, meal:meal }}>
                             Cancel
                         </Button>
                     </Box>
