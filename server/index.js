@@ -101,6 +101,19 @@ app.post('/getFollowerCount', (req, res) => {
     })
 })
 
+app.post('/searchRecipes', (req, res) => {
+    const search = req.body.Search;
+    let sql = `SELECT * FROM RECIPE WHERE RecipeTitle LIKE '%${search}%';`;
+    console.log(sql);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });

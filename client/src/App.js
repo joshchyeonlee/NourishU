@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard.js'
 import Login from './pages/Login.js'
 import Recipes from './pages/Recipes.js'
 import Profile from './pages/Profile.js';
+import AddFood from './pages/AddFood.js';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/recipes" element={<Recipes />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/addFood" element={<AddFood />} />
     </Routes>
   </BrowserRouter>
   );
