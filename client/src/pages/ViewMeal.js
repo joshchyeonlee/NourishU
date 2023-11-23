@@ -1,50 +1,73 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
-import { useLocation } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { useLocation, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 
 const ViewMeal = () => {
     const location = useLocation();
     const meal = location.state.meal;
-    const [recipeInfo, setRecipeInfo] = useState([]);
-    const [recipes, setRecipes] = useState([]);
-    const [recipeTitles, setRecipeTitles] = useState([]);
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [totalCalories, setTotalCalories] = useState(0);
     const [totalProtein, setTotalProtein] = useState(0);
     const [totalCarbohydrates, setTotalCarbohydrates] = useState(0);
     const [totalSaturatedFats, setTotalSaturatedFats] = useState(0);
     const [totalUnsaturatedFats, setTotalUnsaturatedFats] = useState(0);
-    // const [isEdit, setIsEdit] = useState(false);
 
     const formatData = (data) => {
         const rTitles = [...new Set(data.map(val => val.RecipeTitle))];
-        setRecipeTitles(rTitles);
 
-        const recipeIngredients = [];
+        const recipeIngr = [];
 
         rTitles.forEach((value) => {
             var arr = (data.filter((val) => val.RecipeTitle === value))
-            var ingr = arr.map(val => val.IngredientName);
-            const rid = arr[0].RecipeID;
-
+            
             const recipeIngredient = {
-                recipeID: rid,
+                recipeID: arr[0].RecipeID,
                 recipeTitle: value,
-                ingredients: ingr,
+                ingredients: arr.map(val => val.IngredientName),
+                ingredientIDs: arr.map(val => val.IngredientID),
+                ingredientAmtConsumed: arr[0].AmountIngredient,
+                quantityConsumed: arr[0].QuantityConsumed,
             }
-            recipeIngredients.push(recipeIngredient);
+
+            var calories = 0;
+            var protein = 0;
+            var saturatedFats = 0;
+            var unsaturatedFats = 0;
+            var carbohydrates = 0;
+
+            for(var i = 0; i < arr.length; i++){
+                var amt = 1;
+                if(arr[i].isPerServing.data[0]){
+                    amt = arr[i].AmountIngredient;
+                }
+                calories += amt * arr[i].Calories;
+                protein += amt * arr[i].Protein;
+                saturatedFats += amt * arr[i].SaturatedFats;
+                unsaturatedFats += amt * arr[i].UnsaturatedFats;
+                carbohydrates += amt * arr[i].Carbs;
+            }
+
+            var totalFats = saturatedFats + unsaturatedFats;
+
+            recipeIngredient.calories = calories;
+            recipeIngredient.protein = protein;
+            recipeIngredient.saturatedFats = saturatedFats;
+            recipeIngredient.unsaturatedFats = unsaturatedFats;
+            recipeIngredient.totalFats = totalFats;
+            recipeIngredient.carbohydrates = carbohydrates;
+
+            const mult = recipeIngredient.quantityConsumed;
+            setTotalCalories(totalCalories + (calories * mult));
+            setTotalProtein(Number(totalProtein + (mult * protein)).toFixed(2));
+            setTotalSaturatedFats(Number(totalSaturatedFats + (mult * saturatedFats)).toFixed(2));
+            setTotalUnsaturatedFats(Number(totalUnsaturatedFats + (mult * unsaturatedFats)).toFixed(2));
+            setTotalCarbohydrates(Number(totalCarbohydrates + (mult * carbohydrates)).toFixed(2));
+
+            recipeIngr.push(recipeIngredient);
         })
 
-        setRecipeIngredients(recipeIngredients);
-    }
-
-    const setTotalData = (d) => {
-        setTotalCalories(d.reduce((c, {TotalCalories}) => c + parseInt(TotalCalories), 0));
-        setTotalCarbohydrates(d.reduce((c, {TotalCarbs}) => c + TotalCarbs, 0).toFixed(2))
-        setTotalProtein(d.reduce((c, {TotalProtein}) => c + TotalProtein, 0).toFixed(2));
-        setTotalSaturatedFats(d.reduce((c, {TotalSatFat}) => c + TotalSatFat, 0).toFixed(2));
-        setTotalUnsaturatedFats(d.reduce((c, {TotalUnsatFat}) => c + TotalUnsatFat, 0).toFixed(2));
+        setRecipeIngredients(recipeIngr);
     }
 
     const fetchMealContains = async () => {
@@ -53,34 +76,10 @@ const ViewMeal = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getMealContains", MealID);
-            setRecipes(res.data);
             formatData(res.data);
 
         } catch(err){
             throw(err);
-        }
-    }
-
-    const fetchMealInfo = async () => {
-        const MealID = {
-            MealID: meal.MealID,
-        }
-        try{
-            const res = await axios.post("http://localhost:3001/getMealInfo", MealID);
-            setRecipeInfo(res.data);
-            setTotalData(res.data);
-        } catch(err) {
-            throw(err);
-        }
-    }
-
-    const getCalories = (id) => {
-        const filteredData = recipeInfo.filter(recipe => recipe.RecipeID = id)
-        try{
-            const calories = filteredData[0].TotalCalories;
-            return calories
-        } catch (err){
-            return 0;
         }
     }
     
@@ -88,16 +87,10 @@ const ViewMeal = () => {
         return (parseInt(totalSaturatedFats) + parseInt(totalUnsaturatedFats));
     }
 
-    const handleEdit = () => {
-        console.log("edit");
-    }
-
     useEffect( () => {
         fetchMealContains();
-        fetchMealInfo();
     },[]);
     
-
     return(
         <div>
             <Box display="flex" flexDirection="column" padding={4} justifyContent="center" textAlign="center">
@@ -111,9 +104,22 @@ const ViewMeal = () => {
                     </Box>
                     <Box padding={1}>
                         {recipeIngredients.map((val, key) => {
-                            return(<Box key={key} display="flex" flexDirection="row" justifyContent="space-between">
+                            return(<Box key={key} display="flex" flexDirection="column" justifyContent="space-between">
                                 <Typography>{val.recipeTitle}</Typography>
-                                <Typography>Calories: {getCalories(val.recipeID)}</Typography>
+                                <Box paddingLeft={1} paddingRight={1}>
+                                    <Box display="flex" flexDirection="row" justifyContent="space-between">
+                                        <Typography variant="caption">Calories Per Serving</Typography>
+                                        <Typography variant="caption">{val.calories}</Typography>
+                                    </Box>
+                                    <Box display="flex" flexDirection="row" justifyContent="space-between">
+                                        <Typography variant="caption">Quantity Consumed</Typography>
+                                        <Typography variant="caption">{val.quantityConsumed}</Typography>
+                                    </Box>
+                                    <Box display="flex" flexDirection="row" justifyContent="space-between">
+                                        <Typography variant="caption">Total Calories Consumed</Typography>
+                                        <Typography variant="caption">{val.quantityConsumed * val.calories}</Typography>
+                                    </Box>
+                                </Box>
                             </Box>)
                         })}
                     </Box>
@@ -152,7 +158,10 @@ const ViewMeal = () => {
                         </Box>
                     </Box>
                     <Box display="flex" justifyContent="center" padding={4}>
-                        <Button variant="contained" onClick={(() => handleEdit())}>Edit</Button>
+                        <Button component={Link}
+                            to={{pathname:"/editMeal"}}
+                            state={{meal:meal, recipes: recipeIngredients}}
+                            variant="contained">Edit</Button>
                     </Box>
                 </Box>
             </Box>

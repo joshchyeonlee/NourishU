@@ -116,7 +116,7 @@ app.post('/getUserMeals', (req, res) => {
 
 app.post('/getMealContains', (req, res) => {
     const mealId = req.body.MealID;
-    let sql = `SELECT r.RecipeID, r.RecipeTitle, i.IngredientName
+    let sql = `SELECT r.RecipeID, r.RecipeTitle, mr.QuantityConsumed, ri.AmountIngredient, i.isPerServing, i.Carbs, i.Protein, i.SaturatedFats, i.UnsaturatedFats, i.Calories, i.IngredientName, i.IngredientID
     FROM MEAL as m, MEAL_CONTAINS_RECIPE as mr, RECIPE as  r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
     WHERE m.MealID = mr.MealID AND mr.MealID = ? AND mr.RecipeID = r.RecipeID AND ri.RecipeID = r.RecipeID AND ri.IngredientID = i.IngredientID`
     db.query(sql, mealId, (err, result) => {
@@ -128,13 +128,14 @@ app.post('/getMealContains', (req, res) => {
     })
 })
 
-app.post('/getMealInfo', (req, res) => {
-    const mealId = req.body.MealID;
-    let sql = `SELECT m.RecipeID, sum(Carbs) as TotalCarbs, sum(Protein) as TotalProtein, sum(SaturatedFats) as TotalSatFat, sum(UnsaturatedFats) as TotalUnsatFat, sum(Calories) as TotalCalories
-    FROM MEAL_CONTAINS_RECIPE AS m, RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
-    WHERE m.MealID = ? AND m.RecipeID = r.RecipeID AND r.RecipeID = ri.RecipeID AND i.IngredientID = ri.IngredientID
-    GROUP BY m.RecipeID;`
-    db.query(sql, mealId, (err, result) => {
+app.post('/editFood', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const quantityConsumed = req.body.QuantityConsumed;
+    let sql = `UPDATE MEAL_CONTAINS_RECIPE
+    SET QuantityConsumed = ${quantityConsumed}
+    WHERE RecipeID = ${recipeID};`;
+    console.log(sql);
+    db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
