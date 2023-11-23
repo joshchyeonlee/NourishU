@@ -101,6 +101,43 @@ app.post('/getFollowerCount', (req, res) => {
     })
 })
 
+app.post('/getRecipeIngredients', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    let sql = `SELECT * FROM RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
+    WHERE r.RecipeID = 1 and r.RecipeID = ri.RecipeID and i.IngredientID = ri.IngredientID;`;
+    db.query(sql, recipeID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/getRecipeVitamins', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    let sql = `SELECT r.RecipeID, v.VitaminName FROM RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, VITAMINS as v
+    WHERE r.RecipeID = ? and r.RecipeID = ri.RecipeID and ri.IngredientID = v.IngredientID;`;
+    db.query(sql, recipeID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/getRecipeReviews', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    let sql = `SELECT u.UserID, u.UserName, r.RComment, r.Rdifficulty
+    FROM REVIEW as r, USER as u
+    WHERE u.UserID = r.WrittenBy and r.RecipeID = ?;`;
+    db.query(sql, recipeID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
