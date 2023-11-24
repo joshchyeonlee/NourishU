@@ -104,7 +104,7 @@ app.post('/getFollowerCount', (req, res) => {
 app.post('/getRecipeIngredients', (req, res) => {
     const recipeID = req.body.RecipeID;
     let sql = `SELECT * FROM RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
-    WHERE r.RecipeID = 1 and r.RecipeID = ri.RecipeID and i.IngredientID = ri.IngredientID;`;
+    WHERE r.RecipeID = ? and r.RecipeID = ri.RecipeID and i.IngredientID = ri.IngredientID;`;
     db.query(sql, recipeID, (err, result) => {
         if(err){
             throw(err);
