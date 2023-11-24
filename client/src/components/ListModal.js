@@ -1,4 +1,5 @@
-import { Button, Box, Typography, Modal, Grid, List, ListItem, ListItemButton } from "@mui/material";
+import { Box, Typography, Modal, List, ListItem, ListItemButton, IconButton } from "@mui/material";
+import Close from '@mui/icons-material/Close';
 
 const modalFormat = {
     position: 'absolute',
@@ -15,8 +16,13 @@ const modalFormat = {
 
 const ListModal = (props) => {
     return(
-        <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={props.open} onClose={props.onClose}>
         <Box sx={modalFormat} display="flex" flexDirection="column" alignItems="center">
+            <Box sx={{position: "absolute", top:20, right: 20}}>
+                <IconButton onClick={props.onClose}>
+                    <Close/>
+                </IconButton>
+            </Box>
             <Typography padding={1} variant="h5">Following</Typography>
             <Box sx={{width:"100%"}}>
                 <List>
