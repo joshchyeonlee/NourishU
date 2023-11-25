@@ -16,19 +16,19 @@ FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
 
 const user0Interest0 = `
 INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (0, "bean");`
+VALUES (0, "Italian cuisine");`
 const user1Interest0 = `
 INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (1, "koalas");`
+VALUES (1, "Brunch items");`
 const user2Interest0 = `
 INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (2, "cheese");`
+VALUES (2, "Cheese");`
 const user3Interest0 = `
 INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (3, "slightly expired milk");`
+VALUES (3, "Gourmet Burgers");`
 const user4Interest0 = `
 INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (4, "bean");`
+VALUES (4, "Tofu recipes");`
 // const user0Interest1 = `
 // INSERT INTO USER_INTERESTS (UserID, userInterests)
 // VALUES (0, "did I mention beans??");`

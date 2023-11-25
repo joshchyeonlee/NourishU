@@ -1,5 +1,6 @@
 import { Typography, Grid, Button, Box, IconButton } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import BottomNav from "../components/BottomNav";
 
 const Recipes = () => {
     return (
@@ -21,6 +22,7 @@ const Recipes = () => {
                     <Button variant="contained" fullWidth size="large">View Your Recipes</Button>
                 </Grid>
             </Grid>
+            <BottomNav currentPage="Recipes" value={0}/>
         </Box>
     )
 }

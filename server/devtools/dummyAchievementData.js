@@ -21,7 +21,7 @@ INSERT INTO ACHIEVEMENT(AchievementID, Name, Description)
 VALUES (0, "Account Created", "That took so much work honestly")`;
 const firstMealLogged = `
 INSERT INTO ACHIEVEMENT(AchievementID, Name, Description)
-VALUES (1, "First meal logged", "Damn, you ate")`;
+VALUES (1, "First meal logged", "Congrats, you ate!")`;
 const firstGoalAchieved = `
 INSERT INTO ACHIEVEMENT(AchievementID, Name, Description)
 VALUES (2, "First goal completed", "You did it!")`;
@@ -30,10 +30,10 @@ INSERT INTO ACHIEVEMENT(AchievementID, Name, Description)
 VALUES (3, "First Recipe Created", "Who let them cook?")`;
 const firstReviewDeletedByAdmin = `
 INSERT INTO ACHIEVEMENT(AchievementID, Name, Description)
-VALUES (4, "First Review Deleted By Admin", "Oooo get rekt")`;
+VALUES (4, "First Review Deleted By Admin", "Your review got deleted!")`;
 const firstReviewCreated = `
 INSERT INTO ACHIEVEMENT(AchievementID, Name, Description)
-VALUES (5, "First Review Created", "Got something to say??")`;
+VALUES (5, "First Review Created", "Got something to say?")`;
 
 const data = [accountCreated, firstMealLogged, firstGoalAchieved, firstRecipeCreated, firstReviewDeletedByAdmin, firstReviewCreated];
 
