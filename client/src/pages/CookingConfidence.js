@@ -1,9 +1,9 @@
 import { Typography, Grid, Box, Slider, Button } from "@mui/material";
 
 const CookingConfidence = () => {
-  const valuetext = (value) => {
-    return `${value}% Confidence`;
-  };
+  const changeSliderValue = (value) => {
+    console.log(value)
+  }
 
   return (
     <div>
@@ -11,24 +11,21 @@ const CookingConfidence = () => {
         <Box padding={10}>
           <Typography variant="h4">How Confident are you with cooking?</Typography>
         </Box>
-      <Box sx={{ width: 300, marginLeft: '80', marginRight: '80', textAlign: 'center', }}>
+      <Box sx={{ width: 300 }}>
         <Slider
           aria-label="Cooking Confidence"
-          defaultValue={30}
-          getAriaValueText={valuetext}
+          defaultValue={3}
           valueLabelDisplay="auto"
           step={1}
           marks
           min={1}
-          max={10}
-          sx={{ width: '200%', mt: 4 }}
+          max={5}
+          onChange={(event) => changeSliderValue(event.target.value)}
         />
       </Box>
-      <Grid container spacing={3} direction="column" width={200}>
-        <Grid item>
-            <Button variant="contained" sx={{width: '200px'}}>Continue</Button>
-        </Grid>
-      </Grid>
+        <Box position="absolute" bottom={800}>
+          <Button variant="contained" sx={{width: '200px'}}>Continue</Button>
+        </Box>
     </Box>
     </div>
   );
