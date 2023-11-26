@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, Box, TextField, Grid } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -52,16 +52,22 @@ const Login = () => {
 
     return (
         <div>
-            <Typography>Login</Typography>
-            <Button onClick={handleClick}>Add new bean to ingredient</Button>
-            <div>
-                {users.map(user => (<div>
-                    <Typography>Name: {user.UserName}</Typography>
-                    <Typography>Diet Name: {user.DietName}</Typography>
-                </div>))}
-            </div>
+            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={10}>
+                <Typography variant='h4'>Sign In</Typography>
+            </Box>
+            <Grid container spacing={3} direction="column" alignItems="center">
+                <Grid item>
+                    <TextField id="outlined-basic" label="Email" variant="outlined" />
+                </Grid>
+                <Grid item>
+                    <TextField id="outlined-basic" label="Password" variant="outlined" />
+                </Grid>
+                <Grid item>
+                    <Button variant="contained">Log in</Button>
+                </Grid>
+            </Grid>
         </div>
-    )
+    );
 };
 
 export default Login;
