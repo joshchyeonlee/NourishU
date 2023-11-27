@@ -1,8 +1,29 @@
 import { Box, Typography, Grid, Card, CardContent, CardActionArea, CircularProgress, Button } from "@mui/material";
 import MealItemList from "../components/MealItemList";
 import BottomNav from "../components/BottomNav";
+import { useState, useEffect } from "react";
+import axios from 'axios';
 
 const Dashboard = () => {
+    const [userId, setUserId] = useState("0");
+    const [meals, setMeals] = useState([]);
+
+    const fetchUserMeals = async () => {
+        const uid = {
+            UserID: userId,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/getUserMeals", uid);
+            console.log(res.data);
+            setMeals(res.data);
+        } catch(err){
+            throw(err);
+        }
+    }
+
+    useEffect(() => {
+        fetchUserMeals();
+    }, []);
 
     return(   
         <div>
@@ -34,13 +55,9 @@ const Dashboard = () => {
                                 <Box padding={4}>
                                     <Typography variant="h6">Your Meals</Typography>
                                     <Box padding={8} overflow="auto" maxHeight={200}>
-                                        <MealItemList mealName="Breakfast"/>
-                                        <MealItemList mealName="Lunch"/>
-                                        <MealItemList mealName="Gotta make these real meals dude"/>
-                                        <MealItemList mealName="Bean"/>
-                                        <MealItemList mealName="Bean"/>
-                                        <MealItemList mealName="Bean"/>
-                                        <MealItemList mealName="Bean"/>
+                                        {meals.map((value, key) => {
+                                            return <MealItemList meal={value} key={key}/>
+                                        })}
                                     </Box>
                                     <Box>
                                         <Button size="large" variant="contained">Log Meal</Button>

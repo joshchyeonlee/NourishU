@@ -57,6 +57,13 @@ To set this up I used the following videos, it might be worth watching for more 
 
 Note that we're not allowed to use sequelize so I refactored the repo to exclude it. This should make it more intuitive for us anyways since it'll have similar structure to the sql stuff we've seen in lecture.
 
+`admin`
+
+Same thing as `client` run `cd` into the `/admin` directory and run `npm start`
+Runs on port 3002
+Make ya pages and throw them in index.js
+Just make sure that you import pages properly (not from server)
+
 ### More Detail
 
 First of all, you will need to have MySql installed. I have configured the databse in our BE with the `root` user and an empty string as the password - I don't know how this will affect you. Hopefully it won't be a pain to figure out the DB cuz I've never used MySql before...
