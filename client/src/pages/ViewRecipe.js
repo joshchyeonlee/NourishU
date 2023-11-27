@@ -4,6 +4,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
+import formatRecipeData from "../utils/formatRecipeData";
+import NutrInfo from "../components/NutrInfo";
 
 const ViewRecipe = () => {
     //change this value based on information from previous page
@@ -20,6 +22,8 @@ const ViewRecipe = () => {
     const [userReviewLength, setUserReviewLength] = useState(0);
     const [overallRating, setOverallRating] = useState(0);
 
+    const [nutrInfo, setNutrInfo] = useState();
+
     const fetchRecipe = async () => {
         const rID = {
             RecipeID: recipeID,
@@ -28,10 +32,13 @@ const ViewRecipe = () => {
         try{
             const res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
             setRecipeIngredients(res.data);
-            console.log(res.data);
             setRecipeDifficulty(res.data[0].RDifficulty);
             setRecipeTitle(res.data[0].RecipeTitle);
             setRecipeDescription(res.data[0].RecipeDescription);
+            const obj = formatRecipeData(res.data);
+
+            setNutrInfo(obj);
+            console.log(obj);
         } catch (err) {
             throw (err);
         }
@@ -44,6 +51,7 @@ const ViewRecipe = () => {
         try{
             const res = await axios.post("http://localhost:3001/getRecipeVitamins", rID);
             setVitamins(res.data);
+            console.log(res.data);
         } catch (err) {
             throw(err);
         }
@@ -70,7 +78,6 @@ const ViewRecipe = () => {
         setOverallRating(avg);
     }
 
-    //reuse rating component from previous pr
     const setColor = (rating) => {
         if(rating <= 1) return {color: "blue"};
         if(rating <= 2) return {color: "green"};
@@ -140,6 +147,16 @@ const ViewRecipe = () => {
                     <Card variant="outlined" sx={{width:"100%"}}>
                         <CardContent>
                             <Typography variant="h6">Nutritional Info:</Typography>
+                            <NutrInfo info={nutrInfo}/>
+                            <Box display="flex" flexDirection="column">
+                                <Typography>Vitamins</Typography>
+                                <Box paddingLeft={1} display="flex" flexDirection="column">
+                                    {vitamins.map((value, key) => {
+                                        return(
+                                            <Typography variant="caption" key={key}>{value.VitaminName}</Typography>
+                                        )})}
+                                </Box>
+                            </Box>
                         </CardContent>
                     </Card>
                 </Box>
