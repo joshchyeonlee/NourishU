@@ -5,6 +5,7 @@ import Login from './pages/Login.js'
 import Recipes from './pages/Recipes.js'
 import Profile from './pages/Profile.js';
 import AddFood from './pages/AddFood.js';
+import CookingConfidence from './pages/CookingConfidence.js';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/recipes" element={<Recipes />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/addFood" element={<AddFood />} />
+      <Route path="/CookingConfidence" element={<CookingConfidence />} />
     </Routes>
   </BrowserRouter>
   );
