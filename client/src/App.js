@@ -7,6 +7,7 @@ import Profile from './pages/Profile.js';
 import ViewMeal from './pages/ViewMeal.js';
 import EditMeal from './pages/EditMeal.js';
 import EditFood from './pages/EditFood.js';
+import CookingConfidence from './pages/CookingConfidence.js';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/viewMeal" element={<ViewMeal />} />
       <Route path="/editMeal" element={<EditMeal />} />
       <Route path="/editFood" element={<EditFood />} />
+      <Route path="/CookingConfidence" element={<CookingConfidence />} />
     </Routes>
   </BrowserRouter>
   );

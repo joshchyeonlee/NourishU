@@ -9,33 +9,31 @@ LIMIT 1;`;
 
 const createTable =`
 CREATE TABLE GOAL (
-UserID		        INT			NOT NULL,
-GoalMilestone		INT			NOT NULL,
-GoalID			    INT			NOT NULL,
-GoalName	    	VARCHAR(50)	NOT NULL,
-GoalDuration		INT			NOT NULL,
-GoalProgress		VARCHAR(50)	NOT NULL,
+UserID		            INT			NOT NULL,
+GoalID			        INT			NOT NULL,
+InitialCaloricIntake    INT         NOT NULL,
+CalculatedCaloricIntake INT         NOT NULL,
 PRIMARY KEY(UserID, GoalID),
 FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
 
 const user0Goal = `
-INSERT INTO GOAL(UserID, GoalMilestone, GoalID, GoalName, GoalDuration, GoalProgress)
-VALUES(0, 1, 0, "gain muscle", 10, "In Progress");`;
+INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+VALUES(0, 0, 2000, 2500);`;
 const user1Goal = `
-INSERT INTO GOAL(UserID, GoalMilestone, GoalID, GoalName, GoalDuration, GoalProgress)
-VALUES(1, 1, 1, "get leaner", 1, "In Progress");`;
+INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+VALUES(1, 1, 2500, 2000);`;
 const user2Goal = `
-INSERT INTO GOAL(UserID, GoalMilestone, GoalID, GoalName, GoalDuration, GoalProgress)
-VALUES(2, 1, 2, "eat more", 3, "In Progress");`;
+INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+VALUES(2, 2, 2000, 1500);`;
 const user3Goal = `
-INSERT INTO GOAL(UserID, GoalMilestone, GoalID, GoalName, GoalDuration, GoalProgress)
-VALUES(3, 1, 3, "eat more proteins", 4, "In Progress");`;
+INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+VALUES(3, 3, 2000, 2500);`;
 const user4Goal = `
-INSERT INTO GOAL(UserID, GoalMilestone, GoalID, GoalName, GoalDuration, GoalProgress)
-VALUES(4, 1, 4, "eat less carbs", 20, "In Progress");`;
+INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+VALUES(4, 4, 2000, 1500);`;
 const user4Goal1 = `
-INSERT INTO GOAL(UserID, GoalMilestone, GoalID, GoalName, GoalDuration, GoalProgress)
-VALUES(4, 1, 5, "lose weight", 10, "Completed");`;
+INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+VALUES(4, 5, 2500, 3000);`;
 
 const data = [user0Goal, user1Goal, user2Goal, user3Goal, user4Goal, user4Goal1];
 
