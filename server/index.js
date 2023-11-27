@@ -101,6 +101,20 @@ app.post('/getFollowerCount', (req, res) => {
     })
 })
 
+app.post('/queryUserNameExists', (req, res) => {
+    const userName = req.body.UserName;
+    let sql = `SELECT UserName FROM User WHERE UserName = '${userName}'`;
+    console.log(req);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+}
+
+)
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
