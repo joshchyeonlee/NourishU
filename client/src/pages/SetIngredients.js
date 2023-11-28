@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, IconButton, Select, Typography, MenuItem, FormControl, Button } from "@mui/material";
+import { Box, IconButton, Select, Typography, MenuItem, FormControl, Button, InputAdornment } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 
@@ -85,6 +85,9 @@ const SetIngredients = () => {
                                     value={state[index] ? state[index].quantity : 0}
                                     sx={{width:"150px"}}
                                     onChange={(e) => handleChange(e, index)}
+                                    endAdornment={
+                                        <InputAdornment position="end" sx={{marginRight:"30px"}}>servings</InputAdornment>
+                                    }
                                 >
                                     {Array.from(Array(10), (e, i) => {
                                         return(
@@ -99,6 +102,9 @@ const SetIngredients = () => {
                                     value={state[index] ? state[index].quantity : 0}
                                     sx={{width:"150px"}}
                                     onChange={(e) => handleChange(e, index)}
+                                    endAdornment={
+                                        <InputAdornment position="end" sx={{marginRight:"30px"}}>g</InputAdornment>
+                                    }
                                 >
                                     {Array.from(Array(10), (e, i) => {
                                         return(
@@ -106,6 +112,7 @@ const SetIngredients = () => {
                                         )
                                     })}
                                 </Select>
+
                             </FormControl>
                     }
                         <IconButton onClick={() => removeIngredient(value, index)}>
