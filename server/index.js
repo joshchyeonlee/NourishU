@@ -162,6 +162,31 @@ app.post('/searchRecipes', (req, res) => {
     })
 })
 
+app.post('/getUserEmail', (req, res) => {
+    const userEmail = req.body.userEmail;
+    let sql = `SELECT * FROM USER WHERE UserEmail = "${userEmail}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/getUserPassword', (req, res) => {
+    const userPassword = req.body.userPassword;
+    let sql = `SELECT * FROM USER WHERE UserPassword = "${userPassword}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+
+
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
