@@ -189,6 +189,20 @@ app.post('/createRecipe', (req, res) => {
     })
 })
 
+app.post('/setRecipeIngredient', (req, res) => {
+    const rid = req.body.RecipeID;
+    const iid = req.body.IngredientID;
+    const quantity = req.body.Quantity;
+    let sql = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient) VALUES(${rid}, ${iid}, ${quantity});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });

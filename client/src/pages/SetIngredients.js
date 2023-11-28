@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box, IconButton, Select, Typography, MenuItem, FormControl, Button } from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from "axios";
 
 const SetIngredients = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [ingredients, setIngredients] = useState(location.state.ingredients);
+    const [recipeID, setRecipeID] = useState(location.state.recipeID);
     const [state, setState] = useState([]);
 
     //https://stackoverflow.com/questions/69206649/handle-multiple-input-boxes-rendered-using-map-function-javascript
@@ -35,8 +37,31 @@ const SetIngredients = () => {
         setState(arr);
     }
 
+    const removeIngredient = (value, index) => {
+        var newIngr = [...ingredients];
+        var newState = [...state];
+        newIngr.splice(index, 1);
+        newState.splice(index, 1);
+
+        setState(newState);
+        setIngredients(newIngr);
+    }
+
+    const addIngrToRecipe = async (val) => {
+        const ing = {
+            RecipeID: recipeID,
+            IngredientID: val.ingredientID,
+            Quantity: val.quantity,
+        }
+        await axios.post("http://localhost:3001/setRecipeIngredient", ing);
+    }
+
     const handleContinue = () => {
-        console.log("continue");
+        state.map((value) => {
+            addIngrToRecipe(value);
+        })
+
+        navigate("/setRecipeInstructions", {state:{recipeID: recipeID}});
     }
 
     useEffect(() => {
@@ -45,9 +70,6 @@ const SetIngredients = () => {
 
     return(
     <Box display="flex" justifyContent="center" padding={2} flexDirection="column" alignItems="center">
-        <IconButton sx={{position: "absolute", top:10, left: 10}}>
-            <ArrowBackIcon fontSize="large"/>
-        </IconButton>
         <Box display="flex" justifyContent="center" padding={2}>
             <Typography variant="h5">Set Ingredient Quantities</Typography>
         </Box>
@@ -86,7 +108,7 @@ const SetIngredients = () => {
                                 </Select>
                             </FormControl>
                     }
-                        <IconButton>
+                        <IconButton onClick={() => removeIngredient(value, index)}>
                             <DeleteIcon/>
                         </IconButton>
                     </Box>

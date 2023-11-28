@@ -2,7 +2,7 @@ import { Box, Typography, IconButton, TextField, Slider, Autocomplete, Button } 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CreateRecipe = () => {
     const navigate = useNavigate();
@@ -17,6 +17,7 @@ const CreateRecipe = () => {
     const [titleErr, setTitleErr] = useState(false);
     const [descErr, setDescErr] = useState(false);
     const [ingrErr, setIngrErr] = useState(false);
+    const [recipeID, setRecipeID] = useState(-1);
 
     const fetchIngredients = async () => {
         const res = await axios.get("http://localhost:3001/ingredients");
@@ -33,7 +34,7 @@ const CreateRecipe = () => {
             ServingSize: servingSize
         }
         const res = await axios.post("http://localhost:3001/createRecipe", recipe);
-        console.log(res);
+        setRecipeID(res.data.insertId);
     }
 
     const handleCreate = () => {
@@ -57,18 +58,23 @@ const CreateRecipe = () => {
 
         
         if(!isValid) return;
-        
+
         insertRecipe()
-        navigate("/setIngredients", {state:{ingredients: selectedIngredients}});
     }
 
     useEffect(() => {
         fetchIngredients();
-    });
+    }, []);
 
+    useEffect(() => {
+        if (recipeID !== -1) navigate("/setIngredients", {state:{ingredients: selectedIngredients, recipeID: recipeID}});
+    }, [recipeID])
+
+    //back arrow returns to dashboard for now, waiting on PR to be merged to link page
     return(
         <Box display="flex" justifyContent="center" padding={2} flexDirection="column" alignItems="center">
-            <IconButton sx={{position: "absolute", top:10, left: 10}}>
+            <IconButton sx={{position: "absolute", top:10, left: 10}}
+                component={Link} to={{pathname:"/dashboard"}}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box display="flex" justifyContent="center" padding={2}>
