@@ -10,7 +10,6 @@ const SetRecipeInstructions = () => {
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
     const [instructions, setInstructions] = useState([]);
     
-
     const handleContinue = () => {
         console.log("done!");
     }
@@ -22,8 +21,6 @@ const SetRecipeInstructions = () => {
         }
         newInstructions.push(instr);
         setInstructions(newInstructions);
-        console.log("hello?")
-        console.log(newInstructions);
     }
 
     const handleChange = (e, i) => {
@@ -36,7 +33,6 @@ const SetRecipeInstructions = () => {
         };
 
         setInstructions(newState);
-        console.log(newState);
     }
 
     const handleDelete = (i) => {
@@ -45,6 +41,7 @@ const SetRecipeInstructions = () => {
         setInstructions(newInstr);
     }
 
+    //need to set limits on text fields and put in db
     return (
     <Box display="flex" justifyContent="center" padding={2} flexDirection="column" alignItems="center">
         <Box display="flex" justifyContent="center" padding={2}>
