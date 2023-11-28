@@ -106,7 +106,7 @@ const SetIngredients = () => {
                                         <InputAdornment position="end" sx={{marginRight:"30px"}}>g</InputAdornment>
                                     }
                                 >
-                                    {Array.from(Array(10), (e, i) => {
+                                    {Array.from(Array(500), (e, i) => {
                                         return(
                                             <MenuItem key={i} value={i + 1}>{i + 1}</MenuItem>
                                         )
