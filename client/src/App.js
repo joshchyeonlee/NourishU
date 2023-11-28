@@ -9,6 +9,8 @@ import ViewMeal from './pages/ViewMeal.js';
 import EditMeal from './pages/EditMeal.js';
 import EditFood from './pages/EditFood.js';
 import CookingConfidence from './pages/CookingConfidence.js';
+import CreateRecipe from './pages/CreateRecipe.js';
+import SetIngredients from './pages/SetIngredients.js';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
       <Route path="/editMeal" element={<EditMeal />} />
       <Route path="/editFood" element={<EditFood />} />
       <Route path="/CookingConfidence" element={<CookingConfidence />} />
+      <Route path="/createRecipe" element={<CreateRecipe />}/>
+      <Route path="setIngredients" element={<SetIngredients/>}/>
     </Routes>
   </BrowserRouter>
   );
