@@ -7,9 +7,12 @@ const Login = () => {
     const[emailInput, setEmailInput] = useState("")
     const[passwordInput, setPasswordInput] = useState("")
     const[isEmailValid, setIsEmailValid] = useState(false)
+    const[isPasswordValid, setisPasswordValid] = useState(false)
+    const[isButtonClicked, setIsButtonClicked] = useState(false)
     const navigate = useNavigate()
     const handleEmailChange = (value) => {
         setEmailInput(value)
+        
 
     }
     const handlePasswordChange = (value) => {
@@ -33,22 +36,39 @@ const Login = () => {
         } catch(err){
             throw(err);
         }
-
-
     }
-    const checkUserPassword = () => {
+    const checkUserPassword = async () => {
+        const userPass = {
+            userPassword: passwordInput
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/getUserPassword", userPass)
+            console.log(res.data);
+            if (res.data.length >= 1) {
+                setisPasswordValid(true)
+               
+            }
+            else {
+                setisPasswordValid(false)
+            }
+
+        } catch(err){
+            throw(err);
+        }
 
     }
     const checkUserCred = () => {
         checkUserEmail()
+        checkUserPassword()
+        setIsButtonClicked(true)
 
     }
     useEffect(() => {
         console.log(isEmailValid)
-        if (isEmailValid) {
+        if (isEmailValid && isPasswordValid) {
             navigate("/")
         }
-    },[isEmailValid]);
+    },[isEmailValid, isPasswordValid]);
     return (
         <div>
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={10}>
@@ -56,10 +76,10 @@ const Login = () => {
             </Box>
             <Grid container spacing={3} direction="column" alignItems="center">
                 <Grid item>
-                    <TextField id="outlined-basic" label="Email" variant="outlined" onChange={(event)=>{handleEmailChange(event.target.value)}}/>
+                    <TextField error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Email" variant="outlined" helperText={(!isEmailValid && isButtonClicked) ? "Invalid Email" : ""} onChange={(event)=>{handleEmailChange(event.target.value)}}/>
                 </Grid>
                 <Grid item>
-                    <TextField id="outlined-basic" label="Password" variant="outlined" onChange={(event)=>{handlePasswordChange(event.target.value)}} />
+                    <TextField type='password' error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Password" variant="outlined" helperText={(!isPasswordValid && isButtonClicked) ? "Invalid Password" : ""} onChange={(event)=>{handlePasswordChange(event.target.value)}} />
                 </Grid>
                 <Grid item>
                     <Button variant="contained" onClick={checkUserCred}>Log in</Button>
