@@ -112,7 +112,6 @@ const SetIngredients = () => {
                                         )
                                     })}
                                 </Select>
-
                             </FormControl>
                     }
                         <IconButton onClick={() => removeIngredient(value, index)}>

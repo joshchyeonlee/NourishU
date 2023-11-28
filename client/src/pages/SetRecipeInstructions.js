@@ -47,7 +47,7 @@ const SetRecipeInstructions = () => {
         <Box display="flex" justifyContent="center" padding={2}>
             <Typography variant="h5">Add Instructions</Typography>
         </Box>
-        <Card variant="outlined" sx={{width:"70%", height:"600px"}}>
+        <Card variant="outlined" sx={{width:"70%", height:"600px", overflowY: "scroll"}}>
             <Grid container spacing={2} display="flex" justifyContent="center" padding={4}>
                 {instructions.map((value, key) => {return(
                     <Grid item xs={12} key={key}>
