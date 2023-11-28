@@ -26,7 +26,7 @@ const Login = () => {
         try{
             const res = await axios.post("http://localhost:3001/getUserEmail", usereml)
             console.log(res.data);
-            if (res.data.length >= 0) {
+            if (res.data.length > 0) {
                 setIsEmailValid(true)
                
             }
@@ -46,7 +46,7 @@ const Login = () => {
         try{
             const res = await axios.post("http://localhost:3001/getUserPassword", userPass)
             console.log(res.data);
-            if (res.data.length >= 0) {
+            if (res.data.length > 0) {
                 setisPasswordValid(true)
                
             }
