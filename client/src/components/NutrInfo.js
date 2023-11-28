@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 const NutrInfo = (props) => {
-    console.log(props.info);
     return(
     <Box display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row" justifyContent="space-between">

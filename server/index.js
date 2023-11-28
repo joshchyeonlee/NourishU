@@ -171,6 +171,7 @@ app.post('/getRecipeIngredients', (req, res) => {
             throw(err);
         }
         res.send(result);
+        console.log(result);
     })
 })
 
@@ -196,6 +197,62 @@ app.post('/getRecipeReviews', (req, res) => {
             throw(err);
         }
         res.send(result);
+    })
+})
+
+app.post('/addToMeal', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const mealID = req.body.MealID;
+    const quant = req.body.Quantity;
+    let sql = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES (${mealID},${recipeID},${quant});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    }) 
+});
+
+app.post('/updateMealRecipeQuantity', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const mealID = req.body.MealID;
+    const quant = req.body.Quantity;
+    let sql = `UPDATE MEAL_CONTAINS_RECIPE SET QuantityConsumed = ${quant} WHERE MealID = ${mealID} AND RecipeID = ${recipeID}`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+        
+    }) 
+});
+
+app.post('/queryMealContainsRecipe', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const mealID = req.body.MealID;
+    let sql = `SELECT * FROM MEAL_CONTAINS_RECIPE WHERE MealID = ${mealID} AND RecipeID = ${recipeID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+        console.log(result);
+    })
+})
+
+app.post('/createReview', (req, res) => {
+    const by = req.body.WrittenBy;
+    const rID = req.body.RecipeID;
+    const rating = req.body.RDifficulty;
+    const comment = req.body.RComment;
+    let sql = `INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment) VALUES(${by}, ${rID}, ${rating}, "${comment}")`
+    console.log(sql);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+        console.log(result);
     })
 })
 

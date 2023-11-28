@@ -1,6 +1,7 @@
 import { Typography, Grid, Button, Box, IconButton } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import BottomNav from "../components/BottomNav";
+import { Link } from "react-router-dom";
 
 const Recipes = () => {
     return (
@@ -13,10 +14,10 @@ const Recipes = () => {
             </Box>
             <Grid container spacing={3} direction="column" width={500}>
                 <Grid item>
-                    <Button variant="contained" fullWidth size="large">Search Recipes</Button>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" fullWidth size="large">View Saved Recipes</Button>
+                    <Button variant="contained" fullWidth size="large"
+                    component={Link}
+                    to={{pathname:"/searchRecipes"}}
+                    state={{from:"/recipes", recipeID:""}}>Search Recipes</Button>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" fullWidth size="large">View Your Recipes</Button>

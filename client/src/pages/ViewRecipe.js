@@ -6,10 +6,12 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import formatRecipeData from "../utils/formatRecipeData";
 import NutrInfo from "../components/NutrInfo";
+import { useLocation, Link } from "react-router-dom";
 
 const ViewRecipe = () => {
-    //change this value based on information from previous page
-    const [recipeID, setRecipeID] = useState(1);
+    const location = useLocation();
+    const [prevPageState, setPrevPageState] = useState(location.state);
+    const [recipeID, setRecipeID] = useState(location.state.recipeID);
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [vitamins, setVitamins] = useState([]);
     const [recipeTitle, setRecipeTitle] = useState("");
@@ -38,7 +40,6 @@ const ViewRecipe = () => {
             const obj = formatRecipeData(res.data);
 
             setNutrInfo(obj);
-            console.log(obj);
         } catch (err) {
             throw (err);
         }
@@ -51,7 +52,6 @@ const ViewRecipe = () => {
         try{
             const res = await axios.post("http://localhost:3001/getRecipeVitamins", rID);
             setVitamins(res.data);
-            console.log(res.data);
         } catch (err) {
             throw(err);
         }
@@ -106,6 +106,26 @@ const ViewRecipe = () => {
         setUserReview(review);
         setUserReviewLength(review.length);
     }
+    
+    const submitReview = async () => {
+        const reviewInfo = {
+            WrittenBy: 0,
+            RecipeID: recipeID,
+            RDifficulty: userRating,
+            RComment: userReview
+        }
+        try{
+            await axios.post("http://localhost:3001/createReview", reviewInfo);
+            fetchReviews();
+
+        } catch(err){
+            throw(err);
+        }
+    }
+
+    const handleSubmitReview = () => {
+        submitReview();
+    }
 
     //remove useEffect if passing in recipe information from previous page
     useEffect(() => {
@@ -114,9 +134,13 @@ const ViewRecipe = () => {
         fetchReviews();
     },[]);
 
+
     return(
         <div>
-            <IconButton sx={{position: "absolute", top:10, left: 10}}>
+            <IconButton sx={{position: "absolute", top:10, left: 10}}
+                component={Link}
+                to={{pathname: prevPageState.from}}
+                state={prevPageState.prev}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" paddingTop={3}>
@@ -227,7 +251,11 @@ const ViewRecipe = () => {
                                     <Box padding={1} display="flex" justifyContent="space-between">
                                         <Typography variant="caption">{userReviewLength}/255</Typography>
                                         <Box display="flex" justifyContent="flex-end">
-                                            <Button variant="contained">Add Review</Button>
+                                            <Button
+                                                variant="contained"
+                                                disabled={(userReviewLength <= 0) || (overallRating <=0)}
+                                                onClick={handleSubmitReview}
+                                                >Add Review</Button>
                                         </Box>
                                     </Box>
                                 </Box>
