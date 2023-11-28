@@ -1,67 +1,94 @@
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, Box, TextField, Grid } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [users, setUsers] = useState([]);
-    const [usersToAdd, setUserToAdd] = useState({
-        id: 0,
-        name: "",
-        caloriesPerGram: 0,
-        createdAt: null,
-        updatedAt: null
-    });
+    const[emailInput, setEmailInput] = useState("")
+    const[passwordInput, setPasswordInput] = useState("")
+    const[isEmailValid, setIsEmailValid] = useState(false)
+    const[isPasswordValid, setisPasswordValid] = useState(false)
+    const[isButtonClicked, setIsButtonClicked] = useState(false)
+    const navigate = useNavigate()
 
-    const fetchUsers = async () => {
+    const handleEmailChange = (value) => {
+        setEmailInput(value)
+    }
+
+    const handlePasswordChange = (value) => {
+        setPasswordInput(value)
+    }
+
+    const checkUserEmail = async () => {
+        const usereml = {
+            userEmail: emailInput
+        }
         try{
-            const res = await axios.get("http://localhost:3001/login")
-            console.log(res);
-            setUsers(res.data);
+            const res = await axios.post("http://localhost:3001/getUserEmail", usereml)
+            console.log(res.data);
+            if (res.data.length >= 1) {
+                setIsEmailValid(true)
+               
+            }
+            else {
+                setIsEmailValid(false)
+            }
+
         } catch(err){
             throw(err);
         }
     }
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
-
-    const handleClick = async () => {
-        const ingToAdd = {
-            UserID: 98,
-            UserName: "the bean guy",
-            UserEmail: "google@google.com",
-            UserBirthdate: "1999-08-19",
-            UserHeight: 290,
-            UserWeight: 135,
-            UserAge: 25,
-            DietName: "Professional Bean Consumer",
-            DietDescription: "Bean",
-            CookingConfidence: 3
+    const checkUserPassword = async () => {
+        const userPass = {
+            userPassword: passwordInput
         }
-
         try{
-            await axios.post("http://localhost:3001/login", ingToAdd);
-        } catch(error){
-            throw(error);
-        }
-        
-        setUserToAdd(ingToAdd);
-        fetchUsers();
-    }
+            const res = await axios.post("http://localhost:3001/getUserPassword", userPass)
+            console.log(res.data);
+            if (res.data.length >= 1) {
+                setisPasswordValid(true)
+               
+            }
+            else {
+                setisPasswordValid(false)
+            }
 
+        } catch(err){
+            throw(err);
+        }
+
+    }
+    const checkUserCred = () => {
+        checkUserEmail()
+        checkUserPassword()
+        setIsButtonClicked(true)
+
+    }
+    useEffect(() => {
+        console.log(isEmailValid)
+        if (isEmailValid && isPasswordValid) {
+            navigate("/Dashboard")
+        }
+    },[isEmailValid, isPasswordValid]);
     return (
         <div>
-            <Typography>Login</Typography>
-            <Button onClick={handleClick}>Add new bean to ingredient</Button>
-            <div>
-                {users.map(user => (<div>
-                    <Typography>Name: {user.UserName}</Typography>
-                    <Typography>Diet Name: {user.DietName}</Typography>
-                </div>))}
-            </div>
+            <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={10}>
+                <Typography variant='h4'>Sign In</Typography>
+            </Box>
+            <Grid container spacing={3} direction="column" alignItems="center">
+                <Grid item>
+                    <TextField error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Email" variant="outlined" helperText={(!isEmailValid && isButtonClicked) ? "Invalid Email" : ""} onChange={(event)=>{handleEmailChange(event.target.value)}}/>
+                </Grid>
+                <Grid item>
+                    <TextField type='password' error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Password" variant="outlined" helperText={(!isPasswordValid && isButtonClicked) ? "Invalid Password" : ""} onChange={(event)=>{handlePasswordChange(event.target.value)}} />
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" onClick={checkUserCred}>Log in</Button>
+                </Grid>
+            </Grid>
         </div>
-    )
-};
+    );
+}
 
 export default Login;
