@@ -11,26 +11,25 @@ CREATE TABLE REVIEW
 RecipeID		INT			NOT NULL,
 RDifficulty		INT,
 RComment		VARCHAR(255),
-ReviewID		INT			NOT NULL,
-PRIMARY KEY(ReviewID),
+ReviewID		INT PRIMARY KEY AUTO_INCREMENT	NOT NULL,
 FOREIGN KEY(WrittenBy) REFERENCES USER(UserID) ON UPDATE CASCADE,
 FOREIGN KEY(RecipeID) REFERENCES RECIPE(RecipeID) ON UPDATE CASCADE);`;
 
 const review1 = `
-INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment, ReviewID)
-VALUES(0, 1, 3, "This was really good!", 0);`;
+INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment)
+VALUES(0, 1, 3, "This was really good!");`;
 const review2 = `
-INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment, ReviewID)
-VALUES(2,1,1,"This was fairly good!", 1);`;
+INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment)
+VALUES(2,1,1,"This was fairly good!");`;
 const review3 = `
-INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment, ReviewID)
-VALUES(1,1,4,"I would have this again", 2);`;
+INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment)
+VALUES(1,1,4,"I would have this again");`;
 const review4 = `
-INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment, ReviewID)
-VALUES(1,2,5,"Thanks for sharing!", 3);`;
+INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment)
+VALUES(1,2,5,"Thanks for sharing!");`;
 const review5 = `
-INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment, ReviewID)
-VALUES(1,2,3,"I make this for every single meal!", 4);`;
+INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment)
+VALUES(1,2,3,"I make this for every single meal!");`;
 
 const data = [review1, review2, review3, review4, review5];
 

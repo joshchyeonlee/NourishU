@@ -14,7 +14,7 @@ function BottomNav(props){
                 onChange={(event, newValue) => {setValue(newValue);}}
             >
                 <BottomNavigationAction href="/recipes" disabled={props.currentPage === "Recipes"} label="Recipes" icon={<MenuBookIcon />} />
-                <BottomNavigationAction href="/" disabled={props.currentPage === "Dashboard"} label="Dashboard" icon={<HomeIcon />} />
+                <BottomNavigationAction href="/dashboard" disabled={props.currentPage === "Dashboard"} label="Dashboard" icon={<HomeIcon />} />
                 <BottomNavigationAction href="/profile" disabled={props.currentPage === "Profile"} label="Profile" icon={<AccountCircleIcon />} />
             </BottomNavigation>
         </Box>
