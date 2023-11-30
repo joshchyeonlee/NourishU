@@ -90,3 +90,4 @@ Pro tips:
 ##### authentication
 Need to use react-auth-kit@2.12.7. Docs [here](https://authkit.arkadip.dev/)
 As stated in the docs: Please note that react >= 16, js-cookie = 2.2.1 and react-router-dom = 6.0 are peer dependencies.
+Based off of: https://www.youtube.com/watch?v=wr3VmbZdVA4
