@@ -57,6 +57,13 @@ To set this up I used the following videos, it might be worth watching for more 
 
 Note that we're not allowed to use sequelize so I refactored the repo to exclude it. This should make it more intuitive for us anyways since it'll have similar structure to the sql stuff we've seen in lecture.
 
+`admin`
+
+Same thing as `client` run `cd` into the `/admin` directory and run `npm start`
+Runs on port 3002
+Make ya pages and throw them in index.js
+Just make sure that you import pages properly (not from server)
+
 ### More Detail
 
 First of all, you will need to have MySql installed. I have configured the databse in our BE with the `root` user and an empty string as the password - I don't know how this will affect you. Hopefully it won't be a pain to figure out the DB cuz I've never used MySql before...
@@ -79,3 +86,8 @@ Pro tips:
 
 - if you have the client and server running, you can just save changes and it should just automatically recompile and update things.
 - don't forget to hit `ctrl+c` to kill the server/client when you're not working on it. Pretty sure killing the terminal will quit the processes though.
+
+##### authentication
+Need to use react-auth-kit@2.12.7. Docs [here](https://authkit.arkadip.dev/)
+As stated in the docs: Please note that react >= 16, js-cookie = 2.2.1 and react-router-dom = 6.0 are peer dependencies.
+Based off of: https://www.youtube.com/watch?v=wr3VmbZdVA4
