@@ -21,11 +21,9 @@ const EditRecipe = () => {
 
         try{
             const res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
-            console.log(res.data);
             setServingSize(res.data[0].ServingSize);
             setRecipeDifficulty(res.data[0].RDifficulty);
             setCookTime(res.data[0].CookTime);
-            console.log(res.data[0].CookTime);
             setRecipeTitle(res.data[0].RecipeTitle);
             setRecipeDescription(res.data[0].RecipeDescription);
 
@@ -44,8 +42,7 @@ const EditRecipe = () => {
             RecipeDifficulty: recipeDifficulty,
         }
         try{
-            const res = await axios.post("http://localhost:3001/updateRecipe", recipe);
-            console.log(res);
+            await axios.post("http://localhost:3001/updateRecipe", recipe);
         } catch (err) {
             throw (err)
         }
@@ -77,20 +74,26 @@ const EditRecipe = () => {
                 <Box padding={2}>
                     <TextField
                         label="Recipe Title"
+                        helperText={recipeTitle.length === 0 ? "Title required" : ""}
+                        error={recipeTitle.length === 0}
                         fullWidth
                         value={recipeTitle}
                         onChange={(e) => setRecipeTitle(e.target.value)}
+                        inputProps={{ maxLength: 50 }}
                     />
                     <Box display="flex" justifyContent="right">
-                        <Typography variant="caption">{recipeTitle.length}/255</Typography>
+                        <Typography variant="caption">{recipeTitle.length}/50</Typography>
                     </Box>
                 </Box>
                 <Box padding={2}>
                     <TextField
                         label="Recipe Description"
+                        helperText={recipeDescription.length === 0 ? "Description required" : ""}
+                        error={recipeDescription.length === 0}
                         fullWidth
                         value={recipeDescription}
                         onChange={(e) => setRecipeDescription(e.target.value)}
+                        inputProps={{ maxLength: 255 }}
                     />
                     <Box display="flex" justifyContent="right">
                         <Typography variant="caption">{recipeDescription.length}/255</Typography>
@@ -139,18 +142,26 @@ const EditRecipe = () => {
                         onChange={(e) => setCookTime(e.target.value)}
                     />
                     <Box display="flex" justifyContent="right">
-                        <Typography variant="caption">{cookTime}</Typography>
+                        <Typography variant="caption">{cookTime >= 60 ? `${Math.floor(Number(cookTime / 60))} h ${Math.round(((cookTime/60) - Math.floor(cookTime/60)) * 60)} min` : `${cookTime} minutes`}</Typography>
                     </Box>
                 </Box>
             </Box>
             <Box sx={{width:"25%"}}>
                 <Box padding={1}>
-                    <Button fullWidth variant="contained" onClick={handleDone}>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={handleDone}
+                        disabled={recipeTitle.length === 0 || recipeDescription.length === 0}
+                    >
                         Update
                     </Button>
                 </Box>
                 <Box padding={1}>
-                    <Button onClick={handleEditIngredients}>
+                    <Button
+                        onClick={handleEditIngredients}
+                        disabled={recipeTitle.length === 0 || recipeDescription.length === 0}    
+                    >
                         Update and Edit Ingredients
                     </Button>
                 </Box>
