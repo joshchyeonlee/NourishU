@@ -1,8 +1,10 @@
+require("dotenv").config();
 // based off of https://www.youtube.com/watch?v=EN6Dx22cPRI
 // https://www.youtube.com/watch?v=fPuLnzSjPLE
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const jwt = require("jsonwebtoken");
 
 //create connection
 const db = mysql.createConnection({
@@ -276,6 +278,22 @@ app.post('/createReview', (req, res) => {
         res.send(result);
         console.log(result);
     })
+})
+
+app.post('/authenticateUser', (req, res) => {
+    const email = req.body.Email;
+    const password = req.body.Password;
+    const jwtToken = jwt.sign(
+        {email: email, password: password},
+        `${process.env.JWT_SECRET_KEY}`,
+    )
+
+    const obj = {
+        message: "authenticated",
+        token: jwtToken,
+    }
+
+    res.send(obj);
 })
 
 app.listen(3001, () => {

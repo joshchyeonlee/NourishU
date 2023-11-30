@@ -2,6 +2,7 @@ import { Button, Typography, Box, TextField, Grid } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSignIn } from 'react-auth-kit';
 
 const Login = () => {
     const[emailInput, setEmailInput] = useState("")
@@ -9,7 +10,9 @@ const Login = () => {
     const[isEmailValid, setIsEmailValid] = useState(false)
     const[isPasswordValid, setisPasswordValid] = useState(false)
     const[isButtonClicked, setIsButtonClicked] = useState(false)
+    const[isAuth, setIsAuth] = useState(false);
     const navigate = useNavigate()
+    const signIn = useSignIn();
 
     const handleEmailChange = (value) => {
         setEmailInput(value)
@@ -55,19 +58,47 @@ const Login = () => {
         } catch(err){
             throw(err);
         }
-
     }
+
+    const authenticateUser = async () => {
+        const cred = {
+            Email: emailInput,
+            Password: passwordInput,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/authenticateUser", cred)
+            
+            signIn({
+                token: res.data.token,
+                expiresIn: 3600,
+                tokenType: "Bearer",
+                authState: {values: cred.Email},
+            })
+            
+        } catch (err) {
+            throw(err);
+        }
+    }
+
     const checkUserCred = () => {
         checkUserEmail()
         checkUserPassword()
+        authenticateUser();
         setIsButtonClicked(true)
-
     }
+    
     useEffect(() => {
-        if (isEmailValid && isPasswordValid) {
-            navigate("/Dashboard")
+        const check = async () => {
+            if (isEmailValid && isPasswordValid) {
+                await authenticateUser()
+    
+                navigate("/Dashboard");
+            }
         }
+        check();
+        
     },[isEmailValid, isPasswordValid]);
+
     return (
         <div>
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={10}>

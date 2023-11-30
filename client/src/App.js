@@ -11,22 +11,24 @@ import CookingConfidence from './pages/CookingConfidence.js';
 import ViewRecipe from './pages/ViewRecipe.js';
 import SearchRecipes from './pages/SearchRecipes.js';
 import Welcome from './pages/Welcome.js';
+import { RequireAuth } from 'react-auth-kit';
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
-      <Route path="/Dashboard" element={<Dashboard />} />
+      <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard /></RequireAuth>}/>
+      <Route path="/recipes" element={<RequireAuth loginPath='/welcome'><Recipes /></RequireAuth>}/>
+      <Route path="/profile" element={<RequireAuth loginPath='/welcome'><Profile/></RequireAuth>}/>
+      <Route path="/searchRecipes" element={<RequireAuth loginPath='/welcome'><SearchRecipes/></RequireAuth>}/>
+      <Route path="/viewMeal" element={<RequireAuth loginPath='/welcome'><ViewMeal/></RequireAuth>}/>
+      <Route path="/editMeal" element={<RequireAuth loginPath='/welcome'><EditMeal/></RequireAuth>}/>
+      <Route path="/editFood" element={<RequireAuth loginPath='/welcome'><EditFood/></RequireAuth>}/>
+      <Route path="/cookingConfidence" element={<RequireAuth loginPath='/welcome'><CookingConfidence/></RequireAuth>}/>
+      <Route path="/viewRecipe" element={<RequireAuth loginPath='/welcome'><ViewRecipe/></RequireAuth>}/>
+      <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard/></RequireAuth>}/>
+      <Route path="/welcome" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/recipes" element={<Recipes />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/searchRecipes" element={<SearchRecipes />} />
-      <Route path="/viewMeal" element={<ViewMeal />} />
-      <Route path="/editMeal" element={<EditMeal />} />
-      <Route path="/editFood" element={<EditFood />} />
-      <Route path="/CookingConfidence" element={<CookingConfidence />} />
-      <Route path="/viewRecipe" element={<ViewRecipe />} />
-      <Route path="/Welcome" element={<Welcome />} />
     </Routes>
   </BrowserRouter>
   );
