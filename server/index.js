@@ -350,9 +350,7 @@ app.post('/queryUserNameExists', (req, res) => {
         }
         res.send(result);
     })
-}
-
-)
+})
 
 app.listen(3001, () => {
     console.log("Server started on port 3001");
