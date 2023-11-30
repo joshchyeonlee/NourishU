@@ -43,6 +43,16 @@ app.get('/login', (req,res) => {
     })
 })
 
+app.get('/ingredients', (req, res) => {
+    let sql = `SELECT * FROM INGREDIENT`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 //need to get info and update it here
 app.post('/login', (req,res) => {
     let sql = "INSERT INTO USER(UserID, UserName, UserEmail, UserBirthdate, UserHeight, UserWeight, UserAge, DietName, DietDescription, CookingConfidence) VALUES(?)";
@@ -154,7 +164,38 @@ app.post('/updateMealTitle', (req, res) => {
 app.post('/searchRecipes', (req, res) => {
     const search = req.body.Search;
     let sql = `SELECT * FROM RECIPE WHERE RecipeTitle LIKE '%${search}%';`;
-    console.log(sql);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/createRecipe', (req, res) => {
+    const uid = req.body.UserID;
+    const diff = req.body.RDifficulty;
+    const t = req.body.CookTime;
+    const title = req.body.RecipeTitle;
+    const desc = req.body.RecipeDescription;
+    const size = req.body.ServingSize;
+    let sql = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize)
+    VALUES (${uid}, ${diff}, ${t}, "${title}", "${desc}", ${size});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/setRecipeIngredient', (req, res) => {
+    const rid = req.body.RecipeID;
+    const iid = req.body.IngredientID;
+    const quantity = req.body.Quantity;
+    let sql = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient) VALUES(${rid}, ${iid}, ${quantity});`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
