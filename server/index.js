@@ -152,12 +152,10 @@ app.post('/updateMealTitle', (req, res) => {
 app.post('/searchRecipes', (req, res) => {
     const search = req.body.Search;
     let sql = `SELECT * FROM RECIPE WHERE RecipeTitle LIKE '%${search}%';`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -171,7 +169,6 @@ app.post('/getRecipeIngredients', (req, res) => {
             throw(err);
         }
         res.send(result);
-        console.log(result);
     })
 })
 
@@ -258,7 +255,6 @@ app.post('/queryMealContainsRecipe', (req, res) => {
             throw(err);
         }
         res.send(result);
-        console.log(result);
     })
 })
 
@@ -268,13 +264,70 @@ app.post('/createReview', (req, res) => {
     const rating = req.body.RDifficulty;
     const comment = req.body.RComment;
     let sql = `INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment) VALUES(${by}, ${rID}, ${rating}, "${comment}")`
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
         res.send(result);
-        console.log(result);
+    })
+})
+
+app.post('/getUserAchievements', (req, res) => {
+    const uid = req.body.UserID;
+    let sql = `SELECT * FROM ACHIEVEMENTS_EARNED AS e, ACHIEVEMENT AS a WHERE e.UserID = ${uid} AND a.AchievementID = e.AchievementID;`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/getUserCreatedRecipes', (req, res) => {
+    const uid = req.body.UserID;
+    let sql =  `SELECT * FROM RECIPE WHERE UserID = ${uid};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/updateRecipe', (req, res) => {
+    const rid = req.body.RecipeID;
+    const rTitle = req.body.RecipeTitle;
+    const rDesc = req.body.RecipeDescription;
+    const rTime = req.body.CookTime;
+    const rSize = req.body.ServingSize;
+    const rDifficulty = req.body.RecipeDifficulty;
+    let sql = `UPDATE RECIPE SET
+    RecipeTitle = "${rTitle}",
+    RecipeDescription = "${rDesc}",
+    CookTime = ${rTime},
+    ServingSize = ${rSize},
+    RDifficulty = ${rDifficulty}
+    WHERE RecipeID = ${rid};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/updateRecipeIngredient', (req, res) => {
+    const rid = req.body.RecipeID;
+    const iid = req.body.IngredientID;
+    const rQuant = req.body.AmountIngredient;
+    let sql = `UPDATE RECIPE_CONTAINS_INGREDIENT SET
+    AmountIngredient = ${rQuant}
+    WHERE RecipeID = ${rid} AND IngredientID = ${iid};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
     })
 })
 

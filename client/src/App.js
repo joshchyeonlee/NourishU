@@ -11,6 +11,8 @@ import CookingConfidence from './pages/CookingConfidence.js';
 import ViewRecipe from './pages/ViewRecipe.js';
 import SearchRecipes from './pages/SearchRecipes.js';
 import Welcome from './pages/Welcome.js';
+import EditRecipe from './pages/EditRecipe.js';
+import EditRecipeIngredients from './pages/EditRecipeIngredients.js';
 
 function App() {
   return (
@@ -26,6 +28,8 @@ function App() {
       <Route path="/editFood" element={<EditFood />} />
       <Route path="/CookingConfidence" element={<CookingConfidence />} />
       <Route path="/viewRecipe" element={<ViewRecipe />} />
+      <Route path="/editRecipe" element={<EditRecipe />} />
+      <Route path="/editRecipeIngredients" element={<EditRecipeIngredients />} />
       <Route path="/Welcome" element={<Welcome />} />
     </Routes>
   </BrowserRouter>

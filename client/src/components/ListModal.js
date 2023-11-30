@@ -23,8 +23,8 @@ const ListModal = (props) => {
                 <List>
                     {props.values.map((value, key) => {
                         return(
-                        <ListItemButton>
-                            <ListItem disablePadding key={key}>
+                        <ListItemButton key={key}>
+                            <ListItem disablePadding>
                                 <Typography>
                                     {value.UserName}
                                 </Typography>

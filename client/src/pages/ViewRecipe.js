@@ -12,6 +12,7 @@ const ViewRecipe = () => {
     const location = useLocation();
     const [prevPageState, setPrevPageState] = useState(location.state);
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
+    console.log(recipeID);
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [vitamins, setVitamins] = useState([]);
     const [recipeTitle, setRecipeTitle] = useState("");
@@ -177,7 +178,7 @@ const ViewRecipe = () => {
                                 <Box paddingLeft={1} display="flex" flexDirection="column">
                                     {vitamins.map((value, key) => {
                                         return(
-                                            <Typography variant="caption" key={key}>{value.VitaminName}</Typography>
+                                            <Typography variant="caption" key={key}>{value ? value.VitaminName : ""}</Typography>
                                         )})}
                                 </Box>
                             </Box>
@@ -216,8 +217,8 @@ const ViewRecipe = () => {
                                     <Box display="flex" justifyContent="space-between">
                                         <Typography>{value.UserName}</Typography>
                                         <Rating
-                                            value={value.Rdifficulty}
-                                            icon={<FavoriteIcon sx={setColor(value.Rdifficulty)}/>}
+                                            value={value ? value.Rdifficulty : 0}
+                                            icon={<FavoriteIcon sx={setColor(value ? value.Rdifficulty : 0)}/>}
                                             emptyIcon={<FavoriteIcon/>}
                                             readOnly
                                         />
