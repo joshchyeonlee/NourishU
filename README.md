@@ -86,3 +86,7 @@ Pro tips:
 
 - if you have the client and server running, you can just save changes and it should just automatically recompile and update things.
 - don't forget to hit `ctrl+c` to kill the server/client when you're not working on it. Pretty sure killing the terminal will quit the processes though.
+
+##### authentication
+Need to use react-auth-kit@2.12.7. Docs [here](https://authkit.arkadip.dev/)
+As stated in the docs: Please note that react >= 16, js-cookie = 2.2.1 and react-router-dom = 6.0 are peer dependencies.
