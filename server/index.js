@@ -180,6 +180,16 @@ app.post('/getRecipeVitamins', (req, res) => {
     let sql = `SELECT r.RecipeID, v.VitaminName FROM RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, VITAMINS as v
     WHERE r.RecipeID = ? and r.RecipeID = ri.RecipeID and ri.IngredientID = v.IngredientID;`;
     db.query(sql, recipeID, (err, result) => {
+      if(err){
+        throw(err);
+      }
+      res.send(result);
+    })
+})
+app.post('/getUserEmail', (req, res) => {
+    const userEmail = req.body.userEmail;
+    let sql = `SELECT * FROM USER WHERE UserEmail = "${userEmail}"`;
+    db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
@@ -193,12 +203,24 @@ app.post('/getRecipeReviews', (req, res) => {
     FROM REVIEW as r, USER as u
     WHERE u.UserID = r.WrittenBy and r.RecipeID = ?;`;
     db.query(sql, recipeID, (err, result) => {
+      if(err){
+        throw(err);
+      }
+      res.send(result);
+    })
+})
+
+app.post('/getUserPassword', (req, res) => {
+    const userPassword = req.body.userPassword;
+    let sql = `SELECT * FROM USER WHERE UserPassword = "${userPassword}"`;
+    db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
         res.send(result);
     })
 })
+
 
 app.post('/addToMeal', (req, res) => {
     const recipeID = req.body.RecipeID;
