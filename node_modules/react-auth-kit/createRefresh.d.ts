@@ -1,0 +1,102 @@
+/**
+ * Payload for Refresh token
+ */
+export interface RefreshTokenActionPayload<T> {
+    /**
+     * New Auth token from the network response
+     */
+    newAuthToken: string;
+    /**
+     * New Auth Token type from the network response
+     */
+    newAuthTokenType?: string;
+    /**
+     * New Refresh token from the nwtwork response. Can be null
+     */
+    newRefreshToken?: string;
+    /**
+     * New User state from the network. Can be null
+     */
+    newAuthUserState?: T | null;
+}
+/**
+ * Refresh Token Callback Response
+ */
+interface RefreshTokenCallbackResponse<T> extends RefreshTokenActionPayload<T> {
+    /**
+     * If the refresh operation is successful or not
+     *
+     * If the isSuceess is `true`, then the `token` and other items will be
+     * replaced with the new network response
+     *
+     * If the isSuceess is `false`, then everything will be wiped and user will
+     * be sgined out
+     */
+    isSuccess: boolean;
+}
+/**
+ *
+ */
+type refreshTokenCallback<T> = (param: {
+    /**
+     * Existing Auth token for the refresh operation
+     */
+    authToken?: string;
+    /**
+     * Existing Refresh token for the refresh operation
+     */
+    refreshToken?: string;
+    /**
+     * Existing User State for the User state
+     */
+    authUserState: T | null;
+}) => Promise<RefreshTokenCallbackResponse<T>>;
+/**
+ * Parameter for the Refresh operation
+ */
+export interface createRefreshParamInterface<T> {
+    /**
+     * Interval on which the callback function is called
+     */
+    interval: number;
+    /**
+     * A Callback function which'll have the network request
+     *
+     * @example
+     * ```js
+     * refreshApiCallback: async (param) => {
+     *  try {
+     *    const response = await axios.post("/refresh", param, {
+     *      headers: {'Authorization': `Bearer ${param.authToken}`}
+     *    })
+     *    console.log("Refreshing")
+     *    return {
+     *      isSuccess: true,
+     *      newAuthToken: response.data.token,
+     *      newAuthTokenExpireIn: 10,
+     *      newRefreshTokenExpiresIn: 60
+     *    }
+     *  }
+     *  catch(error){
+     *    console.error(error)
+     *    return {
+     *      isSuccess: false
+     *    }
+     *  }
+     * }
+     * ```
+     */
+    refreshApiCallback: refreshTokenCallback<T>;
+}
+/**
+ * @param param - Parameters required for the refresh engine
+ * @returns Same params with added layer of safety net.
+ *
+ * @remarks
+ * This function doesn't really "do anything" at runtime,
+ * it's just help to organize the code base
+ * Use this function to create the refresh token system
+ *
+ */
+declare function createRefresh<T>(param: createRefreshParamInterface<T>): createRefreshParamInterface<T>;
+export default createRefresh;

@@ -1,0 +1,84 @@
+/**
+ * @packageDocumentation
+ *
+ * Reducer Module
+ *
+ * It contains all the reducers
+ *
+ * @remarks
+ * A reducer is a function that takes input from the user
+ * and converts to the actual state object,
+ * that can be processed by React Auth Kit state system.
+ *
+ */
+import type { SignInActionPayload } from '../types';
+import type { RefreshTokenActionPayload } from '../createRefresh';
+import type { AuthKitSetState } from '../RxTokenObject';
+/**
+ * @internal
+ *
+ * Do Sign In reducer.
+ * It is used to convert the incoming payload into
+ * the specified format for the auth state.
+ * It doesn't contains any important buisness logic.
+*
+ * @typeParam T - Type of User State Object
+ * @param signInParams - Sign in parameters
+ * @returns Object that is modified to auth state to used further
+ *
+ * @remarks
+ * - If the `auth.type` is not set, then by default it is set as `Bearer`
+ * - If the `userState` is not set, then by default it is `{}` (an empty object)
+ *
+ */
+export declare function doSignIn<T>(signInParams: SignInActionPayload<T>): AuthKitSetState<T>;
+/**
+ * Do refresh reducer
+ * When the token is refrshed,
+ * this reducer is used to convert the incoming data from
+ * the refresh token functionality.
+ *
+ * @remarks
+ *
+ * Here is the internal decision graph
+ * ```
+ * refreshTokenParam
+ *        |
+ *        |-- new auth token -------------------------> Update the auth data
+ *        |                   |
+ *        |                   |
+ *        |                   |-- new user state -----> Add user state in
+ *        |                   |                         the updated auth data
+ *        |                   |
+ *        |                   |-- new refresh token --> Add new refresh token in
+ *        |                                             the updated auth state
+ *        |
+ *        |-- No auth token only refresh token -------> Update the refresh token
+ *        |
+ *        |
+ *        --- No auth token and refresh token --------> Make everything Null
+ * ```
+ *
+ * @param refreshTokenParam - Parameters set by the
+ * refresh token called
+ * @returns Object that is modified to auth state to used
+ * further to set the refreshed auth states
+ *
+ * @internal
+ *
+ * @typeParam T - Type of User State Object
+ */
+export declare function doRefresh<T>(refreshTokenParam: RefreshTokenActionPayload<T>): AuthKitSetState<T>;
+/**
+ * Do sign out reducer
+ * Called Internally to make the auth state signed out
+ *
+ * @returns Object that is modified to be used further to
+ * update the auth state to make it signed out
+ *
+ * @internal
+ *
+ * @typeParam T - Type of User State Object
+ *
+ */
+export declare function doSignOut<T>(): AuthKitSetState<T>;

@@ -2,6 +2,7 @@ import { Button, Typography, Box, TextField, Grid } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSignIn } from "react-auth-kit";
 
 const Login = () => {
     const[emailInput, setEmailInput] = useState("")
@@ -10,6 +11,7 @@ const Login = () => {
     const[isPasswordValid, setisPasswordValid] = useState(false)
     const[isButtonClicked, setIsButtonClicked] = useState(false)
     const navigate = useNavigate()
+    const signIn = useSignIn();
 
     const handleEmailChange = (value) => {
         setEmailInput(value)
@@ -32,6 +34,13 @@ const Login = () => {
             else {
                 setIsEmailValid(false)
             }
+
+        signIn({
+            token: res.data.token,
+            expiresIn: 3600,
+            tokenType: "Bearer",
+            authState: { userEmail: emailInput },
+        });
 
         } catch(err){
             throw(err);
