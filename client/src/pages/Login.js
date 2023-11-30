@@ -10,7 +10,7 @@ const Login = () => {
     const[isEmailValid, setIsEmailValid] = useState(false)
     const[isPasswordValid, setisPasswordValid] = useState(false)
     const[isButtonClicked, setIsButtonClicked] = useState(false)
-    const[isAuth, setIsAuth] = useState(false);
+    const[userID, setUserID] = useState();
     const navigate = useNavigate()
     const signIn = useSignIn();
 
@@ -29,8 +29,8 @@ const Login = () => {
         try{
             const res = await axios.post("http://localhost:3001/getUserEmail", usereml)
             if (res.data.length > 0) {
+                setUserID(res.data[0].UserID)
                 setIsEmailValid(true)
-               
             }
             else {
                 setIsEmailValid(false)
@@ -72,7 +72,7 @@ const Login = () => {
                 token: res.data.token,
                 expiresIn: 3600,
                 tokenType: "Bearer",
-                authState: {values: cred.Email},
+                authState: {values: {email: cred.Email, userID: userID}},
             })
             
         } catch (err) {
@@ -96,7 +96,7 @@ const Login = () => {
             }
         }
         check();
-        
+
     },[isEmailValid, isPasswordValid]);
 
     return (

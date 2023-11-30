@@ -188,6 +188,7 @@ app.post('/getRecipeVitamins', (req, res) => {
       res.send(result);
     })
 })
+
 app.post('/getUserEmail', (req, res) => {
     const userEmail = req.body.userEmail;
     let sql = `SELECT * FROM USER WHERE UserEmail = "${userEmail}"`;
@@ -283,6 +284,7 @@ app.post('/createReview', (req, res) => {
 app.post('/authenticateUser', (req, res) => {
     const email = req.body.Email;
     const password = req.body.Password;
+
     const jwtToken = jwt.sign(
         {email: email, password: password},
         `${process.env.JWT_SECRET_KEY}`,
@@ -294,6 +296,7 @@ app.post('/authenticateUser', (req, res) => {
     }
 
     res.send(obj);
+
 })
 
 app.listen(3001, () => {

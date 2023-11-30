@@ -3,9 +3,11 @@ import MealItemList from "../components/MealItemList";
 import BottomNav from "../components/BottomNav";
 import { useState, useEffect } from "react";
 import axios from 'axios';
+import { useAuthUser } from 'react-auth-kit'
 
 const Dashboard = () => {
-    const [userId, setUserId] = useState("0");
+    const auth = useAuthUser();
+    const [userId, setUserId] = useState(auth().values.userID);
     const [meals, setMeals] = useState([]);
 
     const fetchUserMeals = async () => {
@@ -14,7 +16,6 @@ const Dashboard = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getUserMeals", uid);
-            console.log(res.data);
             setMeals(res.data);
         } catch(err){
             throw(err);
