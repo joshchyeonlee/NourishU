@@ -1,7 +1,8 @@
 .App {
   text-align: center;
+  overflow-x: none
 }
 
 html, body, #app, #app>div {
-  height: 100%
+  height: 100%,
 }

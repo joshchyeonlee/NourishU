@@ -4,7 +4,6 @@ import Dashboard from './pages/Dashboard.js'
 import Login from './pages/Login.js'
 import Recipes from './pages/Recipes.js'
 import Profile from './pages/Profile.js';
-import AddFood from './pages/AddFood.js';
 import ViewMeal from './pages/ViewMeal.js';
 import EditMeal from './pages/EditMeal.js';
 import EditFood from './pages/EditFood.js';
@@ -12,6 +11,9 @@ import CookingConfidence from './pages/CookingConfidence.js';
 import CreateRecipe from './pages/CreateRecipe.js';
 import SetIngredients from './pages/SetIngredients.js';
 import SetRecipeInstructions from './pages/SetRecipeInstructions.js';
+import ViewRecipe from './pages/ViewRecipe.js';
+import SearchRecipes from './pages/SearchRecipes.js';
+import Welcome from './pages/Welcome.js';
 
 function App() {
   return (
@@ -21,7 +23,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/recipes" element={<Recipes />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/addFood" element={<AddFood />} />
+      <Route path="/searchRecipes" element={<SearchRecipes />} />
       <Route path="/viewMeal" element={<ViewMeal />} />
       <Route path="/editMeal" element={<EditMeal />} />
       <Route path="/editFood" element={<EditFood />} />
@@ -29,6 +31,8 @@ function App() {
       <Route path="/createRecipe" element={<CreateRecipe />}/>
       <Route path="/setIngredients" element={<SetIngredients/>}/>
       <Route path="/setRecipeInstructions" element={<SetRecipeInstructions/>}/>
+      <Route path="/viewRecipe" element={<ViewRecipe />} />
+      <Route path="/Welcome" element={<Welcome />} />
     </Routes>
   </BrowserRouter>
   );
