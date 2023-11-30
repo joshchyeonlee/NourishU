@@ -91,7 +91,10 @@ const EditMeal = () => {
             </Box>
             <Box position="absolute" bottom={10} width="100%" left="50%" marginLeft="-160px">
                 <Box sx={{width:"320px"}} padding={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-                    <Button fullWidth variant="contained">Add Food</Button>
+                    <Button fullWidth variant="contained"
+                        component={Link}
+                        to={{pathname:"/searchRecipes"}}
+                        state={{meal: meal, from:"/editMeal", recipes:recipes}}>Add Food</Button>
                 </Box>
                 <Box sx={{width:"320px"}} padding={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                     <Button fullWidth variant="contained"

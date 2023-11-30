@@ -2,12 +2,19 @@ import { Box, IconButton, InputBase, Typography, Button, Paper, Rating } from "@
 import SearchIcon from '@mui/icons-material/Search';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation, Link } from "react-router-dom";
+import AddFoodModal from "../components/AddFoodModal";
 
-const AddFood = () => {
+const SearchRecipes = () => {
+    const location = useLocation();
+    const [prevPageData, setPrevPageData] = useState(location.state)
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+    const [addRecipe, setAddRecipe] = useState();
+    const [addRecipeTitle, setAddRecipeTitle] = useState("");
 
     const searchRecipes = async () => {
         const searchQuery = {
@@ -15,7 +22,6 @@ const AddFood = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/searchRecipes", searchQuery);
-            console.log(res.data);
             setSearchResults(res.data);
         } catch(err){
             throw(err);
@@ -35,7 +41,6 @@ const AddFood = () => {
     }
 
     const setColor = (val) => {
-        console.log(val);
         if(val === 1) return {color:"blue"};
         if(val === 2) return {color:"green"};
         if(val === 3) return {color:"yellow"};
@@ -43,13 +48,23 @@ const AddFood = () => {
         if(val === 5) return {color:"red"};
     }
 
+    const handleAddFoodModal = (recipe) => {
+        setAddRecipe(recipe)
+        setAddRecipeTitle(recipe.RecipeTitle);
+        setIsAddModalOpen(true);
+    }
+
     return(
         <div>
-            <IconButton sx={{position: "absolute", top:10, left: 10}}>
+            <AddFoodModal open={isAddModalOpen} setOpen={setIsAddModalOpen} recipe={addRecipe} recipeTitle={addRecipeTitle} meal={prevPageData.meal}/>
+            <IconButton sx={{position: "absolute", top:10, left: 10}}
+                component={Link}
+                to={{pathname: prevPageData.from}}
+                state={prevPageData}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box display="flex" justifyContent="center" padding={4}>
-                <Typography variant="h5">Add Food</Typography>
+                <Typography variant="h5">{prevPageData.from === "/editMeal" ? "Add Food" :"Search Recipes"}</Typography>
             </Box>
             <Box display="flex" justifyContent="center" padding={2}>
                 <Paper variant="outlined" square={false} sx={{ width:1/2 }}>
@@ -86,24 +101,39 @@ const AddFood = () => {
                             </Box>
                             <Box>
                                 <Box>
-                                    <Button>View</Button>
+                                    <Button component={Link}
+                                    to={{pathname:"/viewRecipe"}}
+                                    state={{prev: prevPageData, recipeID: value.RecipeID, from:"/searchRecipes"}}>View</Button>
                                 </Box>
-                                <Box>
-                                    <Button>Add</Button>
-                                </Box>
+                                {(!prevPageData.meal) ? (
+                                    <div/>
+                                ) : (<Box>
+                                    <Button onClick={() => {handleAddFoodModal(value)}}>Add</Button>
+                                    </Box>)
+                                }
                             </Box>
                         </Box>
                     )
                 })}
             </Box>
             }   
-            <Box position="absolute" bottom={20} width="50%" left="50%" marginLeft="-160px">
-                <Button variant="contained" sx={{ width:"320px" }}>
-                    Create Recipe
-                </Button>
+            <Box position="absolute" bottom={20} width="50%" left="50%" marginLeft="-160px" display="flex" flexDirection="column">
+                <Box padding={1}>
+                    <Button variant="contained" sx={{ width:"320px" }}>
+                        Create Recipe
+                    </Button>
+                </Box>
+                <Box padding={1}>
+                    <Button variant="contained" sx={{ width:"320px" }}
+                            component={Link}
+                            to={{pathname: prevPageData.from}}
+                            state={prevPageData}>
+                        Done
+                    </Button>
+                </Box>
             </Box>
         </div>
     )
 }
 
-export default AddFood;
+export default SearchRecipes;

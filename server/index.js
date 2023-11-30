@@ -99,7 +99,7 @@ app.post('/getUserMeals', (req, res) => {
 
 app.post('/getMealContains', (req, res) => {
     const mealId = req.body.MealID;
-    let sql = `SELECT r.RecipeID, r.RecipeTitle, mr.QuantityConsumed, ri.AmountIngredient, i.isPerServing, i.Carbs, i.Protein, i.SaturatedFats, i.UnsaturatedFats, i.Calories, i.IngredientName, i.IngredientID
+    let sql = `SELECT r.RecipeID, r.RecipeTitle, mr.QuantityConsumed, ri.AmountIngredient, i.IsPerServing, i.Carbs, i.Protein, i.SaturatedFats, i.UnsaturatedFats, i.Calories, i.IngredientName, i.IngredientID
     FROM MEAL as m, MEAL_CONTAINS_RECIPE as mr, RECIPE as  r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
     WHERE m.MealID = mr.MealID AND mr.MealID = ? AND mr.RecipeID = r.RecipeID AND ri.RecipeID = r.RecipeID AND ri.IngredientID = i.IngredientID`
     db.query(sql, mealId, (err, result) => {
@@ -162,6 +162,30 @@ app.post('/searchRecipes', (req, res) => {
     })
 })
 
+app.post('/getRecipeIngredients', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    let sql = `SELECT * FROM RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, INGREDIENT as i
+    WHERE r.RecipeID = ? and r.RecipeID = ri.RecipeID and i.IngredientID = ri.IngredientID;`;
+    db.query(sql, recipeID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+        console.log(result);
+    })
+})
+
+app.post('/getRecipeVitamins', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    let sql = `SELECT r.RecipeID, v.VitaminName FROM RECIPE as r, RECIPE_CONTAINS_INGREDIENT as ri, VITAMINS as v
+    WHERE r.RecipeID = ? and r.RecipeID = ri.RecipeID and ri.IngredientID = v.IngredientID;`;
+    db.query(sql, recipeID, (err, result) => {
+      if(err){
+        throw(err);
+      }
+      res.send(result);
+    })
+})
 app.post('/getUserEmail', (req, res) => {
     const userEmail = req.body.userEmail;
     let sql = `SELECT * FROM USER WHERE UserEmail = "${userEmail}"`;
@@ -170,6 +194,19 @@ app.post('/getUserEmail', (req, res) => {
             throw(err);
         }
         res.send(result);
+    })
+})
+
+app.post('/getRecipeReviews', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    let sql = `SELECT u.UserID, u.UserName, r.RComment, r.Rdifficulty
+    FROM REVIEW as r, USER as u
+    WHERE u.UserID = r.WrittenBy and r.RecipeID = ?;`;
+    db.query(sql, recipeID, (err, result) => {
+      if(err){
+        throw(err);
+      }
+      res.send(result);
     })
 })
 
@@ -185,7 +222,61 @@ app.post('/getUserPassword', (req, res) => {
 })
 
 
+app.post('/addToMeal', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const mealID = req.body.MealID;
+    const quant = req.body.Quantity;
+    let sql = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES (${mealID},${recipeID},${quant});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    }) 
+});
 
+app.post('/updateMealRecipeQuantity', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const mealID = req.body.MealID;
+    const quant = req.body.Quantity;
+    let sql = `UPDATE MEAL_CONTAINS_RECIPE SET QuantityConsumed = ${quant} WHERE MealID = ${mealID} AND RecipeID = ${recipeID}`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+        
+    }) 
+});
+
+app.post('/queryMealContainsRecipe', (req, res) => {
+    const recipeID = req.body.RecipeID;
+    const mealID = req.body.MealID;
+    let sql = `SELECT * FROM MEAL_CONTAINS_RECIPE WHERE MealID = ${mealID} AND RecipeID = ${recipeID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+        console.log(result);
+    })
+})
+
+app.post('/createReview', (req, res) => {
+    const by = req.body.WrittenBy;
+    const rID = req.body.RecipeID;
+    const rating = req.body.RDifficulty;
+    const comment = req.body.RComment;
+    let sql = `INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment) VALUES(${by}, ${rID}, ${rating}, "${comment}")`
+    console.log(sql);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+        console.log(result);
+    })
+})
 
 app.listen(3001, () => {
     console.log("Server started on port 3001");
