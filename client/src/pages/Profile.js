@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 import ListModal from "../components/ListModal";
 import BottomNav from "../components/BottomNav";
+import { useAuthUser } from 'react-auth-kit'
 
 const Profile = () => {
-    const [userId, setUserId] = useState("0");
+    const auth = useAuthUser();
+    const [userId, setUserId] = useState(auth().values.userID);
     const [userName, setUserName] = useState();
     const [followingCount, setFollowingCount] = useState();
     const [followerCount, setFollowerCount] = useState();
@@ -21,7 +23,6 @@ const Profile = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getUserInfo", uid)
-            console.log(res.data[0].UserName);
             setUserName(res.data[0].UserName);
         } catch(err){
             throw(err);
@@ -34,7 +35,6 @@ const Profile = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getFollowingCount", uid)
-            console.log(res.data);
             setFollowingCount(res.data.length);
             setFollowing(res.data);
         } catch(err){
@@ -48,7 +48,6 @@ const Profile = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getFollowerCount", uid)
-            console.log(res);
             setFollowerCount(res.data.length);
             setFollowers(res.data);
         } catch(err){
@@ -94,7 +93,7 @@ const Profile = () => {
                             <Box display="flex" justifyContent="center">
                                 <Typography variant="h6" padding={2}>Your Recipes</Typography>
                             </Box>
-                            <Box sx={{ overflow: "hidden", overflowY: "scroll", height:"600px"}} padding={2}>                                
+                            <Box sx={{ overflow: "hidden", overflowY: "scroll", height:"400px"}} padding={2}>                                
                                 <Grid container spacing={2} direction="column" justifyContent="center" alignItems="center">
                                     <Grid item sx={{width:"100%"}}>
                                         <ListItemButton>
