@@ -1,8 +1,10 @@
+require("dotenv").config();
 // based off of https://www.youtube.com/watch?v=EN6Dx22cPRI
 // https://www.youtube.com/watch?v=fPuLnzSjPLE
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const jwt = require("jsonwebtoken");
 
 //create connection
 const db = mysql.createConnection({
@@ -33,6 +35,16 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req,res) => {
     let sql = 'SELECT * FROM USER';
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/ingredients', (req, res) => {
+    let sql = `SELECT * FROM INGREDIENT`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -152,6 +164,41 @@ app.post('/updateMealTitle', (req, res) => {
 app.post('/searchRecipes', (req, res) => {
     const search = req.body.Search;
     let sql = `SELECT * FROM RECIPE WHERE RecipeTitle LIKE '%${search}%';`;
+<<<<<<< HEAD
+=======
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/createRecipe', (req, res) => {
+    const uid = req.body.UserID;
+    const diff = req.body.RDifficulty;
+    const t = req.body.CookTime;
+    const title = req.body.RecipeTitle;
+    const desc = req.body.RecipeDescription;
+    const size = req.body.ServingSize;
+    let sql = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize)
+    VALUES (${uid}, ${diff}, ${t}, "${title}", "${desc}", ${size});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/setRecipeIngredient', (req, res) => {
+    const rid = req.body.RecipeID;
+    const iid = req.body.IngredientID;
+    const quantity = req.body.Quantity;
+    let sql = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient) VALUES(${rid}, ${iid}, ${quantity});`;
+>>>>>>> main
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -183,6 +230,7 @@ app.post('/getRecipeVitamins', (req, res) => {
       res.send(result);
     })
 })
+
 app.post('/getUserEmail', (req, res) => {
     const userEmail = req.body.userEmail;
     let sql = `SELECT * FROM USER WHERE UserEmail = "${userEmail}"`;
@@ -329,6 +377,24 @@ app.post('/updateRecipeIngredient', (req, res) => {
         }
         res.send(result);
     })
+})
+
+app.post('/authenticateUser', (req, res) => {
+    const email = req.body.Email;
+    const password = req.body.Password;
+
+    const jwtToken = jwt.sign(
+        {email: email, password: password},
+        `${process.env.JWT_SECRET_KEY}`,
+    )
+
+    const obj = {
+        message: "authenticated",
+        token: jwtToken,
+    }
+
+    res.send(obj);
+
 })
 
 app.listen(3001, () => {
