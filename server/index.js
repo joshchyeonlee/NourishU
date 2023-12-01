@@ -340,6 +340,28 @@ app.post('/authenticateUser', (req, res) => {
 
 })
 
+app.post('/fetchAdminInfo', (req, res) => {
+    const adminID = req.body.AdminID;
+    let sql = `SELECT AdminName, AdminEmail FROM ADMIN WHERE AdminID = ${adminID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/fetchFlaggedReviews', (req,res) => {
+    let sql = `SELECT * FROM ADMIN_REVIEW as ar, REVIEW as r, User as u
+    WHERE r.ReviewID = ar.ReviewID AND ar.ReviewFlagged = 1 AND u.UserID = r.WrittenBy;`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
