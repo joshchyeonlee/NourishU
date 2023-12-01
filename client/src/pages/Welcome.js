@@ -13,7 +13,7 @@ const Welcome = () => {
                         <Button variant="contained" sx = {{width: '200px'}} component={Link} to={{pathname:"/login"}}>Log in</Button>
                     </Grid>
                     <Grid item>
-                    <Button variant="contained" sx = {{width: '200px'}}>Sign Up</Button>
+                    <Button variant="contained" sx = {{width: '200px'}} component={Link} to={{pathname:"/signup-initial"}}>Sign Up</Button>
                     </Grid>
                 </Grid>
             </Box>

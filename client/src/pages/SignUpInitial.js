@@ -1,11 +1,12 @@
 import React from 'react';
 import { Typography, TextField, Grid, Button, Box, IconButton } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 import {Link} from "react-router-dom"
+import { InputAdornment, InputLabel } from '@mui/material';
+import ErrorIcon from '@mui/icons-material/Error';
 
-// put helper text for email and password
 const SignUpInitial = () => {
     const [userNameTextField, setUserNameTextField] = useState("");
     const [userEmailTextField, setUserEmailTextField] = useState("");
@@ -13,12 +14,18 @@ const SignUpInitial = () => {
     const [userConfirmPassTextField, setUserConfirmPassTextField] = useState("");
     const [isPasswordMatch, setIsPasswordMatch] = useState(false);
     const [isUserNameValid, setUserNameValid] = useState(false);
-    const [userEmailValid, setUserEmailValid] = useState(false);
+    const [isUserEmailValid, setUserEmailValid] = useState(false);
 
     const [enteredUserNameTextField, setEnteredUserNameTextField] = useState(false);
-    const [userNameUnique, setUserNameUnique] = useState(false);
+    const [enteredUserEmailTextField, setEnteredUserEmailTextField] = useState(false);
 
+    const [userNameUnique, setUserNameUnique] = useState(true);
+    const [userEmailUnique, setUserEmailUnique] = useState(true);
 
+    const [isPasswordValid, setPasswordValid] = useState(false)
+    const [isConfirmPasswordValid, setConfirmPasswordValid] = useState(false)
+
+    // Stores user name and performs checks
     const storeUserNameInput = (typedUserName) => {
         setUserNameTextField(typedUserName)
         checkUserName(typedUserName)
@@ -27,25 +34,33 @@ const SignUpInitial = () => {
         console.log(typedUserName)
     }
 
+    // Stores user email and performs checks
     const storeUserEmailInput = (typedUserEmail) => {
         setUserEmailTextField(typedUserEmail)
         checkUserEmail(typedUserEmail)
+        setEnteredUserEmailTextField(true)
+        queryUserEmailUnique(typedUserEmail)
         console.log(typedUserEmail)
     }
 
+    // stores user password and performs checks
     const storeUserPassInput = (typedUserPass) => {
+        checkPassValid(typedUserPass)
         setUserPassTextField(typedUserPass)
         console.log(typedUserPass)
     }
 
+    // stores user confirmed password and performs checks
     const storeUserConfirmPassInput = (typedUserConfirmPass) => {
+        checkConfirmPassValid(typedUserConfirmPass)
         setUserConfirmPassTextField(typedUserConfirmPass)
         checkPassMatch(typedUserConfirmPass)
         console.log(typedUserConfirmPass)
     }
 
+    // Checks if password and confirmed password match
     const checkPassMatch = (userConfirmPassInput) => {
-        if (userConfirmPassInput.length < 6) {
+        if (userConfirmPassInput.length > 16) {
             setIsPasswordMatch(false)
             return;
         }
@@ -61,9 +76,32 @@ const SignUpInitial = () => {
         }
     }
 
+    const checkPassValid = (userPassInput) => {
+        if (userPassInput.length < 0 || userPassInput === "") {
+            setPasswordValid(false)
+            return;
+        }
+
+        else {
+            setPasswordValid(true)
+        }
+    }
+
+    const checkConfirmPassValid = (userConfirmPassInput) => {
+        if (userConfirmPassInput.length < 0 || userConfirmPassInput === "") {
+            setConfirmPasswordValid(false)
+            return;
+        }
+
+        else {
+            setConfirmPasswordValid(true)
+        }
+    }
+
+    // Checks if username is of valid input
     const checkUserName = (userNameInput) => {
 
-        if (userNameInput.length > 6) {
+        if (userNameInput.length > 3 && userNameInput.length <= 25) {
             console.log("True")
             setUserNameValid(true)
             return;
@@ -75,6 +113,7 @@ const SignUpInitial = () => {
         }
     }
 
+    // Checks if email is in valid format
     const checkUserEmail = (userEmailInput) => {
         const check = userEmailInput.toLowerCase()
         .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -82,28 +121,19 @@ const SignUpInitial = () => {
 
         console.log(`check user email ${check}`)
 
-        if (check === null) {
+        if (check === null || userEmailInput.length > 50) {
             setUserEmailValid(false)
+            console.log(`Setting false`)
+            console.log(`length of Email is ` + userEmailInput.length)
             return;
         }
-
         else {
             setUserEmailValid(true)
             console.log(`setting true ${check}`)
         }
-
-        // if (userNameInput.length > 6) {
-        //     console.log("True")
-        //     setUserNameValid(true)
-        //     return;
-        // }
-
-        // else {
-        //     console.log("False")
-        //     setUserNameValid(false)
-        // }
     }
 
+    // Checks if username already exists in the DB (must be unique)
     const queryUserUnique = async (userNameInput) => {
         const userName = {
             UserName: userNameInput,
@@ -111,7 +141,6 @@ const SignUpInitial = () => {
         try{
             const res = await axios.post("http://localhost:3001/queryUserNameExists", userName)
             console.log(res.data);
-            //setUserName(res.data[0].UserName);
 
             if (res.data.length > 0) {
                 setUserNameUnique(false)
@@ -127,38 +156,85 @@ const SignUpInitial = () => {
         }
     }
 
+    // Checks if email already exists in the DB (must be unique)
+    const queryUserEmailUnique = async (userEmailInput) => {
+        const userEmail = {
+            UserEmail: userEmailInput,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/queryUserEmailExists", userEmail)
+            console.log(res.data);
+
+            if (res.data.length > 0) {
+                setUserEmailUnique(false)
+                console.log("This email has an account already!")
+            }
+
+            else {
+                setUserEmailUnique(true)
+                console.log("There is no account associated with this email.")
+            }
+        } catch(err){
+            throw(err);
+        }
+    }
+
+    useEffect(() => {
+        // This effect will run whenever userPassTextField or userConfirmPassTextField changes
+        checkPassMatch(userConfirmPassTextField);
+    }, [userPassTextField, userConfirmPassTextField]);
 
 
     return (
         <div>
              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={4}>
-             <IconButton sx={{position: "absolute", top:10, left: 10}}>
+             <IconButton sx={{position: "absolute", top:10, left: 10}}                     
+             component = {Link}
+            to={{pathname:"/welcome"}}>
                 <ArrowBackIcon fontSize="large"/>
                 </IconButton>
             <Typography variant="h4" padding={2}>Sign up - Let's get started!</Typography>
             <Grid container direction="column" spacing={3} justifyContent="center" alignItems="center">
                 <Grid item>
-                    <TextField id="outlined" label="Name" variant="outlined" onChange = {(e) => {
+                    <TextField id="outlined" label="User Name" variant="outlined" onChange = {(e) => {
                         storeUserNameInput(e.target.value)
-                    }} error = {(!isUserNameValid) && (enteredUserNameTextField)} helperText = {(isUserNameValid) || (!enteredUserNameTextField)? "" : "Username must be longer than 6 characters!"}/>
+                    }} error = {(!isUserNameValid) && (enteredUserNameTextField)} helperText = {(isUserNameValid) || (!enteredUserNameTextField)? "" : "Username must be in between 3 to 25 characters!"}
+                    InputProps={{
+                        endAdornment: userNameUnique ? null : (
+                          <InputAdornment position="end">
+                            <ErrorIcon color="error" />
+                            <InputLabel htmlFor="outlined-adornment-password">Username taken</InputLabel>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
                 </Grid>
                 <Grid item>
                     <TextField id="outlined" label="Email" variant="outlined" onChange = {(e) => {
                         storeUserEmailInput(e.target.value)
-                    }}/>
+                    }} error = {(!isUserEmailValid) && (enteredUserEmailTextField)} helperText = {(isUserEmailValid) || (!enteredUserEmailTextField)? "" : "Email must be of valid format and cannot exceed 50 characters!"}
+                    InputProps={{
+                        endAdornment: (userEmailUnique) ? null : (
+                          <InputAdornment position="end">
+                            <ErrorIcon color="error" />
+                            <InputLabel htmlFor="outlined-adornment-password">Email Exists</InputLabel>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
                 </Grid>
                 <Grid item>
-                    <TextField id="outlined" label="Password" variant="outlined" hidden onChange = {(e) => {
+                    <TextField id="outlined" label="Password" variant="outlined" type='password' hidden onChange = {(e) => {
                         storeUserPassInput(e.target.value)
-                    }}/>
+                    }} error = {((userPassTextField.length) > 16) || (!isPasswordMatch)} helperText = {((userPassTextField.length) > 16? "Password entered is TOO long!" : "") || (isPasswordMatch?  "": "Passwords don't match")}/>
                 </Grid>
                 <Grid item>
-                    <TextField id="outlined" label="Confirm Password" variant="outlined" hidden onChange = {(e) => {
+                    <TextField id="outlined" label="Confirm Password" variant="outlined" type='password' hidden onChange = {(e) => {
                         storeUserConfirmPassInput(e.target.value) 
-                    }}/>
+                    }} error = {((userConfirmPassTextField.length) > 16) || (!isPasswordMatch)} helperText = {((userConfirmPassTextField.length) > 16? "Password entered is TOO long!" : "") || (isPasswordMatch?  "": "Passwords don't match")}/>
                 </Grid>
                 <Grid item style={{ marginTop: '10px' }}>
-                    <Button variant="contained" size="small" disabled = {!isPasswordMatch}
+                    <Button variant="contained" size="small" disabled = {!isPasswordMatch || (!userEmailUnique) || (!userNameUnique) || (!isUserNameValid) || (!isUserEmailValid) || (!isPasswordValid) || (!isConfirmPasswordValid)}
                     component = {Link}
                     to={{pathname:"/signup-info"}}
                     state={{userName:userNameTextField, userEmail: userEmailTextField, userPass: userPassTextField}}

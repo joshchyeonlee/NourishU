@@ -352,6 +352,18 @@ app.post('/queryUserNameExists', (req, res) => {
     })
 })
 
+app.post('/queryUserEmailExists', (req, res) => {
+    const userEmail = req.body.UserEmail;
+    let sql = `SELECT UserEmail FROM User WHERE UserEmail = '${userEmail}'`;
+    console.log(req);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });

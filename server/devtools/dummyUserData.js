@@ -13,7 +13,7 @@ const removeUsersFromUser =
 const createTable =
 `CREATE TABLE USER (
 UserID              INT         NOT NULL,
-UserName            VARCHAR(50) NOT NULL,
+UserName            VARCHAR(25) NOT NULL,
 UserEmail           VARCHAR(50) NOT NULL,
 UserBirthdate       DATE        NOT NULL,
 UserHeight          INT         NOT NULL,
@@ -22,7 +22,7 @@ UserAge             INT         NOT NULL,
 DietName            VARCHAR(50) NOT NULL,
 DietDescription     VARCHAR(50) NOT NULL,
 CookingConfidence   INT         NOT NULL,
-UserPassword        VARCHAR(50) NOT NULL,
+UserPassword        VARCHAR(16) NOT NULL,
 PRIMARY KEY(UserID),
 UNIQUE (UserName),
 UNIQUE (UserEmail));`;
