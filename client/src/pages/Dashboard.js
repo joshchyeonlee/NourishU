@@ -4,6 +4,7 @@ import BottomNav from "../components/BottomNav";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useAuthUser } from 'react-auth-kit'
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
     const auth = useAuthUser();
@@ -61,7 +62,12 @@ const Dashboard = () => {
                                         })}
                                     </Box>
                                     <Box>
-                                        <Button size="large" variant="contained">Log Meal</Button>
+                                        <Button 
+                                            size="large"
+                                            variant="contained"
+                                            component={Link}
+                                            to={{pathname:"/logMeal"}}
+                                        >Log Meal</Button>
                                     </Box>
                                 </Box>
                             </CardContent>    
