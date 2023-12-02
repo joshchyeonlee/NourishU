@@ -340,6 +340,28 @@ app.post('/authenticateUser', (req, res) => {
 
 })
 
+app.post('/getAdminEmail', (req, res) => {
+    const adminEmail = req.body.adminEmail;
+    let sql = `SELECT * FROM ADMIN WHERE AdminEmail = "${adminEmail}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/getAdminPassword', (req, res) => {
+    const adminPassword = req.body.adminPassword;
+    let sql = `SELECT * FROM ADMIN WHERE ADMINPASSWORD = "${adminPassword}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
