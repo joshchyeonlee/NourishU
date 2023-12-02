@@ -2,6 +2,7 @@ import { Button, Box, Typography, Grid, TextField, Snackbar, Alert } from '@mui/
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useSignIn } from 'react-auth-kit';
 
 const Login = () => {
     const[emailInput, setEmailInput] = useState("")
@@ -10,19 +11,9 @@ const Login = () => {
     const[isPasswordValid, setisPasswordValid] = useState(false)
     const[isButtonClicked, setIsButtonClicked] = useState(false)
     const[open, setOpen] = useState(false)
+    const[userID, setUserID] = useState();
     const navigate = useNavigate();
-
-    // const signIn = useSignIn();
-
-    // implement this like in client/Login.js
-    // const authenticate = () => {
-    //     signIn({
-    //         token: res.data.token,
-    //         expiresIn: 3600,
-    //         tokenType: "Bearer",
-    //         authState: {values: {email: cred.Email, userID: userID}},
-    //     })
-    // }
+    const signIn = useSignIn();
 
     const handleEmailChange = (value) => {
         setEmailInput(value)
@@ -39,6 +30,7 @@ const Login = () => {
         try{
             const res = await axios.post("http://localhost:3001/getAdminEmail", admineml)
             if (res.data.length > 0) {
+                setUserID(res.data[0].UserID)
                 setIsEmailValid(true)
             }
             else {
@@ -69,9 +61,31 @@ const Login = () => {
         }
     }
 
+    const authenticateAdmin = async () => {
+        const cred = {
+            Email: emailInput,
+            Password: passwordInput,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/authenticateUser", cred)
+            
+            signIn({
+                token: res.data.token,
+                expiresIn: 3600,
+                tokenType: "Bearer",
+                authState: {values: {email: cred.Email, userID: userID}},
+            })
+            
+        } catch (err) {
+            throw(err);
+        }
+        
+    }
+
     const checkAdminCred = () => {
         checkAdminEmail()
         checkUserPassword()
+        authenticateAdmin();
         setIsButtonClicked(true)
         setOpen(true)
     }
@@ -79,7 +93,7 @@ const Login = () => {
     useEffect(() => {
         const check = async () => {
             if (isEmailValid && isPasswordValid) {
-                //navigate("/admin");
+                navigate("/admin");
             }
         }
         check();
