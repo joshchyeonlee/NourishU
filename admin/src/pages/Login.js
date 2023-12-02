@@ -12,6 +12,18 @@ const Login = () => {
     const[open, setOpen] = useState(false)
     const navigate = useNavigate();
 
+    // const signIn = useSignIn();
+
+    // implement this like in client/Login.js
+    // const authenticate = () => {
+    //     signIn({
+    //         token: res.data.token,
+    //         expiresIn: 3600,
+    //         tokenType: "Bearer",
+    //         authState: {values: {email: cred.Email, userID: userID}},
+    //     })
+    // }
+
     const handleEmailChange = (value) => {
         setEmailInput(value)
     }
@@ -96,5 +108,4 @@ const Login = () => {
         </Grid>
     </div>);
 }
-
 export default Login;
