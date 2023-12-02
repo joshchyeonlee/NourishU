@@ -18,18 +18,6 @@ const LogMeal = () => {
     const [selectedTextField, setSelectedTextField] = useState(false);
     const navigate = useNavigate();
 
-    /** okay wtf do I need for meal
-     * MealID -> change to autoincrement
-     * UserID
-     * DateTime
-     * MealTitle
-     * 
-     * MEAL_CONTAINS_RECIPE
-     * MealID
-     * RecipeID
-     * QuantityConsumed
-     */
-
     const handleMealTitleChange = (val) => {
         setMealTitle(val);
         setSelectedTextField(true);
@@ -50,7 +38,6 @@ const LogMeal = () => {
             DateTime: dateTime,
             MealTitle: mealTitle,
         }
-        console.log(meal);
         try{
             const res = await axios.post("http://localhost:3001/createMeal", meal);
             meal.MealID = res.data.insertId;
