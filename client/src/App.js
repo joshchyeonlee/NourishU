@@ -15,6 +15,7 @@ import ViewRecipe from './pages/ViewRecipe.js';
 import SearchRecipes from './pages/SearchRecipes.js';
 import Welcome from './pages/Welcome.js';
 import { RequireAuth } from 'react-auth-kit';
+import LogMeal from './pages/LogMeal.js';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
       <Route path="/setRecipeInstructions" element={<RequireAuth loginPath='/welcome'><SetRecipeInstructions/></RequireAuth>}/>
       <Route path="/viewRecipe" element={<RequireAuth loginPath='/welcome'><ViewRecipe/></RequireAuth>}/>
       <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard/></RequireAuth>}/>
+      <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
     </Routes>
