@@ -66,7 +66,7 @@ const EditRecipe = () => {
         <Box display="flex" justifyContent="center" padding={2} flexDirection="column" textAlign="center" alignItems="center">
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
-                to={{pathname:"/profile"}}>
+                to={{pathname: location.state.from}}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Typography variant="h5">Edit Recipe</Typography>

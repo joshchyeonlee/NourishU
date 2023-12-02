@@ -164,8 +164,6 @@ app.post('/updateMealTitle', (req, res) => {
 app.post('/searchRecipes', (req, res) => {
     const search = req.body.Search;
     let sql = `SELECT * FROM RECIPE WHERE RecipeTitle LIKE '%${search}%';`;
-<<<<<<< HEAD
-=======
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -198,7 +196,6 @@ app.post('/setRecipeIngredient', (req, res) => {
     const iid = req.body.IngredientID;
     const quantity = req.body.Quantity;
     let sql = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient) VALUES(${rid}, ${iid}, ${quantity});`;
->>>>>>> main
     db.query(sql, (err, result) => {
         if(err){
             throw(err);

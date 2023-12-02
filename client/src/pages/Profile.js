@@ -7,9 +7,12 @@ import BottomNav from "../components/BottomNav";
 import AchievementList from "../components/AchievementList";
 import AchievementModal from "../components/AchievementModal";
 import { Link } from "react-router-dom";
+import { useAuthUser } from 'react-auth-kit'
+import YourRecipesList from "../components/YourRecipesList";
 
 const Profile = () => {
-    const [userId, setUserId] = useState(2);
+    const auth = useAuthUser();
+    const [userId, setUserId] = useState(auth().values.userID);
     const [userName, setUserName] = useState();
     const [followingCount, setFollowingCount] = useState();
     const [followerCount, setFollowerCount] = useState();
@@ -148,42 +151,7 @@ const Profile = () => {
                 <Card sx={{width: "50%"}} variant="outlined">
                     <CardContent>
                         <Box sx={{ maxHeight: "300px", overflow: "hidden", overflowY: "scroll"}} display="flex" flexDirection="column" alignItems="center">
-                            <Typography variant="h6" padding={2}>Your Recipes</Typography>
-                            <Grid container spacing={2} direction="column" justifyContent="center" alignItems="center">
-                                {userRecipes.length === 0 ?
-                                <Box sx={{height:"100%"}} alignItems="center" padding={2}>
-                                    <Typography>You haven't created any recipes yet!</Typography>
-                                </Box>
-                                :
-                                <Box sx={{width:"90%"}} display="flex" justifyContent="center" flexDirection="column">
-                                    {userRecipes.map((val, key) => { return(
-                                        <Box key={key} display="flex" justifyContent="space-between" flexDirection="row" alignItems="center">
-                                            <Typography>
-                                                {val.RecipeTitle}
-                                            </Typography>
-                                            <Box display="flex" padding={1}>
-                                                <Box padding={1}>
-                                                    <Button
-                                                        component={Link}
-                                                        to={{pathname: "/viewRecipe"}}
-                                                        state={{prev: {from: "/profile"}, recipeID: val.RecipeID, from:"/profile"}}
-                                                    >
-                                                        View
-                                                    </Button>
-                                                </Box>
-                                                <Box padding={1}>
-                                                    <Button
-                                                        component={Link}
-                                                        to={{pathname: "/editRecipe"}}
-                                                        state={{from:"/profile", recipeID: val.RecipeID}}
-                                                    >Edit</Button>
-                                                </Box>
-                                            </Box>
-                                        </Box>
-                                    )})}
-                                </Box>
-                                }
-                            </Grid>
+                            <YourRecipesList recipes={userRecipes} from="/profile" title="h5"/>
                         </Box>
                     </CardContent>
                 </Card>
