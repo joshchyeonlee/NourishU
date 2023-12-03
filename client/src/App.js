@@ -18,7 +18,6 @@ import SetRecipeInstructions from './pages/SetRecipeInstructions.js';
 import ViewRecipe from './pages/ViewRecipe.js';
 import SearchRecipes from './pages/SearchRecipes.js';
 import Welcome from './pages/Welcome.js';
-import { RequireAuth } from 'react-auth-kit';
 import EditRecipe from './pages/EditRecipe.js';
 import EditRecipeIngredients from './pages/EditRecipeIngredients.js';
 import YourRecipes from './pages/YourRecipes.js';
@@ -50,8 +49,8 @@ function App() {
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
     </Routes>
+    </ThemeProvider>
   </BrowserRouter>
-  );
-}
+)}
 
 export default App;

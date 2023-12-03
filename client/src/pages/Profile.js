@@ -9,7 +9,6 @@ import AchievementModal from "../components/AchievementModal";
 import { Link } from "react-router-dom";
 import { useAuthUser } from 'react-auth-kit'
 import YourRecipesList from "../components/YourRecipesList";
-import { useAuthUser } from 'react-auth-kit'
 
 const Profile = () => {
     const auth = useAuthUser();
