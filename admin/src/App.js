@@ -10,10 +10,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/createIngredient" element={<CreateIngredient/>}/>
-        <Route path="/manageReviews" element={<ManageReviews/>}/>
+        <Route path="/" element={<Login/>} />
+        <Route path="/admin" element={<RequireAuth loginPath='/'><Admin /></RequireAuth>} />
+        <Route path="/createIngredient" element={<RequireAuth loginPath='/'><CreateIngredient /></RequireAuth>}/>
+        <Route path="/manageReviews" element={<RequireAuth loginPath='/'><ManageReviews /></RequireAuth>}/>
       </Routes>
   </BrowserRouter>
   );

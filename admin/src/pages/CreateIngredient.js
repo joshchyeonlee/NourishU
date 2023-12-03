@@ -35,7 +35,6 @@ const CreateIngredient = () => {
             DatePosted: dayjs().format("YYYY-MM-DD")
         }
         const res = await axios.post("http://localhost:3001/createIngredient", ingredient);
-        console.log(res);
         setIngredientID(res.data.insertId);
     }
 
