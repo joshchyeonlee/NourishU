@@ -5,11 +5,41 @@ import { useState, useEffect } from "react";
 import { useAuthUser } from 'react-auth-kit'
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import formatRecipeData from "../utils/formatRecipeData";
 
 const Dashboard = () => {
     const auth = useAuthUser();
     const [userId, setUserId] = useState(auth().values.userID);
     const [meals, setMeals] = useState([]);
+    const [mealIDs, setMealIDs] = useState([]);
+    const [calculatedCaloricIntake, setCalculatedCaloricIntake] = useState(0);
+    const [totalCalories, setTotalCalories] = useState(0);
+
+    const fetchUserGoal = async () => {
+        const uid = {
+            UserID: userId,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/fetchUserGoal", uid);
+            setCalculatedCaloricIntake(res.data[0].CalculatedCaloricIntake);
+        } catch(err) {
+            throw(err);
+        }
+    } 
+
+    const fetchMealContains = async (mealID) => {
+        const MealID = {
+            MealID: mealID
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/getMealContains", MealID);
+
+            return formatRecipeData(res.data).totalCalories;
+
+        } catch(err){
+            throw(err);
+        }
+    }
 
     const fetchUserMeals = async () => {
         const uid = {
@@ -18,13 +48,35 @@ const Dashboard = () => {
         try{
             const res = await axios.post("http://localhost:3001/getUserMeals", uid);
             setMeals(res.data);
+            const mealIDs = res.data.map(x => x.MealID);
+            setMealIDs(mealIDs);
+            
+            // for(var i = 0; i < mealIDs.length; i++){
+            //     fetchMealContains(mealIDs[i]);
+            // }
+
+
         } catch(err){
             throw(err);
         }
     }
 
+    const calculateCaloricIntake = async () => {
+        var calories = 0;
+        for(var i = 0; i < mealIDs.length; i++){
+            calories += await fetchMealContains(mealIDs[i]);
+        }
+        setTotalCalories(calories);
+    }
+
+    useEffect(() => {
+        if(mealIDs.length <= 0) return;
+        calculateCaloricIntake()
+    }, [mealIDs])
+
     useEffect(() => {
         fetchUserMeals();
+        fetchUserGoal();
     }, []);
 
     return(   
@@ -40,10 +92,12 @@ const Dashboard = () => {
                                 <CardContent sx={{ width: "100%", height: "100%" }}>
                                     <Box padding={4} display="flex" flexDirection="column" sx={{ width: "100%", height: "100%" }}>
                                         <Typography variant="h6">Calories Remaining</Typography>
-                                        <Box display="flex" padding={12} justifyContent="center" alignItems="center">
-                                            <CircularProgress variant="determinate" color="primary" size={180} value={30}/>
+                                        <Box display="flex" padding={18} justifyContent="center" alignItems="center">
                                             <Box position="absolute">
-                                                <Typography>840/2500</Typography>
+                                                <CircularProgress variant="determinate" color="primary" size={180} value={ (totalCalories < 0) ? 0 : ((totalCalories/calculatedCaloricIntake) * 100)}/>
+                                            </Box>
+                                            <Box position="absolute">
+                                                <Typography>{totalCalories}/{calculatedCaloricIntake}</Typography>
                                             </Box>
                                         </Box>
                                     </Box>

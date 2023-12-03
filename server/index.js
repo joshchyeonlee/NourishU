@@ -98,9 +98,11 @@ app.post('/getFollowerCount', (req, res) => {
     })
 })
 
+//CURDATE https://www.w3schools.com/sql/func_mysql_curdate.asp
+//DATEDIFF https://www.w3schools.com/sql/func_mysql_datediff.asp
 app.post('/getUserMeals', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT * FROM MEAL WHERE MEAL.UserID = ?`
+    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 0;`;
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
@@ -476,8 +478,6 @@ app.post('/createMeal', (req, res) => {
     const DateTime = req.body.DateTime;
     const MealTitle = req.body.MealTitle;
 
-    console.log(MealTitle)
-
     let sql = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(${UserID}, "${DateTime}", "${MealTitle}");`;
     db.query(sql, (err, result) => {
         if(err){
@@ -485,6 +485,19 @@ app.post('/createMeal', (req, res) => {
         }
         res.send(result);
     })
+})
+
+app.post('/fetchUserGoal', (req, res) => {
+    const UserID = req.body.UserID;
+
+    let sql = `SELECT * FROM GOAL WHERE UserID = ${UserID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+
 })
 
 app.listen(3001, () => {
