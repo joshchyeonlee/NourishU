@@ -1,9 +1,14 @@
-import { Button, Box, Typography, Grid, Card, CardContent, ListItem, ListItemButton } from "@mui/material";
+import { Button, Box, Typography, Grid, Card, CardContent, ListItem, ListItemButton, IconButton, Tooltip } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import ListModal from "../components/ListModal";
 import BottomNav from "../components/BottomNav";
+import AchievementList from "../components/AchievementList";
+import AchievementModal from "../components/AchievementModal";
+import { Link } from "react-router-dom";
+import { useAuthUser } from 'react-auth-kit'
+import YourRecipesList from "../components/YourRecipesList";
 import { useAuthUser } from 'react-auth-kit'
 
 const Profile = () => {
@@ -16,6 +21,10 @@ const Profile = () => {
     const [followerOpen, setFollowerOpen] = useState(false);
     const [following, setFollowing] = useState([]);
     const [followers, setFollowers] = useState([]);
+    const [achievements, setAchievements] = useState([]);
+    const [achievementOpen, setAchievementOpen] = useState(false);
+    const [selectedAchievement, setSelectedAchievement] = useState();
+    const [userRecipes, setUserRecipes] = useState([]);
 
     const fetchUsers = async () => {
         const uid = {
@@ -55,19 +64,53 @@ const Profile = () => {
         }
     }
 
+    const fetchAchievementsEarned = async () => {
+        const uid = {
+            UserID: userId,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/getUserAchievements", uid);
+            setAchievements(res.data);
+        } catch (err) {
+            throw(err);
+        }
+    }
+
+    const fetchUserRecipes = async () => {
+        const uid = {
+            UserID: userId,
+        }
+        try {
+            const res = await axios.post("http://localhost:3001/getUserCreatedRecipes", uid);
+            setUserRecipes(res.data);
+        } catch (err) {
+            throw(err);
+        }
+    }
+
     useEffect(() => {
         fetchUsers();
         fetchFollowingInformation();
         fetchFollowerInformation();
+        fetchAchievementsEarned();
+        fetchUserRecipes();
     },[]);
 
     const handleFollowingOpen = () => setFollowingOpen(true);
     const handleFollowingClose = () => setFollowingOpen(false);
     const handleFollowerOpen = () => setFollowerOpen(true);
     const handleFollowerClose = () => setFollowerOpen(false);
+    const handleAchievementOpen = () => setAchievementOpen(true);
+    const handleAchievementClose = () => setAchievementOpen(false);
+
+    const handleAchievementClick = (achievement) => {
+        setSelectedAchievement(achievement);
+        handleAchievementOpen();
+    }
 
     return(
         <div>
+            <AchievementModal open={achievementOpen} onClose={handleAchievementClose} value={selectedAchievement}/>
             <ListModal open={followingOpen} onClose={handleFollowingClose} values={following}/>
             <ListModal open={followerOpen} onClose={handleFollowerClose} values={followers}/>
             <Button variant="outlined" startIcon={<EditIcon/>} sx={{position:"fixed", top:10, right:10}}>
@@ -86,62 +129,30 @@ const Profile = () => {
                             Followers {followerCount}
                         </Button>
                     </Grid>
-                </Grid>
-                <Card sx={{ width:"50%"}}>
+                </Grid>    
+                <Box padding={1} sx={{width: "50%"}}>
+                    <Card variant="outlined">
+                        <CardContent>
+                            <Box display="flex" justifyContent="center" flexDirection="column" textAlign="center">
+                                <Typography variant="h6">Achievements Earned</Typography>
+                                <Box display="flex" justifyContent="center" paddingTop={1}>
+                                {achievements.map((val, key) => {
+                                    return (
+                                            <Tooltip title={val.Name} key={key}>
+                                                <IconButton onClick={() => handleAchievementClick(val)}>
+                                                    <AchievementList val={val}/>
+                                                </IconButton>
+                                            </Tooltip>)
+                                })}
+                                </Box>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Box>
+                <Card sx={{width: "50%"}} variant="outlined">
                     <CardContent>
-                        <Box display="flex" justifyContent="center" flexDirection="column">
-                            <Box display="flex" justifyContent="center">
-                                <Typography variant="h6" padding={2}>Your Recipes</Typography>
-                            </Box>
-                            <Box sx={{ overflow: "hidden", overflowY: "scroll", height:"400px"}} padding={2}>                                
-                                <Grid container spacing={2} direction="column" justifyContent="center" alignItems="center">
-                                    <Grid item sx={{width:"100%"}}>
-                                        <ListItemButton>
-                                            <ListItem disablePadding>
-                                                <Typography>
-                                                    Recipe1
-                                                </Typography>
-                                            </ListItem>
-                                        </ListItemButton>
-                                    </Grid>
-                                    <Grid item sx={{width:"100%"}}>
-                                        <ListItemButton>
-                                            <ListItem disablePadding>
-                                                <Typography>
-                                                    Recipe2
-                                                </Typography>
-                                            </ListItem>
-                                        </ListItemButton>
-                                    </Grid>
-                                    <Grid item sx={{width:"100%"}}>
-                                        <ListItemButton>
-                                            <ListItem disablePadding>
-                                                <Typography>
-                                                    Recipe3
-                                                </Typography>
-                                            </ListItem>
-                                        </ListItemButton>
-                                    </Grid>
-                                    <Grid item sx={{width:"100%"}}>
-                                        <ListItemButton>
-                                            <ListItem disablePadding>
-                                                <Typography>
-                                                    Recipe4
-                                                </Typography>
-                                            </ListItem>
-                                        </ListItemButton>
-                                    </Grid>
-                                    <Grid item sx={{width:"100%"}}>
-                                        <ListItemButton>
-                                            <ListItem disablePadding>
-                                                <Typography>
-                                                    Recipe5
-                                                </Typography>
-                                            </ListItem>
-                                        </ListItemButton>
-                                    </Grid>
-                                </Grid>
-                            </Box>
+                        <Box sx={{ maxHeight: "300px", overflow: "hidden", overflowY: "scroll"}} display="flex" flexDirection="column" alignItems="center">
+                            <YourRecipesList recipes={userRecipes} from="/profile" title="h5"/>
                         </Box>
                     </CardContent>
                 </Card>

@@ -16,7 +16,9 @@ const Recipes = () => {
                     state={{from:"/recipes", recipeID:""}}>Search Recipes</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" fullWidth size="large">View Your Recipes</Button>
+                    <Button variant="contained" fullWidth size="large"
+                    component={Link}
+                    to={{pathname:"/viewYourRecipes"}}>View Your Recipes</Button>
                 </Grid>
             </Grid>
             <BottomNav currentPage="Recipes" value={0}/>
