@@ -17,7 +17,7 @@ FOREIGN KEY(RecipeID) REFERENCES RECIPE(RecipeID) ON UPDATE CASCADE);`;
 
 const review1 = `
 INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment)
-VALUES(0, 1, 3, "This was really good!");`;
+VALUES(1, 1, 3, "This was really good!");`;
 const review2 = `
 INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment)
 VALUES(2,1,1,"This was fairly good!");`;

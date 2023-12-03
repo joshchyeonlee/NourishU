@@ -18,7 +18,7 @@ FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
 
 const user0Goal = `
 INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
-VALUES(0, 0, 2000, 2500);`;
+VALUES(5, 0, 2000, 2500);`;
 const user1Goal = `
 INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
 VALUES(1, 1, 2500, 2000);`;

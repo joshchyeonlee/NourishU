@@ -191,7 +191,7 @@ const SignUpInfo = () => {
                 <Grid item style={{ marginTop: '10px' }}>
                     <Button variant="contained" size="small" disabled={userDone || !userDietDescSize}
                     component = {Link}
-                    to={{pathname:"/signup-userinterests"}}
+                    to={{pathname:"/cookingConfidence"}}
                     state={{UserName: userName, UserEmail: userEmail, UserPass: userPass, 
                         UserBirthDate: userBirthDate, UserHeight: userHeight, UserWeight: userWeight,
                     UserDiet: userDiet, UserDietDescription: userDietDescription, UserAge: userAge}}
