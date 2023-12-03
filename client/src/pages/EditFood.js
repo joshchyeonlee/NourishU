@@ -50,9 +50,9 @@ const EditFood = () => {
                         </Select>
                     </FormControl>
                 </Box>
-                <Box position="absolute" bottom={10} width="100%" left="50%" marginLeft="-160px">
+                <Box position="absolute" bottom={50} width="100%" left="50%" marginLeft="-160px">
                     <Box sx={{width:"320px"}} padding={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-                        <Button variant="contained" onClick={() => handleConfirm()} component={Link} to={{pathname:"/dashboard"}}>
+                        <Button variant="contained" onClick={() => handleConfirm()} component={Link} to={{pathname: "/EditMeal"}} state={{ recipes:recipes, meal:meal }}>
                             Confirm
                         </Button>
                     </Box>

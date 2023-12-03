@@ -1,5 +1,9 @@
 import './App.css';
 import { BrowserRouter , Routes, Route } from "react-router-dom";
+import { RequireAuth } from 'react-auth-kit';
+import { ThemeProvider } from '@emotion/react';
+import { CssBaseline } from '@mui/material';
+import theme from './themes/theme.js';
 import Dashboard from './pages/Dashboard.js'
 import Login from './pages/Login.js'
 import Recipes from './pages/Recipes.js'
@@ -20,6 +24,8 @@ import LogMeal from './pages/LogMeal.js';
 function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider theme={theme}> 
+      <CssBaseline />
     <Routes>
       <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard /></RequireAuth>}/>
       <Route path="/recipes" element={<RequireAuth loginPath='/welcome'><Recipes /></RequireAuth>}/>

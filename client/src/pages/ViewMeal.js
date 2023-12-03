@@ -71,12 +71,12 @@ const ViewMeal = () => {
                     </Box>
                     <Typography variant="h6">Total Nutrition:</Typography>
                     <NutrInfo info={nutrInfo}/>
-                    <Box display="flex" justifyContent="center" padding={4}>
-                        <Button component={Link}
-                            to={{pathname:"/editMeal"}}
-                            state={{meal:meal, recipes: recipeIngredients}}
-                            variant="contained">Edit</Button>
-                    </Box>
+                </Box>
+                <Box position="absolute" display="flex" justifyContent="center" bottom={50}>
+                    <Button component={Link}
+                        to={{pathname:"/editMeal"}}
+                        state={{meal:meal, recipes: recipeIngredients}}
+                        variant="contained">Edit</Button>
                 </Box>
             </Box>
         </div>

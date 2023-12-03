@@ -2,8 +2,8 @@ import { Box, Typography, Grid, Card, CardContent, CardActionArea, CircularProgr
 import MealItemList from "../components/MealItemList";
 import BottomNav from "../components/BottomNav";
 import { useState, useEffect } from "react";
-import axios from 'axios';
 import { useAuthUser } from 'react-auth-kit'
+import axios from 'axios';
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
@@ -33,15 +33,15 @@ const Dashboard = () => {
                 <Typography variant="h5">Dashboard</Typography>
             </Box>
             <Box display="flex" flexDirection="column" padding={4} justifyContent="center" textAlign="center">
-                <Grid container spacing={2} alignItems="stretch">
+                <Grid container spacing={2} height={"500px"}>
                     <Grid item xs={4} display="flex">
                         <Card variant="outlined" display="flex" justifyContent="space-between" sx={{ boxShadow: 3, width: "100%", height: "100%" }}>
-                            <CardActionArea>
-                                <CardContent>
-                                    <Box padding={4}>
+                            <CardActionArea sx={{ width: "100%", height: "100%" }}>
+                                <CardContent sx={{ width: "100%", height: "100%" }}>
+                                    <Box padding={4} display="flex" flexDirection="column" sx={{ width: "100%", height: "100%" }}>
                                         <Typography variant="h6">Calories Remaining</Typography>
-                                        <Box display="flex" padding={8} justifyContent="center" alignItems="center">
-                                            <CircularProgress variant="determinate" color="primary" size={200} value={30}/>
+                                        <Box display="flex" padding={12} justifyContent="center" alignItems="center">
+                                            <CircularProgress variant="determinate" color="primary" size={180} value={30}/>
                                             <Box position="absolute">
                                                 <Typography>840/2500</Typography>
                                             </Box>
@@ -53,10 +53,10 @@ const Dashboard = () => {
                     </Grid>
                     <Grid item xs={8} display="flex">
                         <Card variant="outlined" display="flex" justifyContent="space-between" sx={{ boxShadow: 3, width: "100%", height: "100%" }}>
-                            <CardContent>
-                                <Box padding={4}>
+                            <CardContent sx={{ width: "100%", height: "100%" }}>
+                                <Box padding={4} display="flex" flexDirection="column" sx={{ width: "100%", height: "100%" }}>
                                     <Typography variant="h6">Your Meals</Typography>
-                                    <Box padding={8} overflow="auto" maxHeight={200}>
+                                    <Box padding={8} overflow="auto" sx={{ height:"300px" }}>
                                         {meals.map((value, key) => {
                                             return <MealItemList meal={value} key={key}/>
                                         })}
