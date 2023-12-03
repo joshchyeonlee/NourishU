@@ -6,14 +6,16 @@ import { useAuthUser } from 'react-auth-kit'
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import formatRecipeData from "../utils/formatRecipeData";
+import SetGoal from "../components/SetGoal";
 
 const Dashboard = () => {
     const auth = useAuthUser();
     const [userId, setUserId] = useState(auth().values.userID);
     const [meals, setMeals] = useState([]);
     const [mealIDs, setMealIDs] = useState([]);
-    const [calculatedCaloricIntake, setCalculatedCaloricIntake] = useState(0);
+    const [goal, setGoal] = useState();
     const [totalCalories, setTotalCalories] = useState(0);
+    const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
 
     const fetchUserGoal = async () => {
         const uid = {
@@ -21,7 +23,7 @@ const Dashboard = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/fetchUserGoal", uid);
-            setCalculatedCaloricIntake(res.data[0].CalculatedCaloricIntake);
+            setGoal(res.data[0]);
         } catch(err) {
             throw(err);
         }
@@ -50,11 +52,6 @@ const Dashboard = () => {
             setMeals(res.data);
             const mealIDs = res.data.map(x => x.MealID);
             setMealIDs(mealIDs);
-            
-            // for(var i = 0; i < mealIDs.length; i++){
-            //     fetchMealContains(mealIDs[i]);
-            // }
-
 
         } catch(err){
             throw(err);
@@ -69,6 +66,14 @@ const Dashboard = () => {
         setTotalCalories(calories);
     }
 
+    const handleOpenSetGoal = () => {
+        setIsGoalModalOpen(true);
+    }
+
+    const handleCloseSetGoal = () => {
+        setIsGoalModalOpen(false);
+    }
+
     useEffect(() => {
         if(mealIDs.length <= 0) return;
         calculateCaloricIntake()
@@ -81,6 +86,7 @@ const Dashboard = () => {
 
     return(   
         <div>
+            <SetGoal open={isGoalModalOpen} onClose={handleCloseSetGoal} goal={goal}/>
             <Box display="flex" flexDirection="column" padding={4} justifyContent="center" textAlign="center">
                 <Typography variant="h5">Dashboard</Typography>
             </Box>
@@ -88,19 +94,35 @@ const Dashboard = () => {
                 <Grid container spacing={2} height={"500px"}>
                     <Grid item xs={4} display="flex">
                         <Card variant="outlined" display="flex" justifyContent="space-between" sx={{ boxShadow: 3, width: "100%", height: "100%" }}>
-                            <CardActionArea sx={{ width: "100%", height: "100%" }}>
+                            <CardActionArea sx={{ width: "100%", height: "100%" }} onClick={handleOpenSetGoal}>
                                 <CardContent sx={{ width: "100%", height: "100%" }}>
-                                    <Box padding={4} display="flex" flexDirection="column" sx={{ width: "100%", height: "100%" }}>
-                                        <Typography variant="h6">Calories Remaining</Typography>
-                                        <Box display="flex" padding={18} justifyContent="center" alignItems="center">
-                                            <Box position="absolute">
-                                                <CircularProgress variant="determinate" color="primary" size={180} value={ (totalCalories < 0) ? 0 : ((totalCalories/calculatedCaloricIntake) * 100)}/>
-                                            </Box>
-                                            <Box position="absolute">
-                                                <Typography>{totalCalories}/{calculatedCaloricIntake}</Typography>
+                                    {goal ? 
+                                        <Box sx={{position: "relative",
+                                            float: "left",
+                                            top: "50%",
+                                            left: "50%",
+                                            transform: "translate(-50%, -50%)"}}
+                                            padding={4} display="flex" flexDirection="column"
+                                        >
+                                            <Typography variant="h6">Calories Remaining</Typography>
+                                            <Box display="flex" padding={18} justifyContent="center" alignItems="center">
+                                                <Box position="absolute">
+                                                    <CircularProgress variant="determinate" color="primary" size={180} value={ (totalCalories < 0 || !goal) ? 0 : ((totalCalories/goal.CalculatedCaloricIntake) * 100)}/>
+                                                </Box>
+                                                <Box position="absolute">
+                                                    <Typography>{totalCalories}/{goal.CalculatedCaloricIntake}</Typography>
+                                                </Box>
                                             </Box>
                                         </Box>
-                                    </Box>
+                                    :   <Box sx={{position: "relative",
+                                                float: "left",
+                                                top: "50%",
+                                                left: "50%",
+                                                transform: "translate(-50%, -50%)"}}
+                                            >
+                                                <Typography variant="h6">No Goal Set!</Typography>
+                                        </Box>
+                                    }
                                 </CardContent>
                             </CardActionArea>
                         </Card>

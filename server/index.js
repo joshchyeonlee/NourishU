@@ -497,7 +497,34 @@ app.post('/fetchUserGoal', (req, res) => {
         }
         res.send(result);
     })
+})
 
+app.post('/updateGoal', (req, res) => {
+    const GoalID = req.body.GoalID;
+    const Calc = req.body.Calculated;
+    let sql = `UPDATE GOAL SET CalculatedCaloricIntake = ${Calc} WHERE GoalID = ${GoalID}`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/createGoal', (req, res) => {
+    const GoalID = req.body.GoalID;
+    const UserID = req.body.UserID;
+    const Calc = req.body.Calculated;
+    const Init = req.body.Initial;
+
+    let sql = `INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+                VALUES(${UserID}, ${GoalID}, ${Calc}, ${Init});`;;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
 })
 
 app.listen(3001, () => {
