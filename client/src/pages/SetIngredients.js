@@ -61,7 +61,7 @@ const SetIngredients = () => {
             addIngrToRecipe(value);
         })
 
-        navigate("/setRecipeInstructions", {state:{recipeID: recipeID}});
+        navigate("/setRecipeInstructions", {state:{recipeID: recipeID, prev: location.state}});
     }
 
     useEffect(() => {

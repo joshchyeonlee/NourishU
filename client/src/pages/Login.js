@@ -35,7 +35,6 @@ const Login = () => {
             else {
                 setIsEmailValid(false)
             }
-
         } catch(err){
             throw(err);
         }
@@ -49,12 +48,10 @@ const Login = () => {
             const res = await axios.post("http://localhost:3001/getUserPassword", userPass)
             if (res.data.length > 0) {
                 setisPasswordValid(true)
-               
             }
             else {
                 setisPasswordValid(false)
             }
-
         } catch(err){
             throw(err);
         }
@@ -67,7 +64,7 @@ const Login = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/authenticateUser", cred)
-            
+
             signIn({
                 token: res.data.token,
                 expiresIn: 3600,
@@ -95,8 +92,8 @@ const Login = () => {
                 navigate("/Dashboard");
             }
         }
-        check();
 
+        check();
     },[isEmailValid, isPasswordValid]);
 
     return (
@@ -112,7 +109,9 @@ const Login = () => {
                     <TextField type='password' error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Password" variant="outlined" helperText={(!isPasswordValid && isButtonClicked) ? "Invalid Password" : ""} onChange={(event)=>{handlePasswordChange(event.target.value)}} />
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" onClick={checkUserCred}>Log in</Button>
+                    <Box padding={4}>
+                        <Button variant="contained" onClick={checkUserCred}>Log in</Button>
+                    </Box>
                 </Grid>
             </Grid>
         </div>
