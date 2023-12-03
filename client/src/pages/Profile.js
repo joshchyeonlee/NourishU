@@ -1,4 +1,4 @@
-import { Button, Box, Typography, Grid, Card, CardContent, IconButton, Tooltip } from "@mui/material";
+import { Button, Box, Typography, Grid, Card, CardContent, ListItem, ListItemButton, IconButton, Tooltip } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { useState, useEffect } from "react";
 import axios from 'axios';
@@ -9,6 +9,7 @@ import AchievementModal from "../components/AchievementModal";
 import { Link } from "react-router-dom";
 import { useAuthUser } from 'react-auth-kit'
 import YourRecipesList from "../components/YourRecipesList";
+import { useAuthUser } from 'react-auth-kit'
 
 const Profile = () => {
     const auth = useAuthUser();
@@ -113,18 +114,18 @@ const Profile = () => {
             <ListModal open={followingOpen} onClose={handleFollowingClose} values={following}/>
             <ListModal open={followerOpen} onClose={handleFollowerClose} values={followers}/>
             <Button variant="outlined" startIcon={<EditIcon/>} sx={{position:"fixed", top:10, right:10}}>
-                Edit
+                Edit Profile
             </Button>
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={4}>
                 <Typography variant="h4">Welcome, {userName}!</Typography>
                 <Grid container spacing={4} padding={3} alignItems="center" justifyContent="center">
                     <Grid item>
-                        <Button variant="outlined" onClick={handleFollowingOpen}>
+                        <Button variant="contained" onClick={handleFollowingOpen}>
                             Following {followingCount}
                         </Button>                                
                     </Grid>
                     <Grid item>
-                        <Button variant="outlined" onClick={handleFollowerOpen}>
+                        <Button variant="contained" onClick={handleFollowerOpen}>
                             Followers {followerCount}
                         </Button>
                     </Grid>

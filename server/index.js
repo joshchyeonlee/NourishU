@@ -471,6 +471,22 @@ app.post('/flagReview', (req, res) => {
     })
 })
 
+app.post('/createMeal', (req, res) => {
+    const UserID = req.body.UserID;
+    const DateTime = req.body.DateTime;
+    const MealTitle = req.body.MealTitle;
+
+    console.log(MealTitle)
+
+    let sql = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(${UserID}, "${DateTime}", "${MealTitle}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });

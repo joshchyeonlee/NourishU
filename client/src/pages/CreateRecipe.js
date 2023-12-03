@@ -2,11 +2,14 @@ import { Box, Typography, IconButton, TextField, Slider, Autocomplete, Button } 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuthUser } from 'react-auth-kit'
 
 const CreateRecipe = () => {
+    const auth = useAuthUser();
     const navigate = useNavigate();
-    const [userId, setUserID] = useState(0);
+    const location = useLocation();
+    const [userId, setUserID] = useState(auth().values.userID);
     const [ingredients, setIngredients] = useState([]);
     const [recipeTitle, setRecipeTitle] = useState("");
     const [recipeDescription, setRecipeDescription] = useState("");
@@ -67,14 +70,16 @@ const CreateRecipe = () => {
     }, []);
 
     useEffect(() => {
-        if (recipeID !== -1) navigate("/setIngredients", {state:{ingredients: selectedIngredients, recipeID: recipeID}});
+        if (recipeID !== -1) navigate("/setIngredients", {state:{ingredients: selectedIngredients, recipeID: recipeID, prev: location.state}});
     }, [recipeID])
 
     //back arrow returns to dashboard for now, waiting on PR to be merged to link page
     return(
         <Box display="flex" justifyContent="center" padding={2} flexDirection="column" alignItems="center">
             <IconButton sx={{position: "absolute", top:10, left: 10}}
-                component={Link} to={{pathname:"/dashboard"}}>
+                component={Link}
+                to= { (location.state) ? {pathname: location.state.from} : {pathname:"/dashboard"}}
+                state = {(location.state) ? location.state.prev : {}}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box display="flex" justifyContent="center" padding={2}>

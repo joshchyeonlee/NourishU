@@ -1,14 +1,10 @@
-import { Typography, Grid, Button, Box, IconButton } from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Typography, Grid, Button, Box } from "@mui/material";
 import BottomNav from "../components/BottomNav";
 import { Link } from "react-router-dom";
 
 const Recipes = () => {
     return (
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <IconButton sx={{position: "absolute", top:10, left: 10}}>
-                <ArrowBackIcon fontSize="large"/>
-            </IconButton>
             <Box padding={10}>
                 <Typography variant="h4" padding={2}>Recipes</Typography>
             </Box>

@@ -9,6 +9,12 @@ import NutrInfo from "../components/NutrInfo";
 import { useLocation, Link } from "react-router-dom";
 
 const ViewRecipe = () => {
+    const blue = "#035E7B";
+    const green = "#4F772D";
+    const red = "#BF211E";
+    const yellow = "#FDCA40";
+    const orange = "#F78764";
+
     const location = useLocation();
     const [prevPageState, setPrevPageState] = useState(location.state);
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
@@ -80,26 +86,26 @@ const ViewRecipe = () => {
     }
 
     const setColor = (rating) => {
-        if(rating <= 1) return {color: "blue"};
-        if(rating <= 2) return {color: "green"};
-        if(rating <= 3) return {color: "yellow"};
-        if(rating <= 4) return {color: "orange"};
-        if(rating <= 5) return {color: "red"};
+        if(rating <= 1) return {color: blue};
+        if(rating <= 2) return {color: green};
+        if(rating <= 3) return {color: yellow};
+        if(rating <= 4) return {color: orange};
+        if(rating <= 5) return {color: red};
     }
 
     const setRatingColor = () => {
         if(hover !== -1){
-            if(hover === 1) return {color: "blue"};
-            if(hover === 2) return {color: "green"};
-            if(hover === 3) return {color: "yellow"};
-            if(hover === 4) return {color: "orange"};
-            if(hover === 5) return {color: "red"};
+            if(hover === 1) return {color: blue};
+            if(hover === 2) return {color: green};
+            if(hover === 3) return {color: yellow};
+            if(hover === 4) return {color: orange};
+            if(hover === 5) return {color: red};
         } else {
-            if(userRating === 1) return {color: "blue"};
-            if(userRating === 2) return {color: "green"};
-            if(userRating === 3) return {color: "yellow"};
-            if(userRating === 4) return {color: "orange"};
-            if(userRating === 5) return {color: "red"};
+            if(userRating === 1) return {color: blue};
+            if(userRating === 2) return {color: green};
+            if(userRating === 3) return {color: yellow};
+            if(userRating === 4) return {color: orange};
+            if(userRating === 5) return {color: red};
         }
     }
 
@@ -118,7 +124,8 @@ const ViewRecipe = () => {
         try{
             await axios.post("http://localhost:3001/createReview", reviewInfo);
             fetchReviews();
-
+            setUserReview("");
+            setUserReviewLength(0);
         } catch(err){
             throw(err);
         }
@@ -248,13 +255,14 @@ const ViewRecipe = () => {
                                         rows={4}
                                         inputProps={{ maxLength: 255 }}
                                         onChange={(event) => handleReview(event.target.value)}
+                                        value={userReview}
                                     />
                                     <Box padding={1} display="flex" justifyContent="space-between">
                                         <Typography variant="caption">{userReviewLength}/255</Typography>
                                         <Box display="flex" justifyContent="flex-end">
                                             <Button
                                                 variant="contained"
-                                                disabled={(userReviewLength <= 0) || (overallRating <=0)}
+                                                disabled={(userReviewLength <= 0) || (userRating <=0)}
                                                 onClick={handleSubmitReview}
                                                 >Add Review</Button>
                                         </Box>
