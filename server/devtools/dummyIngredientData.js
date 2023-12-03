@@ -9,7 +9,7 @@ LIMIT 1;`;
 
 const createTable = `
 CREATE TABLE INGREDIENT (
-    IngredientID    INT         NOT NULL,
+    IngredientID    INT         NOT NULL    AUTO_INCREMENT,
     IngredientName  VARCHAR(50) NOT NULL,
     Carbs           FLOAT       NOT NULL,
     Protein         FLOAT       NOT NULL,

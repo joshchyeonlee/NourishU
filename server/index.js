@@ -439,6 +439,27 @@ app.post('/getAdminPassword', (req, res) => {
     })
 })
 
+app.post('/createIngredient', (req, res) => {
+    const ingName = req.body.IngredientName;
+    const carb = req.body.Carbs;
+    const pro = req.body.Protein;
+    const satFat = req.body.SaturatedFats;
+    const unsatFat = req.body.UnsaturatedFats;
+    const serving = req.body.IsPerServing;
+    const calorie = req.body.Calories;
+    const aid = req.body.AdminID;
+    let sql = `INSERT INTO INGREDIENT(IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID)
+    VALUES ("${ingName}", ${carb}, ${pro}, ${satFat}, ${unsatFat}, ${serving}, ${calorie}, ${aid});`;
+    db.query(sql, (err, result) => {
+        if (err){
+            throw(err)
+            
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
