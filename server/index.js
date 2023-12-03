@@ -511,6 +511,29 @@ app.post('/queryUserEmailExists', (req, res) => {
     })
 })
 
+app.post('/createUser', (req, res) => {
+    const userN = req.body.UserName;
+    const userEm = req.body.UserEmail;
+    const userBirth = req.body.UserBirthdate;
+    const userHt = req.body.UserHeight;
+    const userWt = req.body.UserWeight;
+    const userAg = req.body.UserAge;
+    const userDt = req.body.DietName;
+    const userDtDes = req.body.DietDescription;
+    const userCkConf = req.body.CookingConfidence;
+    const userPass = req.body.UserPassword;
+
+    let sql = `INSERT INTO USER(UserName, UserEmail, UserBirthdate, UserHeight, UserWeight, UserAge, DietName, DietDescription, CookingConfidence, UserPassword)
+    VALUES ("${userN}", "${userEm}", '${userBirth}', ${userHt}, ${userWt}, ${userAg}, "${userDt}", "${userDtDes}", ${userCkConf}, "${userPass}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
