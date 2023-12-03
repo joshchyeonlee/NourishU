@@ -485,6 +485,13 @@ app.post('/getAdminEmail', (req, res) => {
 app.post('/getAdminPassword', (req, res) => {
     const adminPassword = req.body.adminPassword;
     let sql = `SELECT * FROM ADMIN WHERE ADMINPASSWORD = "${adminPassword}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
 
 app.post('/createMeal', (req, res) => {
     const UserID = req.body.UserID;
