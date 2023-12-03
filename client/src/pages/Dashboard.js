@@ -84,6 +84,11 @@ const Dashboard = () => {
         fetchUserGoal();
     }, []);
 
+    useEffect(() => {
+        fetchUserMeals();
+        fetchUserGoal();
+    }, [isGoalModalOpen])
+
     return(   
         <div>
             <SetGoal open={isGoalModalOpen} onClose={handleCloseSetGoal} goal={goal}/>

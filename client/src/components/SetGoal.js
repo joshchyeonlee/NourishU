@@ -18,7 +18,6 @@ const modalFormat = {
     borderRadius: 5,
 };
 
-
 const SetGoal = (props) => {
     const auth = useAuthUser();
     const [userId, setUserId] = useState(auth().values.userID);
@@ -52,11 +51,6 @@ const SetGoal = (props) => {
         } catch (err) {
             throw(err);
         }
-        // const goal = {
-        //     UserID: userId,
-        //     Calculated: updatedGoalValue,
-        // }
-        // console.log(goal);
     }
 
     const handleText = () => {
@@ -82,6 +76,7 @@ const SetGoal = (props) => {
 
     const handleUpdate = () => {
         props.goal ? updateGoal() : createGoal()
+        props.onClose();
     }
 
     return(

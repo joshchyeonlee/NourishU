@@ -518,7 +518,7 @@ app.post('/createGoal', (req, res) => {
     const Init = req.body.Initial;
 
     let sql = `INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
-                VALUES(${UserID}, ${GoalID}, ${Calc}, ${Init});`;;
+                VALUES(${UserID}, ${GoalID}, ${Init}, ${Calc});`;;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
