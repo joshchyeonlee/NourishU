@@ -10,14 +10,9 @@ const Welcome = () => {
                 <Box padding={1}>
                     <Button variant="contained" sx = {{width: '200px'}} component={Link} to={{pathname:"/login"}}>Log in</Button>
                 </Box>
-                <Grid container spacing ={3} direction="column" width={200}>
-                    <Grid item>
-                        <Button variant="contained" sx = {{width: '200px'}} component={Link} to={{pathname:"/login"}}>Log in</Button>
-                    </Grid>
-                    <Grid item>
+                <Box padding={1}>
                     <Button variant="contained" sx = {{width: '200px'}} component={Link} to={{pathname:"/signup-initial"}}>Sign Up</Button>
-                    </Grid>
-                </Grid>
+                </Box>
             </Box>
         </Box>
     )
