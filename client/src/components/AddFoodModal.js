@@ -1,4 +1,4 @@
-import { Box, IconButton, Modal, Typography, FormControl, Select, MenuItem, Button } from "@mui/material"
+import { Box, IconButton, Modal, Typography, FormControl, Select, MenuItem, Button, Snackbar } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import axios from "axios";
@@ -16,8 +16,17 @@ const style = {
   };
 
 const AddFoodModal = (props) => {
-    const [amtConsumed, setAmountConsumed] = useState(0);
-    const handleClose = () => props.setOpen(false);
+    const [amtConsumed, setAmountConsumed] = useState(1);
+    const [confirmationOpen, setConfirmationOpen] = useState(false);
+
+    const handleClose = () => {
+        props.setOpen(false)
+        setConfirmationOpen(true);
+    };
+
+    const handleConfirmationClose = () => {
+        setConfirmationOpen(false);
+    };
 
     const handleAmountSelect = (event) => {
         setAmountConsumed(event.target.value);
@@ -65,44 +74,50 @@ const AddFoodModal = (props) => {
 
     const handleAdd = () => {
         checkIfRecipeExistsInMeal(props.recipe, props.meal);
+        handleClose();
     }
 
     return (
-    <Modal
-        open={props.open}
-        onClose={handleClose}
-    >
-        <Box sx={style}>
-            <Box position="absolute" top={10} right={10}>
-                <IconButton onClick={handleClose}>
-                    <CloseIcon/>
-                </IconButton>
+        <div>
+        <Snackbar
+            open={confirmationOpen}
+            autoHideDuration={6000}
+            onClose={handleConfirmationClose}
+            message="Successfully added food to meal!"
+        />
+        <Modal open={props.open} onClose={handleClose}>
+            <Box sx={style}>
+                <Box position="absolute" top={10} right={10}>
+                    <IconButton onClick={handleClose}>
+                        <CloseIcon/>
+                    </IconButton>
+                </Box>
+                <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center">
+                    <Typography padding={1} variant="h6">Add Food</Typography>
+                </Box>
+                <Box display="flex" padding={2} flexDirection="column">
+                    <Typography>Adding {props.recipeTitle}</Typography>
+                    <Typography>To meal: {props.meal ? props.meal.MealTitle : ""}</Typography>
+                </Box>
+                <Box display="flex" justifyContent="space-between" alignItems="center" padding={2}>
+                    <Typography>Select Quantity:</Typography>
+                    <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
+                        <Select value={amtConsumed} onChange={handleAmountSelect} label="Quantity Consumed" defaultValue={1}>
+                            {Array.from(Array(10), (e, i) => {
+                                return(
+                                    <MenuItem key={i} value={i + 1}>{i + 1}</MenuItem>
+                                )
+                            })}
+                        </Select>
+                    </FormControl>
+                </Box>
+                <Box display="flex" justifyContent="center" padding={2}>
+                    <Button variant="contained" onClick={handleAdd}>Add</Button>
+                </Box>
             </Box>
-            <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-                <Typography padding={1} variant="h6">Add Food</Typography>
-            </Box>
-            <Box display="flex" padding={2} flexDirection="column">
-                <Typography>Adding {props.recipeTitle}</Typography>
-                <Typography>To meal: {props.meal ? props.meal.MealTitle : ""}</Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between" alignItems="center" padding={2}>
-                <Typography>Select Quantity:</Typography>
-                <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-                    <Select value={amtConsumed} onChange={handleAmountSelect} label="Quantity Consumed" defaultValue={1}>
-                        {Array.from(Array(10), (e, i) => {
-                            return(
-                                <MenuItem key={i} value={i + 1}>{i + 1}</MenuItem>
-                            )
-                        })}
-                    </Select>
-                </FormControl>
-            </Box>
-            <Box display="flex" justifyContent="center" padding={2}>
-                <Button variant="contained" onClick={handleAdd}>Add</Button>
-            </Box>
-        
-        </Box>
-    </Modal>)
+        </Modal>
+        </div>
+    )
 }
 
 export default AddFoodModal;

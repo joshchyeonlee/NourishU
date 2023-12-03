@@ -340,6 +340,99 @@ app.post('/authenticateUser', (req, res) => {
 
 })
 
+app.post('/fetchAdminInfo', (req, res) => {
+    const adminID = req.body.AdminID;
+    let sql = `SELECT AdminName, AdminEmail FROM ADMIN WHERE AdminID = ${adminID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/fetchFlaggedReviews', (req,res) => {
+    let sql = `SELECT * FROM ADMIN_REVIEW as ar, REVIEW as r, User as u, Admin as a
+    WHERE r.ReviewID = ar.ReviewID AND ar.ReviewFlagged = 1 AND u.UserID = r.WrittenBy AND ar.AdminID = a.AdminID;`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/fetchAllReviews', (req,res) => {
+    let sql = `SELECT * FROM REVIEW as r, USER as u, ADMIN_REVIEW as ar WHERE r.WrittenBy = u.UserID and r.ReviewID = ar.ReviewID;`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/deleteReview', (req, res) => {
+    const ReviewID = req.body.ReviewID;
+    let adminReview = `DELETE FROM ADMIN_REVIEW WHERE ReviewID = ${ReviewID}`;
+    let review = `DELETE FROM REVIEW WHERE ReviewID = ${ReviewID}`;
+
+    db.query(adminReview, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        db.query(review, (err, result) => {
+            if(err){
+                throw(err);
+            }
+            res.send(result);
+        })
+    })
+})
+
+app.post('/unflagReview', (req, res) => {
+    const ReviewID = req.body.ReviewID;
+    let sql = `UPDATE ADMIN_REVIEW SET ReviewFlagged = 0 WHERE ReviewID = ${ReviewID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/flagReview', (req, res) => {
+    const ReviewID = req.body.ReviewID;
+    var ReviewFlag;
+    (req.body.ReviewFlagged === 1) ? ReviewFlag = 0 : ReviewFlag = 1
+
+    let sql = `UPDATE ADMIN_REVIEW SET ReviewFlagged = ${ReviewFlag} WHERE ReviewID = ${ReviewID};`;
+    console.log(sql);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/createMeal', (req, res) => {
+    const UserID = req.body.UserID;
+    const DateTime = req.body.DateTime;
+    const MealTitle = req.body.MealTitle;
+
+    console.log(MealTitle)
+
+    let sql = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(${UserID}, "${DateTime}", "${MealTitle}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
