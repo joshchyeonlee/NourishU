@@ -1,5 +1,9 @@
 import './App.css';
 import { BrowserRouter , Routes, Route } from "react-router-dom";
+import { RequireAuth } from 'react-auth-kit';
+import { ThemeProvider } from '@emotion/react';
+import { CssBaseline } from '@mui/material';
+import theme from './themes/theme.js';
 import Dashboard from './pages/Dashboard.js'
 import Login from './pages/Login.js'
 import Recipes from './pages/Recipes.js'
@@ -14,7 +18,10 @@ import SetRecipeInstructions from './pages/SetRecipeInstructions.js';
 import ViewRecipe from './pages/ViewRecipe.js';
 import SearchRecipes from './pages/SearchRecipes.js';
 import Welcome from './pages/Welcome.js';
-import { RequireAuth } from 'react-auth-kit';
+import EditRecipe from './pages/EditRecipe.js';
+import EditRecipeIngredients from './pages/EditRecipeIngredients.js';
+import YourRecipes from './pages/YourRecipes.js';
+import LogMeal from './pages/LogMeal.js';
 import SignUpInitial from './pages/SignUpInitial.js';
 import SignUpInfo from './pages/SignUpInfo.js';
 import UserInterests from './pages/UserInterests.js';
@@ -22,6 +29,8 @@ import UserInterests from './pages/UserInterests.js';
 function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider theme={theme}> 
+      <CssBaseline />
     <Routes>
       <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard /></RequireAuth>}/>
       <Route path="/recipes" element={<RequireAuth loginPath='/welcome'><Recipes /></RequireAuth>}/>
@@ -36,14 +45,18 @@ function App() {
       <Route path="/setRecipeInstructions" element={<RequireAuth loginPath='/welcome'><SetRecipeInstructions/></RequireAuth>}/>
       <Route path="/viewRecipe" element={<RequireAuth loginPath='/welcome'><ViewRecipe/></RequireAuth>}/>
       <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard/></RequireAuth>}/>
+      <Route path="/editRecipe" element={<RequireAuth loginPath='/welcome'><EditRecipe /></RequireAuth>} />
+      <Route path="/editRecipeIngredients" element={<RequireAuth loginPath='/welcome'><EditRecipeIngredients /></RequireAuth>} />
+      <Route path="/viewYourRecipes" element={<RequireAuth loginPath='/welcome'><YourRecipes /></RequireAuth>} />
+      <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
       <Route path="/welcome" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
       <Route path ="/signup-initial" element={<SignUpInitial />} />
       <Route path ="/signup-info" element={<SignUpInfo />} />
       <Route path ="/signup-userinterests" element={<UserInterests />} />
     </Routes>
+    </ThemeProvider>
   </BrowserRouter>
-  );
-}
+)}
 
 export default App;

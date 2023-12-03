@@ -200,7 +200,6 @@ app.post('/setRecipeIngredient', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -214,7 +213,6 @@ app.post('/getRecipeIngredients', (req, res) => {
             throw(err);
         }
         res.send(result);
-        console.log(result);
     })
 })
 
@@ -302,7 +300,6 @@ app.post('/queryMealContainsRecipe', (req, res) => {
             throw(err);
         }
         res.send(result);
-        console.log(result);
     })
 })
 
@@ -312,13 +309,70 @@ app.post('/createReview', (req, res) => {
     const rating = req.body.RDifficulty;
     const comment = req.body.RComment;
     let sql = `INSERT INTO REVIEW(WrittenBy, RecipeID, RDifficulty, RComment) VALUES(${by}, ${rID}, ${rating}, "${comment}")`
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
         res.send(result);
-        console.log(result);
+    })
+})
+
+app.post('/getUserAchievements', (req, res) => {
+    const uid = req.body.UserID;
+    let sql = `SELECT * FROM ACHIEVEMENTS_EARNED AS e, ACHIEVEMENT AS a WHERE e.UserID = ${uid} AND a.AchievementID = e.AchievementID;`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/getUserCreatedRecipes', (req, res) => {
+    const uid = req.body.UserID;
+    let sql =  `SELECT * FROM RECIPE WHERE UserID = ${uid};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/updateRecipe', (req, res) => {
+    const rid = req.body.RecipeID;
+    const rTitle = req.body.RecipeTitle;
+    const rDesc = req.body.RecipeDescription;
+    const rTime = req.body.CookTime;
+    const rSize = req.body.ServingSize;
+    const rDifficulty = req.body.RecipeDifficulty;
+    let sql = `UPDATE RECIPE SET
+    RecipeTitle = "${rTitle}",
+    RecipeDescription = "${rDesc}",
+    CookTime = ${rTime},
+    ServingSize = ${rSize},
+    RDifficulty = ${rDifficulty}
+    WHERE RecipeID = ${rid};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/updateRecipeIngredient', (req, res) => {
+    const rid = req.body.RecipeID;
+    const iid = req.body.IngredientID;
+    const rQuant = req.body.AmountIngredient;
+    let sql = `UPDATE RECIPE_CONTAINS_INGREDIENT SET
+    AmountIngredient = ${rQuant}
+    WHERE RecipeID = ${rid} AND IngredientID = ${iid};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
     })
 })
 
@@ -338,6 +392,99 @@ app.post('/authenticateUser', (req, res) => {
 
     res.send(obj);
 
+})
+
+app.post('/fetchAdminInfo', (req, res) => {
+    const adminID = req.body.AdminID;
+    let sql = `SELECT AdminName, AdminEmail FROM ADMIN WHERE AdminID = ${adminID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/fetchFlaggedReviews', (req,res) => {
+    let sql = `SELECT * FROM ADMIN_REVIEW as ar, REVIEW as r, User as u, Admin as a
+    WHERE r.ReviewID = ar.ReviewID AND ar.ReviewFlagged = 1 AND u.UserID = r.WrittenBy AND ar.AdminID = a.AdminID;`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/fetchAllReviews', (req,res) => {
+    let sql = `SELECT * FROM REVIEW as r, USER as u, ADMIN_REVIEW as ar WHERE r.WrittenBy = u.UserID and r.ReviewID = ar.ReviewID;`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/deleteReview', (req, res) => {
+    const ReviewID = req.body.ReviewID;
+    let adminReview = `DELETE FROM ADMIN_REVIEW WHERE ReviewID = ${ReviewID}`;
+    let review = `DELETE FROM REVIEW WHERE ReviewID = ${ReviewID}`;
+
+    db.query(adminReview, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        db.query(review, (err, result) => {
+            if(err){
+                throw(err);
+            }
+            res.send(result);
+        })
+    })
+})
+
+app.post('/unflagReview', (req, res) => {
+    const ReviewID = req.body.ReviewID;
+    let sql = `UPDATE ADMIN_REVIEW SET ReviewFlagged = 0 WHERE ReviewID = ${ReviewID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/flagReview', (req, res) => {
+    const ReviewID = req.body.ReviewID;
+    var ReviewFlag;
+    (req.body.ReviewFlagged === 1) ? ReviewFlag = 0 : ReviewFlag = 1
+
+    let sql = `UPDATE ADMIN_REVIEW SET ReviewFlagged = ${ReviewFlag} WHERE ReviewID = ${ReviewID};`;
+    console.log(sql);
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
+app.post('/createMeal', (req, res) => {
+    const UserID = req.body.UserID;
+    const DateTime = req.body.DateTime;
+    const MealTitle = req.body.MealTitle;
+
+    console.log(MealTitle)
+
+    let sql = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(${UserID}, "${DateTime}", "${MealTitle}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
 })
 
 app.post('/queryUserNameExists', (req, res) => {
