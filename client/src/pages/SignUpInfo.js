@@ -18,10 +18,13 @@ const SignUpInfo = () => {
     const [userBirthDate, setUserBirthDate] = useState("");
     const [userHeight, setUserHeight] = useState(-1);
     const [userWeight, setUserWeight] = useState(-1);
-    const [userDiet, setUserDiet] = useState('None');
+    const [userDiet, setUserDiet] = useState("");
     const [userDietDescription, setUserDietDescription] = useState("");
+    const [userAge, setUserAge] = useState(-1);
 
     const[userDietDescSize, setUserDietDescSize] = useState(true);
+
+    const[userDone, setUserDone] = useState(true);
 
     const today = dayjs();
     const tomorrow = dayjs().add(1, 'day');
@@ -35,11 +38,7 @@ const SignUpInfo = () => {
         'Vegan',
         'Pescatarian',
         'Halal',
-    ];
-
-    // <Typography variant="h4" padding={2}>{userName}</Typography>
-    // <Typography variant="h4" padding={2}>{userEmail}</Typography>
-    // <Typography variant="h4" padding={2}>{userPass}</Typography> 
+    ]; 
 
     const handleBirthDate = (newValue) => {
         // Extract year, month, and day values
@@ -51,9 +50,10 @@ const SignUpInfo = () => {
         const newBirthDate = dayjs(`${year}/${month}/${day}`);
 
         // Update the state with the new Dayjs object
-        setUserBirthDate(newBirthDate.format('YYYY/MM/DD'));
+        setUserBirthDate(newBirthDate.format('YYYY-MM-DD'));
 
-        console.log(newBirthDate.format('YYYY/MM/DD'));
+        console.log(newBirthDate.format('YYYY-MM-DD'));
+        calculateUserAge(newBirthDate)
     };
 
     const handleUserHeight = (inputHeight) => {
@@ -81,7 +81,7 @@ const SignUpInfo = () => {
             return;
         }
 
-        if (inputDietDesc == '') {
+        if (inputDietDesc === '') {
             setUserDietDescSize(false)
             return;
         }
@@ -90,6 +90,29 @@ const SignUpInfo = () => {
         }
         console.log("userDietDescSize updated:", userDietDescSize);
     }
+
+    const checkInfo = () => {
+        if (userBirthDate === "" || userHeight ===  -1 || userWeight === -1 || userDiet === ""  || userDietDescription === ""){
+            setUserDone(true)
+        }
+
+        else {
+            setUserDone(false);
+        }
+    }
+
+    const calculateUserAge = (theDate) => {
+    const calculation = today.diff(theDate, "y")
+    console.log(calculation)
+    console.log(typeof calculation)
+
+    setUserAge(calculation)
+    }
+
+    useEffect(() => {
+        // This effect will run whenever the variables in the array change
+        checkInfo();
+    }, [userBirthDate, userHeight, userWeight, userDiet, userDietDescription]);
 
     return (
         <div>
@@ -162,14 +185,16 @@ const SignUpInfo = () => {
 
                 <TextField id="outlined" label="Briefly describe your diet!" variant="outlined" sx={{ m: 1, minWidth: 350 }}
                 onChange = {(e) => {handleUserDietDescription(e.target.value)}}
-                error = {(!userDietDescSize)} helperText = {(userDietDescSize)? "" : "Description is TOO long!" }/>
+                error = {(!userDietDescSize)} helperText = {(userDietDescSize)? "" : "Description is blank or TOO long!" }/>
                 
 
                 <Grid item style={{ marginTop: '10px' }}>
-                    <Button variant="contained" size="small" disabled={true}
-                    //component = {Link}
-                    //to={{pathname:"/signup-info"}}
-                    //state={{userName:userNameTextField, userEmail: userEmailTextField, userPass: userPassTextField}}
+                    <Button variant="contained" size="small" disabled={userDone || !userDietDescSize}
+                    component = {Link}
+                    to={{pathname:"/signup-userinterests"}}
+                    state={{UserName: userName, UserEmail: userEmail, UserPass: userPass, 
+                        UserBirthDate: userBirthDate, UserHeight: userHeight, UserWeight: userWeight,
+                    UserDiet: userDiet, UserDietDescription: userDietDescription, UserAge: userAge}}
                     >
                         Next
                     </Button>

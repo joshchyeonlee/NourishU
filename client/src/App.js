@@ -17,6 +17,7 @@ import Welcome from './pages/Welcome.js';
 import { RequireAuth } from 'react-auth-kit';
 import SignUpInitial from './pages/SignUpInitial.js';
 import SignUpInfo from './pages/SignUpInfo.js';
+import UserInterests from './pages/UserInterests.js';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path ="/signup-initial" element={<SignUpInitial />} />
       <Route path ="/signup-info" element={<SignUpInfo />} />
+      <Route path ="/signup-userinterests" element={<UserInterests />} />
     </Routes>
   </BrowserRouter>
   );
