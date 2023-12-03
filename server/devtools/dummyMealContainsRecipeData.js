@@ -14,7 +14,7 @@ PRIMARY KEY(MealID, RecipeID),
 FOREIGN KEY(MealID) REFERENCES MEAL(MealID) ON UPDATE CASCADE,
 FOREIGN KEY(RecipeID) REFERENCES RECIPE(RecipeID) ON UPDATE CASCADE);`;
 
-const mealcr0 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(0, 1, 1);`;
+const mealcr0 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(1, 1, 1);`;
 const mealcr1 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(1, 2, 1);`;
 const mealcr2 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(2, 3, 1);`;
 const mealcr3 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(3, 1, 1);`;

@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Box, IconButton, TextField, Typography, Button, Card, CardContent, CardActionArea, Grid } from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Box, IconButton, TextField, Typography, Button, Card, CardContent, Grid } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import MenuIcon from '@mui/icons-material/Menu';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const SetRecipeInstructions = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
     const [instructions, setInstructions] = useState([]);
     
     const handleContinue = () => {
         console.log("done!");
+        const redirect = location.state.prev.prev.prev;
+        navigate(redirect.from, {state: {meal: redirect.meal, recipes: redirect.recipes}})
     }
 
     const handleAdd = () => {
@@ -61,9 +63,6 @@ const SetRecipeInstructions = () => {
                                         sx={{width:"90%"}}
                                         onChange={(e) => handleChange(e, key)}/>
                                     <Box display="flex">
-                                        <IconButton>
-                                            <MenuIcon/>
-                                        </IconButton>
                                         <IconButton onClick={() => handleDelete(key)}>
                                             <DeleteIcon/>
                                         </IconButton>

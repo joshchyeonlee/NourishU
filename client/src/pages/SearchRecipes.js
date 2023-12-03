@@ -10,6 +10,7 @@ import AddFoodModal from "../components/AddFoodModal";
 const SearchRecipes = () => {
     const location = useLocation();
     const [prevPageData, setPrevPageData] = useState(location.state)
+    console.log(location.state);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
@@ -57,12 +58,13 @@ const SearchRecipes = () => {
     return(
         <div>
             <AddFoodModal open={isAddModalOpen} setOpen={setIsAddModalOpen} recipe={addRecipe} recipeTitle={addRecipeTitle} meal={prevPageData.meal}/>
+            {prevPageData.from !== "/logMeal" ?
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
                 to={{pathname: prevPageData.from}}
                 state={prevPageData}>
                 <ArrowBackIcon fontSize="large"/>
-            </IconButton>
+            </IconButton> : <></>}
             <Box display="flex" justifyContent="center" padding={4}>
                 <Typography variant="h5">{prevPageData.from === "/editMeal" ? "Add Food" :"Search Recipes"}</Typography>
             </Box>
@@ -117,16 +119,19 @@ const SearchRecipes = () => {
                 })}
             </Box>
             }   
-            <Box position="absolute" bottom={20} width="50%" left="50%" marginLeft="-160px" display="flex" flexDirection="column">
+            <Box position="absolute" bottom={50} width="50%" left="50%" marginLeft="-160px" display="flex" flexDirection="column">
                 <Box padding={1}>
-                    <Button variant="contained" sx={{ width:"320px" }}>
+                    <Button variant="contained" sx={{ width:"320px" }}
+                            component={Link}
+                            to={{ pathname: "/createRecipe"}}
+                            state={{prev: prevPageData, from: "/searchRecipes"}}>
                         Create Recipe
                     </Button>
                 </Box>
                 <Box padding={1}>
                     <Button variant="contained" sx={{ width:"320px" }}
                             component={Link}
-                            to={{pathname: prevPageData.from}}
+                            to={{pathname: (prevPageData.from === "/logMeal") ? "/dashboard" : prevPageData.from}}
                             state={prevPageData}>
                         Done
                     </Button>

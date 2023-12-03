@@ -19,7 +19,6 @@ const EditMeal = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/removeRecipeFromMeal", RecipeID)
-            console.log(res.data);
         } catch (err) {
             throw(err);
         }
@@ -41,8 +40,7 @@ const EditMeal = () => {
             MealID: meal.MealID,
         }
         try{
-            const res = await axios.post("http://localhost:3001/updateMealTitle", data)
-            console.log(res.data);
+            await axios.post("http://localhost:3001/updateMealTitle", data)
             var m = meal;
             m.MealTitle = mealName;
             setMeal(m);
@@ -65,7 +63,13 @@ const EditMeal = () => {
                 <Typography variant="h5">Edit Meal</Typography>
             </Box>
             <Box padding={4} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-                <TextField label="Meal Name" variant="standard" defaultValue={mealName} onChange={(event) => {setMealName(event.target.value)}}/>
+                <TextField
+                    error={mealName.length===0}
+                    helperText={(mealName.length===0) ? "Meal name is required" : ""}
+                    label="Meal Name"
+                    variant="standard"
+                    defaultValue={mealName}
+                    onChange={(event) => {setMealName(event.target.value)}}/>
             </Box>
             <Box padding={4} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                 {recipes.map((value, key) => {
@@ -89,7 +93,7 @@ const EditMeal = () => {
                     )
                 })}
             </Box>
-            <Box position="absolute" bottom={10} width="100%" left="50%" marginLeft="-160px">
+            <Box position="absolute" bottom={50} width="100%" left="50%" marginLeft="-160px">
                 <Box sx={{width:"320px"}} padding={1} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                     <Button fullWidth variant="contained"
                         component={Link}
