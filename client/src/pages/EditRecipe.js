@@ -62,7 +62,7 @@ const EditRecipe = () => {
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
                 to={{pathname: location.state.from}}
-                state={{recipeID: recipeID}}>
+                state={ location.state.prev }>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Typography variant="h5">Edit Recipe</Typography>

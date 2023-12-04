@@ -68,7 +68,7 @@ const EditRecipeIngredients = () => {
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
                 to={{pathname: location.state.from}}
-                state={{recipeID: recipeID}}>
+                state={ location.state.prev }>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box display="flex" justifyContent="center" alignItems="center" padding={2} flexDirection="column" sx={{ width:"100%" }}>

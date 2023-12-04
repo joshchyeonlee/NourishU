@@ -6,12 +6,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 const EditRecipeRedirect = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [recipeID, setRecipeID] = useState(location.state.recipeID);
+    const [recipeID, setRecipeID] = useState(location.state ? location.state.recipeID : 0);
+
     return(
         <Box display="flex" justifyContent="center" padding={2} flexDirection="column" textAlign="center" alignItems="center" sx={{height:"100vh", width:"100%"}}>
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
-                to={{pathname: location.state.from}}>
+                to={{pathname: location.state ? location.state.from : "/dashboard"}}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box padding={8}>
