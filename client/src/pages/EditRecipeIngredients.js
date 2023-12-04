@@ -55,7 +55,7 @@ const EditRecipeIngredients = () => {
         state.map((value => {
             updateRecipeIngredient(value);
         }))
-        navigate("/profile");
+        navigate(location.state.prev.from);
     }
 
     useEffect(() => {
@@ -67,7 +67,8 @@ const EditRecipeIngredients = () => {
             <Typography variant="h5">Edit Recipe Ingredients</Typography>
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
-                to={{pathname:"/profile"}}>
+                to={{pathname: location.state.from}}
+                state={{recipeID: recipeID}}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box display="flex" justifyContent="center" alignItems="center" padding={2} flexDirection="column" sx={{ width:"100%" }}>

@@ -48,14 +48,9 @@ const EditRecipe = () => {
         }
     }
 
-    const handleEditIngredients = () => {
-        updateRecipe();
-        navigate("/editRecipeIngredients", {state: { recipeID: recipeID }});
-    }
-
     const handleDone = () => {
         updateRecipe();
-        navigate("/profile");
+        navigate(location.state.prev.from);
     }
 
     useEffect(() => {
@@ -66,7 +61,8 @@ const EditRecipe = () => {
         <Box display="flex" justifyContent="center" padding={2} flexDirection="column" textAlign="center" alignItems="center">
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
-                to={{pathname: location.state.from}}>
+                to={{pathname: location.state.from}}
+                state={{recipeID: recipeID}}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Typography variant="h5">Edit Recipe</Typography>
@@ -155,14 +151,6 @@ const EditRecipe = () => {
                         disabled={recipeTitle.length === 0 || recipeDescription.length === 0}
                     >
                         Update
-                    </Button>
-                </Box>
-                <Box padding={1}>
-                    <Button
-                        onClick={handleEditIngredients}
-                        disabled={recipeTitle.length === 0 || recipeDescription.length === 0}    
-                    >
-                        Update and Edit Ingredients
                     </Button>
                 </Box>
             </Box>

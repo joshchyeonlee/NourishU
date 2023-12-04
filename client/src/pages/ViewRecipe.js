@@ -18,7 +18,6 @@ const ViewRecipe = () => {
     const location = useLocation();
     const [prevPageState, setPrevPageState] = useState(location.state);
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
-    console.log(recipeID);
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [vitamins, setVitamins] = useState([]);
     const [recipeTitle, setRecipeTitle] = useState("");
@@ -30,6 +29,7 @@ const ViewRecipe = () => {
     const [userReview, setUserReview] = useState("");
     const [userReviewLength, setUserReviewLength] = useState(0);
     const [overallRating, setOverallRating] = useState(0);
+    const [recipeSteps, setRecipeSteps] = useState([]);
 
     const [nutrInfo, setNutrInfo] = useState();
 
@@ -135,11 +135,22 @@ const ViewRecipe = () => {
         submitReview();
     }
 
+    const fetchRecipeSteps = async () => {
+        const RecipeID = { RecipeID: recipeID };
+        try{
+            const res = await axios.post("http://localhost:3001/fetchRecipeSteps", RecipeID);
+            setRecipeSteps(res.data);
+        } catch (err) {
+            throw(err);
+        }
+    }
+
     //remove useEffect if passing in recipe information from previous page
     useEffect(() => {
         fetchRecipe();
         fetchVitamins();
         fetchReviews();
+        fetchRecipeSteps();
     },[]);
 
 
@@ -212,6 +223,14 @@ const ViewRecipe = () => {
                     <Card variant="outlined" sx={{width:"100%"}}>
                         <CardContent>
                             <Typography variant="h6">Steps:</Typography>
+                                {recipeSteps.map((value, key) => {
+                                    return(
+                                        <Box key={key} padding={1}>
+                                            <Typography>Step {value.StepNo}:</Typography>
+                                            <Typography>{value.StepDescription}</Typography>
+                                        </Box>
+                                    )
+                                })}
                         </CardContent>
                     </Card>
                 </Box>

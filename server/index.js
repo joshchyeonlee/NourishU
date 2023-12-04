@@ -501,6 +501,31 @@ app.post('/setRecipeInstruction', (req, res) => {
         }
         res.send(result);
     })
+}
+)
+
+app.post('/fetchRecipeSteps', (req, res) => {
+    const RecipeID = req.body.RecipeID;
+    let sql = `SELECT * FROM RECIPE_STEP WHERE RecipeID = ${RecipeID} ORDER BY StepNo;`;
+    
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/removeAllSteps', (req, res) => {
+    const RecipeID = req.body.RecipeID;
+    let sql = `DELETE FROM RECIPE_STEP WHERE RecipeID = ${RecipeID};`;
+    
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
 })
 
 app.listen(3001, () => {
