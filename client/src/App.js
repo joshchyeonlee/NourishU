@@ -46,7 +46,7 @@ function App() {
       <Route path="/editRecipeIngredients" element={<RequireAuth loginPath='/welcome'><EditRecipeIngredients /></RequireAuth>} />
       <Route path="/viewYourRecipes" element={<RequireAuth loginPath='/welcome'><YourRecipes /></RequireAuth>} />
       <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
-      <Route path="/welcome" element={<Welcome />} />
+      <Route path="/" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
     </Routes>
     </ThemeProvider>
