@@ -114,6 +114,7 @@ const SignUpInitial = () => {
     }
 
     // Checks if email is in valid format
+    // Regex from: https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
     const checkUserEmail = (userEmailInput) => {
         const check = userEmailInput.toLowerCase()
         .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -196,7 +197,7 @@ const SignUpInitial = () => {
             <Typography variant="h4" padding={2}>Sign up - Let's get started!</Typography>
             <Grid container direction="column" spacing={3} justifyContent="center" alignItems="center">
                 <Grid item>
-                    <TextField id="outlined" label="User Name" variant="outlined" onChange = {(e) => {
+                    <TextField id="outlined" label="User Name" variant="outlined" sx={{ m: 1, width: 350 }} inputProps={{maxLength: 25}}onChange = {(e) => {
                         storeUserNameInput(e.target.value)
                     }} error = {(!isUserNameValid) && (enteredUserNameTextField)} helperText = {(isUserNameValid) || (!enteredUserNameTextField)? "" : "Username must be in between 3 to 25 characters!"}
                     InputProps={{
@@ -210,7 +211,7 @@ const SignUpInitial = () => {
                     />
                 </Grid>
                 <Grid item>
-                    <TextField id="outlined" label="Email" variant="outlined" onChange = {(e) => {
+                    <TextField id="outlined" label="Email" variant="outlined" sx={{ m: 1, width: 350 }} inputProps={{maxLength: 50}} onChange = {(e) => {
                         storeUserEmailInput(e.target.value)
                     }} error = {(!isUserEmailValid) && (enteredUserEmailTextField)} helperText = {(isUserEmailValid) || (!enteredUserEmailTextField)? "" : "Email must be of valid format and cannot exceed 50 characters!"}
                     InputProps={{
@@ -224,12 +225,12 @@ const SignUpInitial = () => {
                     />
                 </Grid>
                 <Grid item>
-                    <TextField id="outlined" label="Password" variant="outlined" type='password' hidden onChange = {(e) => {
+                    <TextField id="outlined" label="Password" variant="outlined" type='password' hidden sx={{ m: 1, width: 350 }} inputProps= {{maxLength: 16}} onChange = {(e) => {
                         storeUserPassInput(e.target.value)
                     }} error = {((userPassTextField.length) > 16) || (!isPasswordMatch)} helperText = {((userPassTextField.length) > 16? "Password entered is TOO long!" : "") || (isPasswordMatch?  "": "Passwords don't match")}/>
                 </Grid>
                 <Grid item>
-                    <TextField id="outlined" label="Confirm Password" variant="outlined" type='password' hidden onChange = {(e) => {
+                    <TextField id="outlined" label="Confirm Password" variant="outlined" type='password' hidden sx={{ m: 1, width: 350 }} inputProps={{maxLength: 16}} onChange = {(e) => {
                         storeUserConfirmPassInput(e.target.value) 
                     }} error = {((userConfirmPassTextField.length) > 16) || (!isPasswordMatch)} helperText = {((userConfirmPassTextField.length) > 16? "Password entered is TOO long!" : "") || (isPasswordMatch?  "": "Passwords don't match")}/>
                 </Grid>

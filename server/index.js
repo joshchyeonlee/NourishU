@@ -534,6 +534,21 @@ app.post('/createUser', (req, res) => {
     })
 })
 
+app.post('/createUserInterests', (req, res) => {
+    const userID = req.body.UserID;
+    const userInt = req.body.UserInterests;
+
+    let sql = `INSERT INTO USER_INTERESTS(UserID, UserInterests)
+    VALUES (${userID}, "${userInt}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        console.log(result);
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });

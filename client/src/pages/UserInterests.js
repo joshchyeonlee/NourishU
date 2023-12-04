@@ -7,7 +7,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
-
+import axios from "axios";
+import { useSignIn } from 'react-auth-kit';
 
 const UserInterests = () => {
 
@@ -23,10 +24,11 @@ const UserInterests = () => {
     const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
     const [userAge, setUserAge] = useState(location.state.UserAge);
 
-    const [userID, setUserID] = useState(location.state.userID);
+    const [userID, setUserID] = useState(location.state.user);
     const [userInterest, setUserInterest] = useState("");
 
     const [userNotReady, setUserNotReady] = useState(true);
+    const signIn = useSignIn();
 
     const interestsList = [
         'Reading',
@@ -45,10 +47,11 @@ const UserInterests = () => {
 
     const handleInterestSelected = (interestInput) => {
         setUserInterest(interestInput)
+        checkInterest(interestInput);
     }
 
-    const checkInterest = () => {
-        if (userInterest === "") {
+    const checkInterest = (interestInput) => {
+        if (interestInput === "") {
             setUserNotReady(true);
         }
         
@@ -57,15 +60,41 @@ const UserInterests = () => {
         }
     }
 
-    // Make function to insert the user interest into the db
+    const insertUserInterest = async () => {
+      const theInterests = {
+        UserID: userID,
+        UserInterests: userInterest
 
-    // also make function to set the cookie
+      }
+      const res = await axios.post("http://localhost:3001/createUserInterests", theInterests);
+  }
+    
 
-    useEffect(() => {
-        if (userInterest != "") navigate("/dashboard", {state: {user: userID}});
-        }, [userInterest])
+  const handleContinue = async () => {
+    insertUserInterest();
+    await authenticateUser();
+    navigate("/dashboard", {state:{UserID: userID}});
+  }
 
+  const authenticateUser = async () => {
+    const cred = {
+        Email: userEmail,
+        Password: userPass,
+    }
+    try{
+        const res = await axios.post("http://localhost:3001/authenticateUser", cred)
 
+        signIn({
+            token: res.data.token,
+            expiresIn: 3600,
+            tokenType: "Bearer",
+            authState: {values: {email: cred.Email, userID: userID}},
+        })
+        
+    } catch (err) {
+        throw(err);
+    }
+}
     return (
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
         <Box padding={8}>
@@ -91,14 +120,11 @@ const UserInterests = () => {
           </Select>
         </FormControl>
 
-
-
         <Grid item style={{ marginTop: '10px' }}>
                     <Button variant="contained" size="small" disabled={userNotReady}
-                    component = {Link}
-                    to={{pathname:"/cookingConfidence"}}
+                    onClick = {handleContinue}
                     >
-                        Next
+                        Go to dashboard!
                     </Button>
                 </Grid>
       </Box>

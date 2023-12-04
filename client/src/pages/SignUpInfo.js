@@ -183,7 +183,7 @@ const SignUpInfo = () => {
                 </FormControl>
                 </Box>
 
-                <TextField id="outlined" label="Briefly describe your diet!" variant="outlined" sx={{ m: 1, minWidth: 350 }}
+                <TextField id="outlined" label="Briefly describe your diet!" variant="outlined" sx={{ m: 1, minWidth: 350 }} inputProps = {{maxLength: 50}}
                 onChange = {(e) => {handleUserDietDescription(e.target.value)}}
                 error = {(!userDietDescSize)} helperText = {(userDietDescSize)? "" : "Description is blank or TOO long!" }/>
                 

@@ -77,8 +77,8 @@ const CookingConfidence = () => {
                 ,{value: 5, label: "Extremely confident"}];
 
   useEffect(() => {
-      if (userID !== -1) navigate("/signup-userinterests", {state: {user: userID}});
-      }, [userID])
+      if (userID !== -1) navigate("/signup-userinterests", {state: {user: userID, UserEmail: userEmail, UserPass: userPass}});
+      }, [userID, userEmail, userPass])
 
   return (
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
