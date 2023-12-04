@@ -487,6 +487,22 @@ app.post('/createMeal', (req, res) => {
     })
 })
 
+app.post('/setRecipeInstruction', (req, res) => {
+    const RecipeID = req.body.RecipeID;
+    const StepNo = req.body.StepNo;
+    const Description = req.body.StepDescription;
+
+    let sql = `INSERT INTO RECIPE_STEP(RecipeID, StepNo, StepDescription) 
+    VALUES(${RecipeID}, ${StepNo}, "${Description}");`;
+    
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });

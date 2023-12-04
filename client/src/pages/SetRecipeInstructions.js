@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Box, IconButton, TextField, Typography, Button, Card, CardContent, Grid } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
 
 const SetRecipeInstructions = () => {
     const location = useLocation();
@@ -10,8 +11,25 @@ const SetRecipeInstructions = () => {
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
     const [instructions, setInstructions] = useState([]);
     
+    const insertInstruction = async () => {
+        for(var i = 0; i < instructions.length; i++){
+            const recipeStep = {
+                RecipeID: recipeID,
+                StepNo: i + 1,
+                StepDescription: instructions[i].instructions,
+            }
+            
+            try{
+                const res = await axios.post("http://localhost:3001/setRecipeInstruction", recipeStep)
+                console.log(res);
+            } catch (err) {
+                throw(err);
+            }
+        }
+    }
+
     const handleContinue = () => {
-        console.log("done!");
+        insertInstruction();
         const redirect = location.state.prev.prev.prev;
         navigate(redirect.from, {state: {meal: redirect.meal, recipes: redirect.recipes}})
     }
