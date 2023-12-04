@@ -490,7 +490,6 @@ app.post('/createMeal', (req, res) => {
 app.post('/queryUserNameExists', (req, res) => {
     const userName = req.body.UserName;
     let sql = `SELECT UserName FROM User WHERE UserName = '${userName}'`;
-    console.log(req);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -502,7 +501,6 @@ app.post('/queryUserNameExists', (req, res) => {
 app.post('/queryUserEmailExists', (req, res) => {
     const userEmail = req.body.UserEmail;
     let sql = `SELECT UserEmail FROM User WHERE UserEmail = '${userEmail}'`;
-    console.log(req);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -529,7 +527,6 @@ app.post('/createUser', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -544,7 +541,6 @@ app.post('/createUserInterests', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })

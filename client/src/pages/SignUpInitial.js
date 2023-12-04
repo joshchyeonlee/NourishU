@@ -31,7 +31,6 @@ const SignUpInitial = () => {
         checkUserName(typedUserName)
         setEnteredUserNameTextField(true)
         queryUserUnique(typedUserName)
-        console.log(typedUserName)
     }
 
     // Stores user email and performs checks
@@ -40,14 +39,12 @@ const SignUpInitial = () => {
         checkUserEmail(typedUserEmail)
         setEnteredUserEmailTextField(true)
         queryUserEmailUnique(typedUserEmail)
-        console.log(typedUserEmail)
     }
 
     // stores user password and performs checks
     const storeUserPassInput = (typedUserPass) => {
         checkPassValid(typedUserPass)
         setUserPassTextField(typedUserPass)
-        console.log(typedUserPass)
     }
 
     // stores user confirmed password and performs checks
@@ -55,7 +52,6 @@ const SignUpInitial = () => {
         checkConfirmPassValid(typedUserConfirmPass)
         setUserConfirmPassTextField(typedUserConfirmPass)
         checkPassMatch(typedUserConfirmPass)
-        console.log(typedUserConfirmPass)
     }
 
     // Checks if password and confirmed password match
@@ -66,13 +62,11 @@ const SignUpInitial = () => {
         }
 
         if (userPassTextField === userConfirmPassInput) {
-            console.log("True")
             setIsPasswordMatch(true)
         }
 
         else {
             setIsPasswordMatch(false)
-            console.log("False")
         }
     }
 
@@ -102,13 +96,11 @@ const SignUpInitial = () => {
     const checkUserName = (userNameInput) => {
 
         if (userNameInput.length > 3 && userNameInput.length <= 25) {
-            console.log("True")
             setUserNameValid(true)
             return;
         }
 
         else {
-            console.log("False")
             setUserNameValid(false)
         }
     }
@@ -120,17 +112,12 @@ const SignUpInitial = () => {
         .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
 
-        console.log(`check user email ${check}`)
-
         if (check === null || userEmailInput.length > 50) {
             setUserEmailValid(false)
-            console.log(`Setting false`)
-            console.log(`length of Email is ` + userEmailInput.length)
             return;
         }
         else {
             setUserEmailValid(true)
-            console.log(`setting true ${check}`)
         }
     }
 
@@ -141,16 +128,13 @@ const SignUpInitial = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/queryUserNameExists", userName)
-            console.log(res.data);
 
             if (res.data.length > 0) {
                 setUserNameUnique(false)
-                console.log("User name taken")
             }
 
             else {
                 setUserNameUnique(true)
-                console.log("User name available")
             }
         } catch(err){
             throw(err);
@@ -164,16 +148,13 @@ const SignUpInitial = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/queryUserEmailExists", userEmail)
-            console.log(res.data);
 
             if (res.data.length > 0) {
                 setUserEmailUnique(false)
-                console.log("This email has an account already!")
             }
 
             else {
                 setUserEmailUnique(true)
-                console.log("There is no account associated with this email.")
             }
         } catch(err){
             throw(err);

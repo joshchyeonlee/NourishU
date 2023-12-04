@@ -27,7 +27,6 @@ const SignUpInfo = () => {
     const[userDone, setUserDone] = useState(true);
 
     const today = dayjs();
-    const tomorrow = dayjs().add(1, 'day');
     const earlyDate = dayjs('1920-01-01')
 
     const dietNames = [
@@ -52,7 +51,6 @@ const SignUpInfo = () => {
         // Update the state with the new Dayjs object
         setUserBirthDate(newBirthDate.format('YYYY-MM-DD'));
 
-        console.log(newBirthDate.format('YYYY-MM-DD'));
         calculateUserAge(newBirthDate)
     };
 
@@ -66,13 +64,11 @@ const SignUpInfo = () => {
 
     const handleUserDiet = (inputDiet) => {
         setUserDiet(inputDiet)
-        console.log(inputDiet + `changed to`)
     }
 
     const handleUserDietDescription = (inputDietDesc) => {
         setUserDietDescription(inputDietDesc)
         checkDietDescriptionLength(inputDietDesc)
-        console.log(inputDietDesc + `changed to`)
     }
 
     const checkDietDescriptionLength = (inputDietDesc) => {
@@ -88,7 +84,6 @@ const SignUpInfo = () => {
         else {
             setUserDietDescSize(true);
         }
-        console.log("userDietDescSize updated:", userDietDescSize);
     }
 
     const checkInfo = () => {
@@ -103,8 +98,6 @@ const SignUpInfo = () => {
 
     const calculateUserAge = (theDate) => {
     const calculation = today.diff(theDate, "y")
-    console.log(calculation)
-    console.log(typeof calculation)
 
     setUserAge(calculation)
     }
@@ -123,7 +116,8 @@ const SignUpInfo = () => {
                     <DatePicker label="Enter your birthdate" sx={{ m: 1, minWidth: 350 }}
                         views={['year', 'month', 'day']}
                         minDate={earlyDate}
-                        maxDate={tomorrow}
+                        maxDate={today}
+                        disableFuture = {true}
                         onChange={(newValue) => handleBirthDate(newValue)} />
                 </LocalizationProvider>
 
