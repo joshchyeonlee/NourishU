@@ -16,9 +16,9 @@ CalculatedCaloricIntake INT         NOT NULL,
 PRIMARY KEY(UserID, GoalID),
 FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
 
-const user0Goal = `
-INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
-VALUES(5, 0, 2000, 2500);`;
+// const user0Goal = `
+// INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+// VALUES(0, 0, 2000, 2500);`;
 const user1Goal = `
 INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
 VALUES(1, 1, 2500, 2000);`;
@@ -35,6 +35,7 @@ const user4Goal1 = `
 INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
 VALUES(4, 5, 2500, 3000);`;
 
-const data = [user0Goal, user1Goal, user2Goal, user3Goal, user4Goal, user4Goal1];
+// const data = [user0Goal, user1Goal, user2Goal, user3Goal, user4Goal, user4Goal1];
+const data = [user1Goal, user2Goal, user3Goal, user4Goal, user4Goal1];
 
 module.exports = { checkTable, createTable, data };

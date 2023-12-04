@@ -17,10 +17,6 @@ ServingSize         INT			    NOT NULL,
 PRIMARY KEY(RecipeID),
 FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
 
-// Need to put easter egg of fave recipe 
-// const recipe0 = `INSERT INTO RECIPE(RecipeID, UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize) 
-//                 VALUES(0, 0, 1, 60, ");`;
-
 const recipe1 = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize) 
                 VALUES(2, 1, 5, "Chocolate Protein Shake", "Create a chocolate-y shake that has a great source of protein!", 1);`;            
 
