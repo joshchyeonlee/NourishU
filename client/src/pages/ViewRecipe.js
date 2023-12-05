@@ -7,6 +7,7 @@ import axios from "axios";
 import formatRecipeData from "../utils/formatRecipeData";
 import NutrInfo from "../components/NutrInfo";
 import { useLocation, Link } from "react-router-dom";
+import { useAuthUser } from "react-auth-kit";
 
 const ViewRecipe = () => {
     const blue = "#035E7B";
@@ -15,10 +16,11 @@ const ViewRecipe = () => {
     const yellow = "#FDCA40";
     const orange = "#F78764";
 
+    const auth = useAuthUser();
+    const [isSelf, setIsSelf] = useState(false);
     const location = useLocation();
     const [prevPageState, setPrevPageState] = useState(location.state);
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
-    console.log(recipeID);
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [vitamins, setVitamins] = useState([]);
     const [recipeTitle, setRecipeTitle] = useState("");
@@ -40,10 +42,12 @@ const ViewRecipe = () => {
 
         try{
             const res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
+            console.log(res.data);
             setRecipeIngredients(res.data);
             setRecipeDifficulty(res.data[0].RDifficulty);
             setRecipeTitle(res.data[0].RecipeTitle);
             setRecipeDescription(res.data[0].RecipeDescription);
+            setIsSelf(auth().values.userID === res.data[0].UserID);
             const obj = formatRecipeData(res.data);
 
             setNutrInfo(obj);
@@ -236,39 +240,41 @@ const ViewRecipe = () => {
                                 </Box>)
                             })}
                             <Divider/>
-                            <Box padding={2}>
-                                <Typography>Write a Review:</Typography>
-                                <Box display="flex" padding={1} flexDirection="column">
-                                    <Box display="flex" justifyContent="space-between" paddingBottom={1}>
-                                        <Typography>Rating </Typography>
-                                        <Rating
-                                            value={userRating}
-                                            icon={<FavoriteIcon sx={setRatingColor()}/>}
-                                            emptyIcon={<FavoriteIcon/>}
-                                            onChange={(event) => setUserRating(parseInt(event.target.value))}
-                                            onChangeActive={(event, newHover) => setHover(newHover)}
+                            {isSelf === true ? <div></div> :
+                                <Box padding={2}>
+                                    <Typography>Write a Review:</Typography>
+                                    <Box display="flex" padding={1} flexDirection="column">
+                                        <Box display="flex" justifyContent="space-between" paddingBottom={1}>
+                                            <Typography>Rating </Typography>
+                                            <Rating
+                                                value={userRating}
+                                                icon={<FavoriteIcon sx={setRatingColor()}/>}
+                                                emptyIcon={<FavoriteIcon/>}
+                                                onChange={(event) => setUserRating(parseInt(event.target.value))}
+                                                onChangeActive={(event, newHover) => setHover(newHover)}
+                                            />
+                                        </Box>
+                                        <TextField
+                                            sx={{width:"100%"}}
+                                            multiline
+                                            rows={4}
+                                            inputProps={{ maxLength: 255 }}
+                                            onChange={(event) => handleReview(event.target.value)}
+                                            value={userReview}
                                         />
-                                    </Box>
-                                    <TextField
-                                        sx={{width:"100%"}}
-                                        multiline
-                                        rows={4}
-                                        inputProps={{ maxLength: 255 }}
-                                        onChange={(event) => handleReview(event.target.value)}
-                                        value={userReview}
-                                    />
-                                    <Box padding={1} display="flex" justifyContent="space-between">
-                                        <Typography variant="caption">{userReviewLength}/255</Typography>
-                                        <Box display="flex" justifyContent="flex-end">
-                                            <Button
-                                                variant="contained"
-                                                disabled={(userReviewLength <= 0) || (userRating <=0)}
-                                                onClick={handleSubmitReview}
-                                                >Add Review</Button>
+                                        <Box padding={1} display="flex" justifyContent="space-between">
+                                            <Typography variant="caption">{userReviewLength}/255</Typography>
+                                            <Box display="flex" justifyContent="flex-end">
+                                                <Button
+                                                    variant="contained"
+                                                    disabled={(userReviewLength <= 0) || (userRating <=0)}
+                                                    onClick={handleSubmitReview}
+                                                    >Add Review</Button>
+                                            </Box>
                                         </Box>
                                     </Box>
                                 </Box>
-                            </Box>
+                            }
                         </CardContent>
                     </Card>
                 </Box>
