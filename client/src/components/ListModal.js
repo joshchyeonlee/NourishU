@@ -17,6 +17,11 @@ const modalFormat = {
 };
 
 const ListModal = (props) => {
+    const handleViewUser = (userID) => {
+        props.setUserId(userID);
+        props.onClose();
+    }
+
     return(
     <Modal open={props.open} onClose={props.onClose}>
         <Box sx={modalFormat} display="flex" flexDirection="column" alignItems="center">
@@ -30,7 +35,7 @@ const ListModal = (props) => {
                 <List>
                     {props.values.map((value, key) => {
                         return(
-                        <ListItemButton key={key} onClick={() => props.setUserId(value.UserID)}>
+                        <ListItemButton key={key} onClick={() => handleViewUser(value.UserID)}>
                             <ListItem disablePadding>
                                 <Typography>
                                     {value.UserName}

@@ -136,7 +136,9 @@ const Profile = ( props ) => {
             : <></>
             }
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={4}>
-                <Typography variant="h4">Welcome, {userName}!</Typography>
+                {isSelf ? <Typography variant="h4">Welcome, {userName}!</Typography>
+                        : <Typography variant="h4">{userName}'s Profile</Typography>
+                }
                 <Grid container spacing={4} padding={3} alignItems="center" justifyContent="center">
                     <Grid item>
                         <Button variant="contained" onClick={handleFollowingOpen}>
