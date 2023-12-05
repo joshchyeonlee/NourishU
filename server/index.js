@@ -643,6 +643,30 @@ app.post('/getVitamin', (req, res) => {
     })
 })
 
+app.post("/setIngredientPer100g", (req, res) => {
+    const IngredientID = req.body.IngredientID;
+    const ServingSize = req.body.ServingSize;
+    let sql = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(${IngredientID}, ${ServingSize});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/setIngredientPerServing", (req, res) => {
+    const IngredientID = req.body.IngredientID;
+    const Weight = req.body.ServingSize;
+    let sql = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(${IngredientID}, ${Weight});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
