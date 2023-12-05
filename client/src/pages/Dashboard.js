@@ -76,15 +76,33 @@ const Dashboard = () => {
 
     const handleCaloriesConsumed = () => {
         var val = (totalCalories/goal.CalculatedCaloricIntake) * 100
-        console.log(val);
         if(val > 100) val = 100;
         return val;
+    }
+
+    const deleteMeal = async (mealID) => {
+        const mealObj = {
+            MealID: mealID,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/deleteMeal", mealObj);
+            console.log(res.data);
+        } catch (err) {
+            throw(err);
+        }
+    }
+
+    const handleRemoveMeal = (i) => {
+        deleteMeal(meals[i].MealID);
+        const newMeals = [...meals];
+        newMeals.splice(i,1);
+        setMeals(newMeals);
     }
 
     useEffect(() => {
         if(mealIDs.length <= 0) return;
         calculateCaloricIntake()
-    }, [mealIDs])
+    }, [mealIDs, meals ])
 
     useEffect(() => {
         fetchUserMeals();
@@ -146,7 +164,7 @@ const Dashboard = () => {
                                     <Typography variant="h6">Your Meals</Typography>
                                     <Box padding={8} overflow="auto" sx={{ height:"300px" }}>
                                         {meals.map((value, key) => {
-                                            return <MealItemList meal={value} key={key}/>
+                                            return <MealItemList meal={value} key={key} i={key} handleRemove={handleRemoveMeal}/>
                                         })}
                                     </Box>
                                     <Box>

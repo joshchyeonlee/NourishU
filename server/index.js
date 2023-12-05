@@ -643,6 +643,24 @@ app.post('/getVitamin', (req, res) => {
     })
 })
 
+app.post('/deleteMeal', (req, res) => {
+    const MealID = req.body.MealID;
+    let sql = `DELETE FROM MEAL_CONTAINS_RECIPE WHERE MealID = ${MealID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        let del = `DELETE FROM MEAL WHERE MealID = ${MealID};`;
+        db.query(del, (err, result) => {
+            if(err){
+                throw(err);
+            }
+            res.send(result);
+        })
+    })
+
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
