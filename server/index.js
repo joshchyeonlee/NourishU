@@ -526,9 +526,23 @@ app.post('/createIngredient', (req, res) => {
             throw(err)
             
         }
-        console.log(result);
         res.send(result);
     })
+})
+
+app.post('/getVitamin', (req, res) => {
+    const ingID = req.body.IngredientID
+    const vit = req.body.VitaminName;
+    let sql = `INSERT INTO VITAMINS(IngredientID, VitaminName) VALUES( ${ingID}, "${vit}");`;
+    db.query(sql, (err, result) => {
+        if (err) {
+            throw(err)
+            
+        }
+        res.send(result);
+    })
+
+
 })
 
 app.listen(3001, () => {
