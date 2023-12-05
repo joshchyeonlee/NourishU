@@ -473,6 +473,28 @@ app.post('/flagReview', (req, res) => {
     })
 })
 
+app.post('/getAdminEmail', (req, res) => {
+    const adminEmail = req.body.adminEmail;
+    let sql = `SELECT * FROM ADMIN WHERE AdminEmail = "${adminEmail}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/getAdminPassword', (req, res) => {
+    const adminPassword = req.body.adminPassword;
+    let sql = `SELECT * FROM ADMIN WHERE ADMINPASSWORD = "${adminPassword}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.post('/createMeal', (req, res) => {
     const UserID = req.body.UserID;
     const DateTime = req.body.DateTime;
@@ -577,6 +599,42 @@ app.post('/createGoal', (req, res) => {
 
     let sql = `INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
                 VALUES(${UserID}, ${GoalID}, ${Init}, ${Calc});`;;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/createIngredient', (req, res) => {
+    const ingName = req.body.IngredientName;
+    const carb = req.body.Carbs;
+    const pro = req.body.Protein;
+    const satFat = req.body.SaturatedFats;
+    const unsatFat = req.body.UnsaturatedFats;
+    const serving = req.body.IsPerServing;
+    const calorie = req.body.Calories;
+    const aid = req.body.AdminID;
+    const date = req.body.DatePosted;
+
+    let sql = `INSERT INTO INGREDIENT(IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted)
+    VALUES("${ingName}", ${carb}, ${pro}, ${satFat}, ${unsatFat}, ${serving}, ${calorie}, ${aid}, "${date}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+
+})
+
+app.post('/getVitamin', (req, res) => {
+    const ingID = req.body.IngredientID;
+    const vit = req.body.VitaminName;
+
+    let sql = `INSERT INTO VITAMINS(IngredientID, VitaminName) VALUES(${ingID}, "${vit}");`;
+
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
