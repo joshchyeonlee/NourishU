@@ -98,9 +98,11 @@ app.post('/getFollowerCount', (req, res) => {
     })
 })
 
+//CURDATE https://www.w3schools.com/sql/func_mysql_curdate.asp
+//DATEDIFF https://www.w3schools.com/sql/func_mysql_datediff.asp
 app.post('/getUserMeals', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT * FROM MEAL WHERE MEAL.UserID = ?`
+    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 0;`;
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
@@ -498,9 +500,105 @@ app.post('/createMeal', (req, res) => {
     const DateTime = req.body.DateTime;
     const MealTitle = req.body.MealTitle;
 
-    console.log(MealTitle)
-
     let sql = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(${UserID}, "${DateTime}", "${MealTitle}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/queryUserNameExists', (req, res) => {
+    const userName = req.body.UserName;
+    let sql = `SELECT UserName FROM User WHERE UserName = '${userName}'`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/queryUserEmailExists', (req, res) => {
+    const userEmail = req.body.UserEmail;
+    let sql = `SELECT UserEmail FROM User WHERE UserEmail = '${userEmail}'`;
+      db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/fetchUserGoal', (req, res) => {
+    const UserID = req.body.UserID;
+
+    let sql = `SELECT * FROM GOAL WHERE UserID = ${UserID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/createUser', (req, res) => {
+    const userN = req.body.UserName;
+    const userEm = req.body.UserEmail;
+    const userBirth = req.body.UserBirthdate;
+    const userHt = req.body.UserHeight;
+    const userWt = req.body.UserWeight;
+    const userAg = req.body.UserAge;
+    const userDt = req.body.DietName;
+    const userDtDes = req.body.DietDescription;
+    const userCkConf = req.body.CookingConfidence;
+    const userPass = req.body.UserPassword;
+
+    let sql = `INSERT INTO USER(UserName, UserEmail, UserBirthdate, UserHeight, UserWeight, UserAge, DietName, DietDescription, CookingConfidence, UserPassword)
+    VALUES ("${userN}", "${userEm}", '${userBirth}', ${userHt}, ${userWt}, ${userAg}, "${userDt}", "${userDtDes}", ${userCkConf}, "${userPass}");`;
+      db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/updateGoal', (req, res) => {
+    const GoalID = req.body.GoalID;
+    const Calc = req.body.Calculated;
+    let sql = `UPDATE GOAL SET CalculatedCaloricIntake = ${Calc} WHERE GoalID = ${GoalID}`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/createUserInterests', (req, res) => {
+    const userID = req.body.UserID;
+    const userInt = req.body.UserInterests;
+
+    let sql = `INSERT INTO USER_INTERESTS(UserID, UserInterests)
+    VALUES (${userID}, "${userInt}");`;
+      db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/createGoal', (req, res) => {
+    const GoalID = req.body.GoalID;
+    const UserID = req.body.UserID;
+    const Calc = req.body.Calculated;
+    const Init = req.body.Initial;
+
+    let sql = `INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
+                VALUES(${UserID}, ${GoalID}, ${Init}, ${Calc});`;;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -519,30 +617,30 @@ app.post('/createIngredient', (req, res) => {
     const calorie = req.body.Calories;
     const aid = req.body.AdminID;
     const date = req.body.DatePosted;
+
     let sql = `INSERT INTO INGREDIENT(IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted)
-    VALUES ("${ingName}", ${carb}, ${pro}, ${satFat}, ${unsatFat}, ${serving}, ${calorie}, ${aid}, "${date}");`;
+    VALUES("${ingName}", ${carb}, ${pro}, ${satFat}, ${unsatFat}, ${serving}, ${calorie}, ${aid}, "${date});`;
     db.query(sql, (err, result) => {
-        if (err){
-            throw(err)
-            
+        if(err){
+            throw(err);
         }
         res.send(result);
     })
+
 })
 
 app.post('/getVitamin', (req, res) => {
-    const ingID = req.body.IngredientID
+    const ingID = req.body.IngredientID;
     const vit = req.body.VitaminName;
-    let sql = `INSERT INTO VITAMINS(IngredientID, VitaminName) VALUES( ${ingID}, "${vit}");`;
+
+    let sql = `INSERT INTO VITAMINS(IngredientID, VitaminName) VALUES(${ingID}, "${vit}");`;
+
     db.query(sql, (err, result) => {
-        if (err) {
-            throw(err)
-            
+        if(err){
+            throw(err);
         }
         res.send(result);
     })
-
-
 })
 
 app.listen(3001, () => {

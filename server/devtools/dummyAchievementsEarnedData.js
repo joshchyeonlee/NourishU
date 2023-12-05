@@ -18,7 +18,7 @@ FOREIGN KEY(AchievementID) REFERENCES ACHIEVEMENT(AchievementID) ON UPDATE CASCA
 
 const user0AccountCreated =`
 INSERT INTO ACHIEVEMENTS_EARNED(UserID, AchievementID, TimeEarned)
-VALUES(0,0,'2023-07-01 13:39:12');`;
+VALUES(5,0,'2023-07-01 13:39:12');`;
 const user1AccountCreated =`
 INSERT INTO ACHIEVEMENTS_EARNED(UserID, AchievementID, TimeEarned)
 VALUES(1,0,'2023-12-23 00:13:42');`;
