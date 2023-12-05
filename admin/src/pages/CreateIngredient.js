@@ -1,4 +1,4 @@
-import { Typography, Box, Button, TextField, Container, MenuItem, Select, IconButton } from "@mui/material";
+import { Typography, Box, Button, TextField, Container, MenuItem, Select, IconButton, Snackbar, Alert } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {  useState, useEffect } from "react";
 import dayjs from "dayjs";
@@ -21,6 +21,7 @@ const CreateIngredient = () => {
     const [satFatErr, setSatFatErr] = useState(false);
     const [unSatFatErr, setUnSatFatErr] = useState(false);
     const [calErr, setCalErr] = useState(false);
+    const[open, setOpen] = useState(false);
     const [vitaminName, setVitaminName] = useState("");
 
     const insertIngredient = async () => {
@@ -85,15 +86,26 @@ const CreateIngredient = () => {
             isValid = false;
         } else setCalErr(false);
 
+        
+
         if (!isValid) return;
 
         insertIngredient();
+
+        if (insertIngredient()) {
+            setOpen(true);
+        }
     }
 
     useEffect(() => {
         if(ingredientID === -1) return; //change that 0 to whatever you initially set the ingredientID to when you use const [ingredientID, setIngredientID] = useState(< use this value>)
         insertVitamin()
     }, [ingredientID])
+
+    useEffect(() => {
+        if(ingredientName != "") return;
+        setIngredientName("");
+    }, [ingredientName])
 
     return (
         <Container>
@@ -177,6 +189,11 @@ const CreateIngredient = () => {
                 </Box>
                 <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
                     <Button variant="contained" onClick={handleCreate}>Create</Button>
+                </Box>
+                <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
+                    <Snackbar open={open}>
+                        <Alert severity="success">You have successfully created an ingredient!</Alert>
+                    </Snackbar>
                 </Box>
             </Box>
         </Container>
