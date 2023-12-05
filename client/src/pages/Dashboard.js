@@ -74,6 +74,13 @@ const Dashboard = () => {
         setIsGoalModalOpen(false);
     }
 
+    const handleCaloriesConsumed = () => {
+        var val = (totalCalories/goal.CalculatedCaloricIntake) * 100
+        console.log(val);
+        if(val > 100) val = 100;
+        return val;
+    }
+
     useEffect(() => {
         if(mealIDs.length <= 0) return;
         calculateCaloricIntake()
@@ -112,7 +119,7 @@ const Dashboard = () => {
                                             <Typography variant="h6">Calories Remaining</Typography>
                                             <Box display="flex" padding={18} justifyContent="center" alignItems="center">
                                                 <Box position="absolute">
-                                                    <CircularProgress variant="determinate" color="primary" size={180} value={ (totalCalories < 0 || !goal) ? 0 : ((totalCalories/goal.CalculatedCaloricIntake) * 100)}/>
+                                                    <CircularProgress variant="determinate" color={(totalCalories > goal.CalculatedCaloricIntake) ? "error" : "primary"} size={180} value={ (totalCalories < 0 || !goal) ? 0 : handleCaloriesConsumed()}/>
                                                 </Box>
                                                 <Box position="absolute">
                                                     <Typography>{totalCalories}/{goal.CalculatedCaloricIntake}</Typography>
