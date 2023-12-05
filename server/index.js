@@ -487,6 +487,28 @@ app.post('/createMeal', (req, res) => {
     })
 })
 
+app.post('/queryUserNameExists', (req, res) => {
+    const userName = req.body.UserName;
+    let sql = `SELECT UserName FROM User WHERE UserName = '${userName}'`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/queryUserEmailExists', (req, res) => {
+    const userEmail = req.body.UserEmail;
+    let sql = `SELECT UserEmail FROM User WHERE UserEmail = '${userEmail}'`;
+      db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.post('/fetchUserGoal', (req, res) => {
     const UserID = req.body.UserID;
 
@@ -499,11 +521,47 @@ app.post('/fetchUserGoal', (req, res) => {
     })
 })
 
+app.post('/createUser', (req, res) => {
+    const userN = req.body.UserName;
+    const userEm = req.body.UserEmail;
+    const userBirth = req.body.UserBirthdate;
+    const userHt = req.body.UserHeight;
+    const userWt = req.body.UserWeight;
+    const userAg = req.body.UserAge;
+    const userDt = req.body.DietName;
+    const userDtDes = req.body.DietDescription;
+    const userCkConf = req.body.CookingConfidence;
+    const userPass = req.body.UserPassword;
+
+    let sql = `INSERT INTO USER(UserName, UserEmail, UserBirthdate, UserHeight, UserWeight, UserAge, DietName, DietDescription, CookingConfidence, UserPassword)
+    VALUES ("${userN}", "${userEm}", '${userBirth}', ${userHt}, ${userWt}, ${userAg}, "${userDt}", "${userDtDes}", ${userCkConf}, "${userPass}");`;
+      db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.post('/updateGoal', (req, res) => {
     const GoalID = req.body.GoalID;
     const Calc = req.body.Calculated;
     let sql = `UPDATE GOAL SET CalculatedCaloricIntake = ${Calc} WHERE GoalID = ${GoalID}`;
     db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/createUserInterests', (req, res) => {
+    const userID = req.body.UserID;
+    const userInt = req.body.UserInterests;
+
+    let sql = `INSERT INTO USER_INTERESTS(UserID, UserInterests)
+    VALUES (${userID}, "${userInt}");`;
+      db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }

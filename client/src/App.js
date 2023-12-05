@@ -22,6 +22,9 @@ import EditRecipe from './pages/EditRecipe.js';
 import EditRecipeIngredients from './pages/EditRecipeIngredients.js';
 import YourRecipes from './pages/YourRecipes.js';
 import LogMeal from './pages/LogMeal.js';
+import SignUpInitial from './pages/SignUpInitial.js';
+import SignUpInfo from './pages/SignUpInfo.js';
+import UserInterests from './pages/UserInterests.js';
 
 function App() {
   return (
@@ -36,7 +39,7 @@ function App() {
       <Route path="/viewMeal" element={<RequireAuth loginPath='/welcome'><ViewMeal/></RequireAuth>}/>
       <Route path="/editMeal" element={<RequireAuth loginPath='/welcome'><EditMeal/></RequireAuth>}/>
       <Route path="/editFood" element={<RequireAuth loginPath='/welcome'><EditFood/></RequireAuth>}/>
-      <Route path="/cookingConfidence" element={<RequireAuth loginPath='/welcome'><CookingConfidence/></RequireAuth>}/>
+      <Route path="/cookingConfidence" element={<CookingConfidence />}/>
       <Route path="/createRecipe" element={<RequireAuth loginPath='/welcome'><CreateRecipe /></RequireAuth>}/>
       <Route path="/setIngredients" element={<RequireAuth loginPath='/welcome'><SetIngredients/></RequireAuth>}/>
       <Route path="/setRecipeInstructions" element={<RequireAuth loginPath='/welcome'><SetRecipeInstructions/></RequireAuth>}/>
@@ -48,6 +51,9 @@ function App() {
       <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
       <Route path="/" element={<Welcome />} />
       <Route path="/login" element={<Login />} />
+      <Route path ="/signup-initial" element={<SignUpInitial />} />
+      <Route path ="/signup-info" element={<SignUpInfo />} />
+      <Route path ="/signup-userinterests" element={<UserInterests />} />
     </Routes>
     </ThemeProvider>
   </BrowserRouter>
