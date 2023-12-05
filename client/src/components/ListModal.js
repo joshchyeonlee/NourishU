@@ -1,5 +1,6 @@
 import { Box, Typography, Modal, List, ListItem, ListItemButton, IconButton } from "@mui/material";
 import Close from '@mui/icons-material/Close';
+import { useNavigate } from "react-router-dom";
 
 const modalFormat = {
     position: 'absolute',
@@ -29,7 +30,7 @@ const ListModal = (props) => {
                 <List>
                     {props.values.map((value, key) => {
                         return(
-                        <ListItemButton key={key}>
+                        <ListItemButton key={key} onClick={() => props.setUserId(value.UserID)}>
                             <ListItem disablePadding>
                                 <Typography>
                                     {value.UserName}
