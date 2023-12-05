@@ -102,7 +102,7 @@ app.post('/getFollowerCount', (req, res) => {
 //DATEDIFF https://www.w3schools.com/sql/func_mysql_datediff.asp
 app.post('/getUserMeals', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 0;`;
+    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 1 AND UserID = ${userId};`;
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
