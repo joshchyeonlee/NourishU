@@ -16,6 +16,7 @@ const CreateIngredient = () => {
     const[saturatedFats, setSaturatedFats] = useState("");
     const[isPerServing, setIsPerServing] = useState(0);
     const[servingVal, setServingVal] = useState("");
+    const[servingValErr, setServingValErr] = useState("");
     const[unsaturatedFats, setUnsaturatedFats] = useState("");
     const[calories, setCalories] = useState("");
     const[ingredientID, setIngredientID] = useState(-1);
@@ -86,6 +87,11 @@ const CreateIngredient = () => {
 
         if(calories.length === 0) {
             setCalErr(true);
+            isValid = false;
+        } else setCalErr(false);
+
+        if(servingVal.length === 0) {
+            setServingValErr(true);
             isValid = false;
         } else setCalErr(false);
 
@@ -175,6 +181,8 @@ const CreateIngredient = () => {
                     </Box>
                     <Box display="flex" justifyContent="center" flexDirection="row" padding={1}>
                         <TextField
+                            error={servingValErr}
+                            helperText={servingValErr ? ((isPerServing === 0) ? "Serving Size must be provided" : "g Per Serving must be provided") : "" } 
                             fullWidth
                             type="number"
                             value={servingVal}
