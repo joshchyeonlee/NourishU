@@ -619,7 +619,7 @@ app.post('/createIngredient', (req, res) => {
     const date = req.body.DatePosted;
 
     let sql = `INSERT INTO INGREDIENT(IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted)
-    VALUES("${ingName}", ${carb}, ${pro}, ${satFat}, ${unsatFat}, ${serving}, ${calorie}, ${aid}, "${date});`;
+    VALUES("${ingName}", ${carb}, ${pro}, ${satFat}, ${unsatFat}, ${serving}, ${calorie}, ${aid}, "${date}");`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
