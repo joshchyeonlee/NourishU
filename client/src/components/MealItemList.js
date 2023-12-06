@@ -9,7 +9,7 @@ const MealItemList = (props) => {
             </Box>
             <Box display="flex">
                 <Button component={Link} to={{pathname:"/viewMeal"}} state={{meal:props.meal}}>View</Button>
-                <Button>Remove</Button>
+                <Button onClick={() => props.handleRemove(props.i)}>Remove</Button>
             </Box>
         </Box>
     )

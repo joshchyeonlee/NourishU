@@ -681,6 +681,24 @@ app.post('/getVitamin', (req, res) => {
     })
 })
 
+app.post('/deleteMeal', (req, res) => {
+    const MealID = req.body.MealID;
+    let sql = `DELETE FROM MEAL_CONTAINS_RECIPE WHERE MealID = ${MealID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        
+        let del = `DELETE FROM MEAL WHERE MealID = ${MealID};`;
+        db.query(del, (err, result) => {
+            if(err){
+                throw(err);
+            }
+            res.send(result);
+        })
+    })
+})
+
 app.post("/setIngredientPer100g", (req, res) => {
     const IngredientID = req.body.IngredientID;
     const ServingSize = req.body.ServingSize;
@@ -692,6 +710,7 @@ app.post("/setIngredientPer100g", (req, res) => {
         res.send(result);
     })
 })
+
 
 app.post("/setIngredientPerServing", (req, res) => {
     const IngredientID = req.body.IngredientID;
