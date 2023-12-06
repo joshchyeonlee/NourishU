@@ -27,7 +27,6 @@ const formatRecipeData = (data) =>{
 
         for(var i = 0; i < arr.length; i++){
             var amt = 1;
-            console.log(arr[i]);
             if(arr[i].IsPerServing.data[0]){
                 amt = arr[i].AmountIngredient;
             }

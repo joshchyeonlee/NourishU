@@ -74,10 +74,35 @@ const Dashboard = () => {
         setIsGoalModalOpen(false);
     }
 
+    const handleCaloriesConsumed = () => {
+        var val = (totalCalories/goal.CalculatedCaloricIntake) * 100
+        if(val > 100) val = 100;
+        return val;
+    }
+
+    const deleteMeal = async (mealID) => {
+        const mealObj = {
+            MealID: mealID,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/deleteMeal", mealObj);
+            console.log(res.data);
+        } catch (err) {
+            throw(err);
+        }
+    }
+
+    const handleRemoveMeal = (i) => {
+        deleteMeal(meals[i].MealID);
+        const newMeals = [...meals];
+        newMeals.splice(i,1);
+        setMeals(newMeals);
+    }
+
     useEffect(() => {
         if(mealIDs.length <= 0) return;
         calculateCaloricIntake()
-    }, [mealIDs])
+    }, [mealIDs, meals ])
 
     useEffect(() => {
         fetchUserMeals();
@@ -112,7 +137,7 @@ const Dashboard = () => {
                                             <Typography variant="h6">Calories Remaining</Typography>
                                             <Box display="flex" padding={18} justifyContent="center" alignItems="center">
                                                 <Box position="absolute">
-                                                    <CircularProgress variant="determinate" color="primary" size={180} value={ (totalCalories < 0 || !goal) ? 0 : ((totalCalories/goal.CalculatedCaloricIntake) * 100)}/>
+                                                    <CircularProgress variant="determinate" color={(totalCalories > goal.CalculatedCaloricIntake) ? "error" : "primary"} size={180} value={ (totalCalories < 0 || !goal) ? 0 : handleCaloriesConsumed()}/>
                                                 </Box>
                                                 <Box position="absolute">
                                                     <Typography>{totalCalories}/{goal.CalculatedCaloricIntake}</Typography>
@@ -139,7 +164,7 @@ const Dashboard = () => {
                                     <Typography variant="h6">Your Meals</Typography>
                                     <Box padding={8} overflow="auto" sx={{ height:"300px" }}>
                                         {meals.map((value, key) => {
-                                            return <MealItemList meal={value} key={key}/>
+                                            return <MealItemList meal={value} key={key} i={key} handleRemove={handleRemoveMeal}/>
                                         })}
                                     </Box>
                                     <Box>
