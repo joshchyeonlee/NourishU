@@ -38,8 +38,6 @@ const Login = () => {
         }
     }
 
-
-
     const authenticateAdmin = async () => {
         const cred = {
             Email: emailInput,

@@ -62,7 +62,7 @@ const Login = () => {
         checkUserCredentials();
         setIsButtonClicked(true)
     }
-    
+
     useEffect(() => {
         const auth = async () => {
             await authenticateUser();
