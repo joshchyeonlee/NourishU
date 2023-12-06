@@ -9,8 +9,6 @@ const Login = () => {
     const[emailInput, setEmailInput] = useState("")
     const[passwordInput, setPasswordInput] = useState("")
     const[isCredentialValid, setIsCredentialValid] = useState(false);
-    // const[isEmailValid, setIsEmailValid] = useState(false)
-    // const[isPasswordValid, setisPasswordValid] = useState(false)
     const[isButtonClicked, setIsButtonClicked] = useState(false)
     const[userID, setUserID] = useState();
     const navigate = useNavigate()
@@ -74,17 +72,6 @@ const Login = () => {
         if(typeof userID === 'undefined' || !isCredentialValid) return;
         auth();
     },[userID, isCredentialValid])
-    // useEffect(() => {
-    //     const check = async () => {
-    //         if (isCredentialValid) {
-    //             await authenticateUser()
-                
-    //             navigate("/Dashboard");
-    //         }
-    //     }
-
-    //     check();
-    // },[isCredentialValid]);
 
     return (
         <div>
