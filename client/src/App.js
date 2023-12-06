@@ -24,6 +24,9 @@ import YourRecipes from './pages/YourRecipes.js';
 import LogMeal from './pages/LogMeal.js';
 import EditRecipeSteps from './pages/EditRecipeSteps.js';
 import EditRecipeRedirect from './pages/EditRecipeRedirect.js';
+import SignUpInitial from './pages/SignUpInitial.js';
+import SignUpInfo from './pages/SignUpInfo.js';
+import UserInterests from './pages/UserInterests.js';
 
 function App() {
   return (
@@ -52,9 +55,12 @@ function App() {
         <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
-      </Routes>
-      </ThemeProvider>
-    </BrowserRouter>
+        <Route path ="/signup-initial" element={<SignUpInitial />} />
+        <Route path ="/signup-info" element={<SignUpInfo />} />
+        <Route path ="/signup-userinterests" element={<UserInterests />} />
+    </Routes>
+    </ThemeProvider>
+  </BrowserRouter>
 )}
 
 export default App;

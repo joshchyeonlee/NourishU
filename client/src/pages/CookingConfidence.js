@@ -1,10 +1,12 @@
 import { Typography, Box, Slider, Button, IconButton } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const ConfidenceIcon = (props) => {
   //scale based off of 
@@ -17,6 +19,22 @@ const ConfidenceIcon = (props) => {
 }
 
 const CookingConfidence = () => {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [userName, setUserName] = useState(location.state.UserName);
+  const [userEmail, setUserEmail] = useState(location.state.UserEmail);
+  const [userPass, setUserPass] = useState(location.state.UserPass);
+  const [userBirthDate, setUserBirthDate] = useState(location.state.UserBirthDate);
+  const [userHeight, setUserHeight] = useState(location.state.UserHeight);
+  const [userWeight, setUserWeight] = useState(location.state.UserWeight);
+  const [userDiet, setUserDiet] = useState(location.state.UserDiet);
+  const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
+  const [userAge, setUserAge] = useState(location.state.UserAge);
+  const [userCookingConf, setUserCookingConf] = useState(-1);
+
+  const [userID, setUserID] = useState(-1);
+
   const [value, setValue] = useState(3);
 
   const blue = "#035E7B";
@@ -35,10 +53,32 @@ const CookingConfidence = () => {
 
   const changeSliderValue = (value) => {
     setValue(value)
+    setUserCookingConf(value)
   }
+
+  const insertUser = async () => {
+    const user = {
+      UserName: userName,
+      UserEmail: userEmail,
+      UserBirthdate: userBirthDate,
+      UserHeight: userHeight,
+      UserWeight: userWeight,
+      UserAge: userAge,
+      DietName: userDiet,
+      DietDescription: userDietDescription,
+      CookingConfidence: userCookingConf,
+      UserPassword: userPass
+    }
+    const res = await axios.post("http://localhost:3001/createUser", user);
+    setUserID(res.data.insertId);
+}
 
   const marks = [{value: 1, label: "Not confident at all"}
                 ,{value: 5, label: "Extremely confident"}];
+
+  useEffect(() => {
+      if (userID !== -1) navigate("/signup-userinterests", {state: {user: userID, UserEmail: userEmail, UserPass: userPass}});
+      }, [userID, userEmail, userPass])
 
   return (
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
@@ -65,7 +105,8 @@ const CookingConfidence = () => {
           />
         </Box>
         <Box position="absolute" bottom={50}>
-          <Button variant="contained" sx={{width: '200px'}}>Continue</Button>
+          <Button variant="contained" sx={{width: '400px'}} onClick={insertUser}
+          disabled = {userCookingConf == -1}>Create my account!</Button>
         </Box>
     </Box>
   );
