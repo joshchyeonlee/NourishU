@@ -100,10 +100,8 @@ const CreateIngredient = () => {
         if (!isValid) return;
 
         insertIngredient();
-
-        if (insertIngredient()) {
-            setOpen(true);
-        }
+        setOpen(true);
+        
     }
     
     const clearValues = () => {
@@ -155,11 +153,6 @@ const CreateIngredient = () => {
         else insertVals();
         
     }, [ingredientID])
-
-    useEffect(() => {
-        if(ingredientName != "") return;
-        setIngredientName("");
-    }, [ingredientName])
 
     return (
         <Container>
