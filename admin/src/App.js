@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter , Routes, Route } from "react-router-dom";
+import { BrowserRouter , Routes, Route, Navigate } from "react-router-dom";
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import CreateIngredient from './pages/CreateIngredient';
@@ -14,6 +14,7 @@ function App() {
         <Route path="/admin" element={<RequireAuth loginPath='/'><Admin /></RequireAuth>} />
         <Route path="/createIngredient" element={<RequireAuth loginPath='/'><CreateIngredient /></RequireAuth>}/>
         <Route path="/manageReviews" element={<RequireAuth loginPath='/'><ManageReviews /></RequireAuth>}/>
+        <Route path="*" element={<Navigate replace to="/admin" />} />
       </Routes>
   </BrowserRouter>
   );
