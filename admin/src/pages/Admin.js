@@ -1,10 +1,12 @@
 import { Typography, Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useAuthUser } from "react-auth-kit";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
 const Admin = () => {
-    const [adminID, setAdminID] = useState(0);  //need to update this to actual adminID from cookie
+    const auth = useAuthUser();
+    const[adminID, setAdminID] = useState(auth().values.userID);
     const [adminInfo, setAdminInfo] = useState();
 
     const fetchAdmin = async () => {
@@ -13,7 +15,6 @@ const Admin = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/fetchAdminInfo", aID);
-            console.log(res);
             setAdminInfo(res.data[0]);
         } catch (err) {
             throw(err);

@@ -102,7 +102,7 @@ app.post('/getFollowerCount', (req, res) => {
 //DATEDIFF https://www.w3schools.com/sql/func_mysql_datediff.asp
 app.post('/getUserMeals', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 0;`;
+    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 1 AND UserID = ${userId};`;
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
@@ -635,6 +635,30 @@ app.post('/getVitamin', (req, res) => {
 
     let sql = `INSERT INTO VITAMINS(IngredientID, VitaminName) VALUES(${ingID}, "${vit}");`;
 
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/setIngredientPer100g", (req, res) => {
+    const IngredientID = req.body.IngredientID;
+    const ServingSize = req.body.ServingSize;
+    let sql = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(${IngredientID}, ${ServingSize});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/setIngredientPerServing", (req, res) => {
+    const IngredientID = req.body.IngredientID;
+    const Weight = req.body.ServingSize;
+    let sql = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(${IngredientID}, ${Weight});`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
