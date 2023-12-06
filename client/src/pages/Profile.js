@@ -6,13 +6,15 @@ import ListModal from "../components/ListModal";
 import BottomNav from "../components/BottomNav";
 import AchievementList from "../components/AchievementList";
 import AchievementModal from "../components/AchievementModal";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuthUser } from 'react-auth-kit'
 import YourRecipesList from "../components/YourRecipesList";
 
-const Profile = () => {
+const Profile = ( props ) => {
     const auth = useAuthUser();
-    const [userId, setUserId] = useState(auth().values.userID);
+    const location = useLocation();
+    const [userId, setUserId] = useState();
+    const [isSelf, setIsSelf] = useState(true);
     const [userName, setUserName] = useState();
     const [followingCount, setFollowingCount] = useState();
     const [followerCount, setFollowerCount] = useState();
@@ -88,12 +90,24 @@ const Profile = () => {
     }
 
     useEffect(() => {
+        if(props.userID){
+            setUserId(props.userID);
+        } else if (location.state && location.state.userID){
+            setUserId(location.state.userID);
+        } else {
+            setUserId(auth().values.userID)
+        }
+    },[])
+
+    useEffect(() => {
+        if( typeof userId === 'undefined' || userId === -1) return
+        setIsSelf(userId === auth().values.userID)
         fetchUsers();
         fetchFollowingInformation();
         fetchFollowerInformation();
         fetchAchievementsEarned();
         fetchUserRecipes();
-    },[]);
+    },[userId]);
 
     const handleFollowingOpen = () => setFollowingOpen(true);
     const handleFollowingClose = () => setFollowingOpen(false);
@@ -110,13 +124,18 @@ const Profile = () => {
     return(
         <div>
             <AchievementModal open={achievementOpen} onClose={handleAchievementClose} value={selectedAchievement}/>
-            <ListModal open={followingOpen} onClose={handleFollowingClose} values={following}/>
-            <ListModal open={followerOpen} onClose={handleFollowerClose} values={followers}/>
+            <ListModal open={followingOpen} onClose={handleFollowingClose} values={following} setUserId={setUserId}/>
+            <ListModal open={followerOpen} onClose={handleFollowerClose} values={followers} setUserId={setUserId}/>
+            {isSelf ? 
             <Button variant="outlined" startIcon={<EditIcon/>} sx={{position:"fixed", top:10, right:10}}>
                 Edit Profile
             </Button>
+            : <></>
+            }
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={4}>
-                <Typography variant="h4">Welcome, {userName}!</Typography>
+                {isSelf ? <Typography variant="h4">Welcome, {userName}!</Typography>
+                        : <Typography variant="h4">{userName}'s Profile</Typography>
+                }
                 <Grid container spacing={4} padding={3} alignItems="center" justifyContent="center">
                     <Grid item>
                         <Button variant="contained" onClick={handleFollowingOpen}>
@@ -128,7 +147,8 @@ const Profile = () => {
                             Followers {followerCount}
                         </Button>
                     </Grid>
-                </Grid>    
+                </Grid>
+                {isSelf?
                 <Box padding={1} sx={{width: "50%"}}>
                     <Card variant="outlined">
                         <CardContent>
@@ -137,21 +157,27 @@ const Profile = () => {
                                 <Box display="flex" justifyContent="center" paddingTop={1}>
                                 {achievements.map((val, key) => {
                                     return (
-                                            <Tooltip title={val.Name} key={key}>
-                                                <IconButton onClick={() => handleAchievementClick(val)}>
-                                                    <AchievementList val={val}/>
-                                                </IconButton>
-                                            </Tooltip>)
+                                        <Tooltip title={val.Name} key={key}>
+                                            <IconButton onClick={() => handleAchievementClick(val)}>
+                                                <AchievementList val={val}/>
+                                            </IconButton>
+                                        </Tooltip>)
                                 })}
                                 </Box>
                             </Box>
                         </CardContent>
                     </Card>
                 </Box>
+                :<></>
+                }    
                 <Card sx={{width: "50%"}} variant="outlined">
                     <CardContent>
                         <Box sx={{ maxHeight: "300px", overflow: "hidden", overflowY: "scroll"}} display="flex" flexDirection="column" alignItems="center">
-                            <YourRecipesList recipes={userRecipes} from="/profile" title="h5"/>
+                            <YourRecipesList
+                                recipes={userRecipes}
+                                isSelf={isSelf}
+                                from="/profile"
+                                title="h5"/>
                         </Box>
                     </CardContent>
                 </Card>

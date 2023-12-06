@@ -67,8 +67,9 @@ app.post('/login', (req,res) => {
 
 app.post('/getUserInfo', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT * FROM USER WHERE UserID = ?`;
-    db.query(sql, userId, (err, result) => {
+    let sql = `SELECT * FROM USER WHERE UserID = ${userId}`;
+    console.log(sql);
+    db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
@@ -78,8 +79,9 @@ app.post('/getUserInfo', (req, res) => {
 
 app.post('/getFollowingCount', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT UserName FROM FOLLOWS JOIN USER ON UserID = FolloweeUserID WHERE FollowerUserID = ?`;
-    db.query(sql, userId, (err, result) => {
+    let sql = `SELECT UserName, FolloweeUserID as UserID FROM FOLLOWS JOIN USER ON UserID = FolloweeUserID WHERE FollowerUserID = ${userId}`;
+    console.log(sql);
+    db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
@@ -89,7 +91,7 @@ app.post('/getFollowingCount', (req, res) => {
 
 app.post('/getFollowerCount', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT UserName FROM FOLLOWS JOIN USER ON UserID = FollowerUserID WHERE FolloweeUserID = ?`;
+    let sql = `SELECT UserName, FollowerUserID as UserID FROM FOLLOWS JOIN USER ON UserID = FollowerUserID WHERE FolloweeUserID = ?`;
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
