@@ -31,7 +31,6 @@ const Profile = ( props ) => {
         const uid = {
             UserID: userId,
         }
-        console.log(uid)
         try{
             const res = await axios.post("http://localhost:3001/getUserInfo", uid)
             setUserName(res.data[0].UserName);
@@ -48,7 +47,6 @@ const Profile = ( props ) => {
             const res = await axios.post("http://localhost:3001/getFollowingCount", uid)
             setFollowingCount(res.data.length);
             setFollowing(res.data);
-            console.log(res.data);
         } catch(err){
             throw(err);
         }
@@ -62,7 +60,6 @@ const Profile = ( props ) => {
             const res = await axios.post("http://localhost:3001/getFollowerCount", uid)
             setFollowerCount(res.data.length);
             setFollowers(res.data);
-            console.log(res.data);
         } catch(err){
             throw(err);
         }
