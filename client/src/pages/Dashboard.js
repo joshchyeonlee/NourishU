@@ -11,7 +11,6 @@ import SetGoal from "../components/SetGoal";
 const Dashboard = () => {
     const auth = useAuthUser();
     const [userId, setUserId] = useState(auth().values.userID ? auth().values.userID : -1);
-    console.log(auth().values.userID);
     const [meals, setMeals] = useState([]);
     const [mealIDs, setMealIDs] = useState([]);
     const [goal, setGoal] = useState();
@@ -50,7 +49,6 @@ const Dashboard = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getUserMeals", uid);
-            console.log(res);
             setMeals(res.data);
             const mealIDs = res.data.map(x => x.MealID);
             setMealIDs(mealIDs);
@@ -87,8 +85,7 @@ const Dashboard = () => {
             MealID: mealID,
         }
         try{
-            const res = await axios.post("http://localhost:3001/deleteMeal", mealObj);
-            console.log(res.data);
+            await axios.post("http://localhost:3001/deleteMeal", mealObj);
         } catch (err) {
             throw(err);
         }
@@ -108,7 +105,6 @@ const Dashboard = () => {
 
     useEffect(() => {
         if(userId === -1 || typeof userId === 'undefined') return;
-        console.log(userId);
         fetchUserMeals();
         fetchUserGoal();
     }, [userId, isGoalModalOpen]);
