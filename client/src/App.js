@@ -22,6 +22,8 @@ import EditRecipe from './pages/EditRecipe.js';
 import EditRecipeIngredients from './pages/EditRecipeIngredients.js';
 import YourRecipes from './pages/YourRecipes.js';
 import LogMeal from './pages/LogMeal.js';
+import EditRecipeSteps from './pages/EditRecipeSteps.js';
+import EditRecipeRedirect from './pages/EditRecipeRedirect.js';
 import SignUpInitial from './pages/SignUpInitial.js';
 import SignUpInfo from './pages/SignUpInfo.js';
 import UserInterests from './pages/UserInterests.js';
@@ -31,29 +33,31 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}> 
       <CssBaseline />
-    <Routes>
-      <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard /></RequireAuth>}/>
-      <Route path="/recipes" element={<RequireAuth loginPath='/welcome'><Recipes /></RequireAuth>}/>
-      <Route path="/profile" element={<RequireAuth loginPath='/welcome'><Profile/></RequireAuth>}/>
-      <Route path="/searchRecipes" element={<RequireAuth loginPath='/welcome'><SearchRecipes/></RequireAuth>}/>
-      <Route path="/viewMeal" element={<RequireAuth loginPath='/welcome'><ViewMeal/></RequireAuth>}/>
-      <Route path="/editMeal" element={<RequireAuth loginPath='/welcome'><EditMeal/></RequireAuth>}/>
-      <Route path="/editFood" element={<RequireAuth loginPath='/welcome'><EditFood/></RequireAuth>}/>
-      <Route path="/cookingConfidence" element={<CookingConfidence />}/>
-      <Route path="/createRecipe" element={<RequireAuth loginPath='/welcome'><CreateRecipe /></RequireAuth>}/>
-      <Route path="/setIngredients" element={<RequireAuth loginPath='/welcome'><SetIngredients/></RequireAuth>}/>
-      <Route path="/setRecipeInstructions" element={<RequireAuth loginPath='/welcome'><SetRecipeInstructions/></RequireAuth>}/>
-      <Route path="/viewRecipe" element={<RequireAuth loginPath='/welcome'><ViewRecipe/></RequireAuth>}/>
-      <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard/></RequireAuth>}/>
-      <Route path="/editRecipe" element={<RequireAuth loginPath='/welcome'><EditRecipe /></RequireAuth>} />
-      <Route path="/editRecipeIngredients" element={<RequireAuth loginPath='/welcome'><EditRecipeIngredients /></RequireAuth>} />
-      <Route path="/viewYourRecipes" element={<RequireAuth loginPath='/welcome'><YourRecipes /></RequireAuth>} />
-      <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
-      <Route path="/" element={<Welcome />} />
-      <Route path="/login" element={<Login />} />
-      <Route path ="/signup-initial" element={<SignUpInitial />} />
-      <Route path ="/signup-info" element={<SignUpInfo />} />
-      <Route path ="/signup-userinterests" element={<UserInterests />} />
+      <Routes>
+        <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard /></RequireAuth>}/>
+        <Route path="/recipes" element={<RequireAuth loginPath='/welcome'><Recipes /></RequireAuth>}/>
+        <Route path="/profile" element={<RequireAuth loginPath='/welcome'><Profile/></RequireAuth>}/>
+        <Route path="/searchRecipes" element={<RequireAuth loginPath='/welcome'><SearchRecipes/></RequireAuth>}/>
+        <Route path="/viewMeal" element={<RequireAuth loginPath='/welcome'><ViewMeal/></RequireAuth>}/>
+        <Route path="/editMeal" element={<RequireAuth loginPath='/welcome'><EditMeal/></RequireAuth>}/>
+        <Route path="/editFood" element={<RequireAuth loginPath='/welcome'><EditFood/></RequireAuth>}/>
+        <Route path="/cookingConfidence" element={<RequireAuth loginPath='/welcome'><CookingConfidence/></RequireAuth>}/>
+        <Route path="/createRecipe" element={<RequireAuth loginPath='/welcome'><CreateRecipe /></RequireAuth>}/>
+        <Route path="/setIngredients" element={<RequireAuth loginPath='/welcome'><SetIngredients/></RequireAuth>}/>
+        <Route path="/setRecipeInstructions" element={<RequireAuth loginPath='/welcome'><SetRecipeInstructions/></RequireAuth>}/>
+        <Route path="/viewRecipe" element={<RequireAuth loginPath='/welcome'><ViewRecipe/></RequireAuth>}/>
+        <Route path="/dashboard" element={<RequireAuth loginPath='/welcome'><Dashboard/></RequireAuth>}/>
+        <Route path="/editRecipe" element={<RequireAuth loginPath='/welcome'><EditRecipeRedirect /></RequireAuth>} />
+        <Route path="/editRecipeDetails" element={<RequireAuth loginPath='/welcome'><EditRecipe /></RequireAuth>} />
+        <Route path="/editRecipeSteps" element={<RequireAuth loginPath='/welcome'><EditRecipeSteps /></RequireAuth>} />
+        <Route path="/editRecipeIngredients" element={<RequireAuth loginPath='/welcome'><EditRecipeIngredients /></RequireAuth>} />
+        <Route path="/viewYourRecipes" element={<RequireAuth loginPath='/welcome'><YourRecipes /></RequireAuth>} />
+        <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
+        <Route path ="/signup-initial" element={<SignUpInitial />} />
+        <Route path ="/signup-info" element={<SignUpInfo />} />
+        <Route path ="/signup-userinterests" element={<UserInterests />} />
     </Routes>
     </ThemeProvider>
   </BrowserRouter>

@@ -28,14 +28,14 @@ const YourRecipes = () => {
     }, []);
     
     return(
-        <div>
+        <Box display="flex" padding={4} justifyContent="center">
             <IconButton sx={{position: "absolute", top:10, left: 10}} component={Link} to={{pathname:"/recipes"}}>
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
-            <Box display="flex" padding={4} sx={{ width: "60%", translate:"25%"}}>
+            <Box display="flex" sx={{ width:"60%" }}>
                 <YourRecipesList recipes={userRecipes} from="/viewYourRecipes" title="h5" />
             </Box>
-        </div>
+        </Box>
     )
 }
 
