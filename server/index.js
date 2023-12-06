@@ -102,7 +102,7 @@ app.post('/getFollowerCount', (req, res) => {
 //DATEDIFF https://www.w3schools.com/sql/func_mysql_datediff.asp
 app.post('/getUserMeals', (req, res) => {
     const userId = req.body.UserID;
-    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 0;`;
+    let sql = `SELECT * FROM MEAL as m WHERE DATEDIFF(DateTime, CURDATE()) = 1 AND UserID = ${userId};`;
     db.query(sql, userId, (err, result) => {
         if(err){
             throw(err);
@@ -509,6 +509,21 @@ app.post('/createMeal', (req, res) => {
     })
 })
 
+app.post('/setRecipeInstruction', (req, res) => {
+    const RecipeID = req.body.RecipeID;
+    const StepNo = req.body.StepNo;
+    const Description = req.body.StepDescription;
+
+    let sql = `INSERT INTO RECIPE_STEP(RecipeID, StepNo, StepDescription) 
+    VALUES(${RecipeID}, ${StepNo}, "${Description}");`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.post('/queryUserNameExists', (req, res) => {
     const userName = req.body.UserName;
     let sql = `SELECT UserName FROM User WHERE UserName = '${userName}'`;
@@ -535,6 +550,17 @@ app.post('/fetchUserGoal', (req, res) => {
     const UserID = req.body.UserID;
 
     let sql = `SELECT * FROM GOAL WHERE UserID = ${UserID};`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/fetchRecipeSteps', (req, res) => {
+    const RecipeID = req.body.RecipeID;
+    let sql = `SELECT * FROM RECIPE_STEP WHERE RecipeID = ${RecipeID} ORDER BY StepNo;`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -577,13 +603,24 @@ app.post('/updateGoal', (req, res) => {
     })
 })
 
+app.post('/removeAllSteps', (req, res) => {
+    const RecipeID = req.body.RecipeID;
+    let sql = `DELETE FROM RECIPE_STEP WHERE RecipeID = ${RecipeID};`;
+    db.query(sql, (err, result) => {
+              if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
 app.post('/createUserInterests', (req, res) => {
     const userID = req.body.UserID;
     const userInt = req.body.UserInterests;
 
     let sql = `INSERT INTO USER_INTERESTS(UserID, UserInterests)
     VALUES (${userID}, "${userInt}");`;
-      db.query(sql, (err, result) => {
+    db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
@@ -599,6 +636,7 @@ app.post('/createGoal', (req, res) => {
 
     let sql = `INSERT INTO GOAL(UserID, GoalID, InitialCaloricIntake, CalculatedCaloricIntake)
                 VALUES(${UserID}, ${GoalID}, ${Init}, ${Calc});`;;
+
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -650,6 +688,7 @@ app.post('/deleteMeal', (req, res) => {
         if(err){
             throw(err);
         }
+        
         let del = `DELETE FROM MEAL WHERE MealID = ${MealID};`;
         db.query(del, (err, result) => {
             if(err){
@@ -658,7 +697,31 @@ app.post('/deleteMeal', (req, res) => {
             res.send(result);
         })
     })
+})
 
+app.post("/setIngredientPer100g", (req, res) => {
+    const IngredientID = req.body.IngredientID;
+    const ServingSize = req.body.ServingSize;
+    let sql = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(${IngredientID}, ${ServingSize});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+
+app.post("/setIngredientPerServing", (req, res) => {
+    const IngredientID = req.body.IngredientID;
+    const Weight = req.body.ServingSize;
+    let sql = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(${IngredientID}, ${Weight});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
 })
 
 app.listen(3001, () => {

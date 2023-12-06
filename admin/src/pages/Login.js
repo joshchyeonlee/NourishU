@@ -30,7 +30,7 @@ const Login = () => {
         try{
             const res = await axios.post("http://localhost:3001/getAdminEmail", admineml)
             if (res.data.length > 0) {
-                setUserID(res.data[0].UserID)
+                setUserID(res.data[0].AdminID)
                 setIsEmailValid(true)
             }
             else {
@@ -68,7 +68,7 @@ const Login = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/authenticateUser", cred)
-            
+            console.log(res.data);
             signIn({
                 token: res.data.token,
                 expiresIn: 3600,
@@ -79,7 +79,6 @@ const Login = () => {
         } catch (err) {
             throw(err);
         }
-        
     }
 
     const checkAdminCred = () => {
@@ -93,6 +92,7 @@ const Login = () => {
     useEffect(() => {
         const check = async () => {
             if (isEmailValid && isPasswordValid) {
+                await authenticateAdmin();
                 navigate("/admin");
             }
         }
