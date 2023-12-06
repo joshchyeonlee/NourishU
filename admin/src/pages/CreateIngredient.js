@@ -1,4 +1,4 @@
-import { Typography, Box, Button, TextField, Container, MenuItem, Select, IconButton, Autocomplete, FormControl, InputLabel } from "@mui/material";
+import { Typography, Box, Button, TextField, Container, MenuItem, Select, IconButton, Autocomplete, FormControl, InputLabel, Snackbar, Alert } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useState, useEffect } from "react";
 import { useAuthUser } from "react-auth-kit";
@@ -20,13 +20,14 @@ const CreateIngredient = () => {
     const[unsaturatedFats, setUnsaturatedFats] = useState("");
     const[calories, setCalories] = useState("");
     const[ingredientID, setIngredientID] = useState(-1);
+    const[open, setOpen] = useState(false);
+    const[vitaminName, setVitaminName] = useState("");
     const[titleErr, setTitleErr] = useState(false);
     const[carbErr, setCarbErr] = useState(false);
     const[proteinErr, setProteinErr] = useState(false);
     const[satFatErr, setSatFatErr] = useState(false);
     const[unSatFatErr, setUnSatFatErr] = useState(false);
     const[calErr, setCalErr] = useState(false);
-    const[vitaminName, setVitaminName] = useState("");
 
     const insertIngredient = async () => {
         const ingredient = {
@@ -90,6 +91,7 @@ const CreateIngredient = () => {
             isValid = false;
         } else setCalErr(false);
 
+        
         if(servingVal.length === 0) {
             setServingValErr(true);
             isValid = false;
@@ -98,6 +100,8 @@ const CreateIngredient = () => {
         if (!isValid) return;
 
         insertIngredient();
+        setOpen(true);
+        
     }
     
     const clearValues = () => {
@@ -256,6 +260,11 @@ const CreateIngredient = () => {
                     <Box display="flex" justifyContent="center" padding={1}>
                         <Button variant="contained" onClick={handleCreate}>Create</Button>
                     </Box>
+                </Box>
+                <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
+                    <Snackbar open={open}>
+                        <Alert severity="success">You have successfully created an ingredient!</Alert>
+                    </Snackbar>
                 </Box>
             </Box>
         </Container>
