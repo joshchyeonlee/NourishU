@@ -5,6 +5,11 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const jwt = require("jsonwebtoken");
+const sha256 = require('js-sha256');
+
+console.log(sha256("bean"));
+
+
 
 //create connection
 const db = mysql.createConnection({
@@ -256,7 +261,8 @@ app.post('/getRecipeReviews', (req, res) => {
 
 app.post('/getUserPassword', (req, res) => {
     const userPassword = req.body.userPassword;
-    let sql = `SELECT * FROM USER WHERE UserPassword = "${userPassword}"`;
+    const hash = sha256(userPassword);
+    let sql = `SELECT * FROM USER WHERE UserPassword = "${hash}"`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -751,6 +757,20 @@ app.post("/setIngredientPerServing", (req, res) => {
         }
         res.send(result);
     })
+})
+
+//https://stackoverflow.com/questions/1676551/best-way-to-test-if-a-row-exists-in-a-mysql-table
+app.post('/checkUserCredentials', (req, res) => {
+    const UserEmail = req.body.Email;
+    const hash = req.body.Password;
+    let sql = `SELECT UserID FROM USER WHERE UserEmail = "${UserEmail}" AND UserPassword = "${hash}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+
 })
 
 app.listen(3001, () => {

@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSignIn } from 'react-auth-kit';
+import sha256 from 'js-sha256'
 
 const Login = () => {
     const[emailInput, setEmailInput] = useState("")
     const[passwordInput, setPasswordInput] = useState("")
-    const[isEmailValid, setIsEmailValid] = useState(false)
-    const[isPasswordValid, setisPasswordValid] = useState(false)
+    const[isCredentialValid, setIsCredentialValid] = useState(false);
+    // const[isEmailValid, setIsEmailValid] = useState(false)
+    // const[isPasswordValid, setisPasswordValid] = useState(false)
     const[isButtonClicked, setIsButtonClicked] = useState(false)
     const[userID, setUserID] = useState();
     const navigate = useNavigate()
@@ -22,47 +24,30 @@ const Login = () => {
         setPasswordInput(value)
     }
 
-    const checkUserEmail = async () => {
-        const usereml = {
-            userEmail: emailInput
+    const checkUserCredentials = async () => {
+        const hash = sha256(passwordInput);
+        const userCredentials = {
+            Email: emailInput,
+            Password: hash,
         }
         try{
-            const res = await axios.post("http://localhost:3001/getUserEmail", usereml)
-            if (res.data.length > 0) {
-                setUserID(res.data[0].UserID)
-                setIsEmailValid(true)
-            }
-            else {
-                setIsEmailValid(false)
-            }
-        } catch(err){
-            throw(err);
-        }
-    }
-
-    const checkUserPassword = async () => {
-        const userPass = {
-            userPassword: passwordInput
-        }
-        try{
-            const res = await axios.post("http://localhost:3001/getUserPassword", userPass)
-            if (res.data.length > 0) {
-                setisPasswordValid(true)
-            }
-            else {
-                setisPasswordValid(false)
-            }
+            const res = await axios.post("http://localhost:3001/checkUserCredentials", userCredentials);
+            console.log(res.data);
+            setUserID(res.data[0].UserID);
+            setIsCredentialValid(res.data.length > 0);
         } catch(err){
             throw(err);
         }
     }
 
     const authenticateUser = async () => {
+        const hash = sha256(passwordInput);
         const cred = {
             Email: emailInput,
-            Password: passwordInput,
+            Password: hash,
         }
         try{
+            //need to set userId!!!
             const res = await axios.post("http://localhost:3001/authenticateUser", cred)
 
             signIn({
@@ -78,23 +63,30 @@ const Login = () => {
     }
 
     const checkUserCred = () => {
-        checkUserEmail()
-        checkUserPassword()
-        authenticateUser();
+        checkUserCredentials();
         setIsButtonClicked(true)
     }
     
     useEffect(() => {
-        const check = async () => {
-            if (isEmailValid && isPasswordValid) {
-                await authenticateUser()
-    
-                navigate("/Dashboard");
-            }
+        const auth = async () => {
+            await authenticateUser();
+            navigate("/Dashboard");
         }
 
-        check();
-    },[isEmailValid, isPasswordValid]);
+        if(typeof userID === 'undefined' || !isCredentialValid) return;
+        auth();
+    },[userID, isCredentialValid])
+    // useEffect(() => {
+    //     const check = async () => {
+    //         if (isCredentialValid) {
+    //             await authenticateUser()
+                
+    //             navigate("/Dashboard");
+    //         }
+    //     }
+
+    //     check();
+    // },[isCredentialValid]);
 
     return (
         <div>
@@ -103,10 +95,10 @@ const Login = () => {
             </Box>
             <Grid container spacing={3} direction="column" alignItems="center">
                 <Grid item>
-                    <TextField error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Email" variant="outlined" helperText={(!isEmailValid && isButtonClicked) ? "Invalid Email" : ""} onChange={(event)=>{handleEmailChange(event.target.value)}}/>
+                    <TextField error={!isCredentialValid && isButtonClicked} id="outlined-basic" label="Email" variant="outlined" helperText={(!isCredentialValid && isButtonClicked) ? "Invalid Email" : ""} onChange={(event)=>{handleEmailChange(event.target.value)}}/>
                 </Grid>
                 <Grid item>
-                    <TextField type='password' error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Password" variant="outlined" helperText={(!isPasswordValid && isButtonClicked) ? "Invalid Password" : ""} onChange={(event)=>{handlePasswordChange(event.target.value)}} />
+                    <TextField type='password' error={!isCredentialValid && isButtonClicked} id="outlined-basic" label="Password" variant="outlined" helperText={(!isCredentialValid && isButtonClicked) ? "Invalid Password" : ""} onChange={(event)=>{handlePasswordChange(event.target.value)}} />
                 </Grid>
                 <Grid item>
                     <Box padding={4}>

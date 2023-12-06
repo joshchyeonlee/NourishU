@@ -10,7 +10,8 @@ import SetGoal from "../components/SetGoal";
 
 const Dashboard = () => {
     const auth = useAuthUser();
-    const [userId, setUserId] = useState(auth().values.userID);
+    const [userId, setUserId] = useState(auth().values.userID ? auth().values.userID : -1);
+    console.log(auth().values.userID);
     const [meals, setMeals] = useState([]);
     const [mealIDs, setMealIDs] = useState([]);
     const [goal, setGoal] = useState();
@@ -106,14 +107,11 @@ const Dashboard = () => {
     }, [mealIDs, meals ])
 
     useEffect(() => {
+        if(userId === -1 || typeof userId === 'undefined') return;
+        console.log(userId);
         fetchUserMeals();
         fetchUserGoal();
-    }, []);
-
-    useEffect(() => {
-        fetchUserMeals();
-        fetchUserGoal();
-    }, [isGoalModalOpen])
+    }, [userId, isGoalModalOpen]);
 
     return(   
         <div>
