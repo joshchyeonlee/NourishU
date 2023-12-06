@@ -1,4 +1,4 @@
-import { Typography, Box, Slider, Button, IconButton } from "@mui/material";
+import { Typography, Box, Slider, Button, IconButton, Snackbar } from "@mui/material";
 import { useState, useEffect } from "react";
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
@@ -7,6 +7,7 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const ConfidenceIcon = (props) => {
   //scale based off of 
@@ -32,6 +33,7 @@ const CookingConfidence = () => {
   const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
   const [userAge, setUserAge] = useState(location.state.UserAge);
   const [userCookingConf, setUserCookingConf] = useState(-1);
+  const [isAchievementOpen, setIsAchievementOpen] = useState();
 
   const [userID, setUserID] = useState(-1);
 
@@ -71,16 +73,41 @@ const CookingConfidence = () => {
     }
     const res = await axios.post("http://localhost:3001/createUser", user);
     setUserID(res.data.insertId);
-}
+  }
+
+  const assignAchievement = async () => {
+    const t = dayjs().toISOString().substring(0,10) + " " + dayjs().format("h:m:s");
+    const UID = {
+      UserID: userID,
+      Time: t,
+    }
+    try{
+      await axios.post("http://localhost:3001/assignCreateAccountAchievement", UID);
+      setIsAchievementOpen(true);
+    } catch (err) {
+      throw(err)
+    }
+  }
+
+  const handleAchievementClose = (event, reason) => {
+    if(reason === 'clickaway') return;
+    setIsAchievementOpen(false);
+  }
 
   const marks = [{value: 1, label: "Not confident at all"}
                 ,{value: 5, label: "Extremely confident"}];
 
   useEffect(() => {
-      if (userID !== -1) navigate("/signup-userinterests", {state: {user: userID, UserEmail: userEmail, UserPass: userPass}});
-      }, [userID, userEmail, userPass])
+    if(userID !== -1) assignAchievement();
+    }, [userID])
+    
+  useEffect(() => {
+    if(isAchievementOpen === false) navigate("/signup-userinterests", {state: {user: userID, UserEmail: userEmail, UserPass: userPass}});
+  }, [isAchievementOpen])
 
   return (
+    <div>
+      <Snackbar open={isAchievementOpen} autoHideDuration={1500} onClose={handleAchievementClose} message="Achievement Unlocked! New Account Created"/>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
         <Box padding={8}>
           <Typography variant="h4">How Confident are you with cooking?</Typography>
@@ -109,6 +136,7 @@ const CookingConfidence = () => {
           disabled = {userCookingConf == -1}>Create my account!</Button>
         </Box>
     </Box>
+    </div>
   );
 };
 

@@ -755,6 +755,21 @@ app.post("/setIngredientPerServing", (req, res) => {
     })
 })
 
+app.post("/assignCreateAccountAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "Account Created"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
