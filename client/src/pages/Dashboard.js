@@ -49,6 +49,7 @@ const Dashboard = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getUserMeals", uid);
+            console.log(res);
             setMeals(res.data);
             const mealIDs = res.data.map(x => x.MealID);
             setMealIDs(mealIDs);
