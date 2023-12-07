@@ -20,23 +20,11 @@ const ConfidenceIcon = (props) => {
 }
 
 const CookingConfidence = () => {
-
   const navigate = useNavigate();
   const location = useLocation();
-  // const [userName, setUserName] = useState(location.state.UserName);
-  // const [userEmail, setUserEmail] = useState(location.state.UserEmail);
-  // const [userPass, setUserPass] = useState(location.state.UserPass);
-  // const [userBirthDate, setUserBirthDate] = useState(location.state.UserBirthDate);
-  // const [userHeight, setUserHeight] = useState(location.state.UserHeight);
-  // const [userWeight, setUserWeight] = useState(location.state.UserWeight);
-  // const [userDiet, setUserDiet] = useState(location.state.UserDiet);
-  // const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
   const [userCookingConf, setUserCookingConf] = useState(-1);
   const [isAchievementOpen, setIsAchievementOpen] = useState();
   const [userID, setUserID] = useState(-1);
-
-  console.log("broken here?");
-
   const [value, setValue] = useState(3);
 
   const blue = "#035E7B";
@@ -98,7 +86,6 @@ const CookingConfidence = () => {
 
   useEffect(() => {
     if(userID !== -1){
-      console.log("this is breaking it");
       assignAchievement();
       setIsAchievementOpen(true);
     }

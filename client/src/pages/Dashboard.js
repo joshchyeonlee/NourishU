@@ -52,7 +52,6 @@ const Dashboard = (props) => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getUserMeals", uid);
-            console.log(res);
             setMeals(res.data);
             const mealIDs = res.data.map(x => x.MealID);
             setMealIDs(mealIDs);
@@ -113,7 +112,6 @@ const Dashboard = (props) => {
         }
         try{
             const res = await axios.post("http://localhost:3001/isFirstGoal", UserID);
-            console.log(res.data);
             if(res.data === false) return;
 
             setIsAchievementOpen(true);

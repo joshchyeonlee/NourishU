@@ -45,7 +45,6 @@ const ViewRecipe = () => {
 
         try{
             const res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
-            console.log(res.data);
             setRecipeIngredients(res.data);
             setRecipeDifficulty(res.data[0].RDifficulty);
             setRecipeTitle(res.data[0].RecipeTitle);
@@ -144,7 +143,6 @@ const ViewRecipe = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/isFirstReview", UserID);
-            console.log(res.data);
             if(res.data === true){
                 setIsAchievementOpen(true);
                 assignAchievement();
@@ -162,7 +160,6 @@ const ViewRecipe = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/assignFirstReviewAchievement", UID);
-            console.log(res);
         } catch (err) {
             throw (err)
         }

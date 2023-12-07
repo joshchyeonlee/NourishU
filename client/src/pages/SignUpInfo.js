@@ -91,7 +91,6 @@ const SignUpInfo = () => {
         else {
             setUserDone(false);
         }
-        console.log("in after check info");
     }
 
     const calculateUserAge = (theDate) => {
@@ -102,7 +101,6 @@ const SignUpInfo = () => {
 
     useEffect(() => {
         // This effect will run whenever the variables in the array change
-        console.log("before checkInfo");
         checkInfo();
     }, [userBirthDate, userHeight, userWeight, userDiet, userDietDescription]);
 

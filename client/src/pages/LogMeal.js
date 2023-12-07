@@ -64,8 +64,7 @@ const LogMeal = () => {
             Time: dateTime,
         }
         try{
-            const res = await axios.post("http://localhost:3001/assignFirstMealAchievement", UID);
-            console.log(res);
+            await axios.post("http://localhost:3001/assignFirstMealAchievement", UID);
         } catch (err) {
             throw (err)
         }
@@ -77,7 +76,6 @@ const LogMeal = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/isFirstMeal", meal);
-            console.log(res);
             if(res.data === true){
                 setIsAchievementOpen(true);
                 assignAchievement();
@@ -95,13 +93,11 @@ const LogMeal = () => {
 
     useEffect(() => {
         if(dateTime == "") return;
-        console.log("UseEffect dateTime");
         checkIfFirstMeal();
     },[dateTime])
 
     useEffect(() => {
         if(isAchievementOpen === false){
-            console.log("achievementOpen");
             addMeal();
         }
 
