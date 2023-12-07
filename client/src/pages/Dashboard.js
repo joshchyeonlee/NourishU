@@ -50,7 +50,6 @@ const Dashboard = (props) => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getUserMeals", uid);
-            console.log(res);
             setMeals(res.data);
             const mealIDs = res.data.map(x => x.MealID);
             setMealIDs(mealIDs);
@@ -87,8 +86,7 @@ const Dashboard = (props) => {
             MealID: mealID,
         }
         try{
-            const res = await axios.post("http://localhost:3001/deleteMeal", mealObj);
-            console.log(res.data);
+            await axios.post("http://localhost:3001/deleteMeal", mealObj);
         } catch (err) {
             throw(err);
         }
@@ -107,14 +105,10 @@ const Dashboard = (props) => {
     }, [mealIDs, meals ])
 
     useEffect(() => {
+        if(userId === -1 || typeof userId === 'undefined') return;
         fetchUserMeals();
         fetchUserGoal();
-    }, []);
-
-    useEffect(() => {
-        fetchUserMeals();
-        fetchUserGoal();
-    }, [isGoalModalOpen])
+    }, [userId, isGoalModalOpen]);
 
     return(   
         <div>

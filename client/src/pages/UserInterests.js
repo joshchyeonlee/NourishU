@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import axios from "axios";
 import { useSignIn } from 'react-auth-kit';
+import sha256 from 'js-sha256'
 
 const UserInterests = () => {
 
@@ -42,7 +43,6 @@ const UserInterests = () => {
         'Fashion',
         'Technology',
         'Movies/Tv Shows',
-    
       ];
 
     const handleInterestSelected = (interestInput) => {
@@ -77,9 +77,10 @@ const UserInterests = () => {
   }
 
   const authenticateUser = async () => {
+    const hash = sha256(userPass);
     const cred = {
         Email: userEmail,
-        Password: userPass,
+        Password: hash,
     }
     try{
         const res = await axios.post("http://localhost:3001/authenticateUser", cred)

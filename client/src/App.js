@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter , Routes, Route } from "react-router-dom";
+import { BrowserRouter , Routes, Route, Navigate } from "react-router-dom";
 import { RequireAuth } from 'react-auth-kit';
 import { ThemeProvider } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
@@ -28,6 +28,9 @@ import SignUpInitial from './pages/SignUpInitial.js';
 import SignUpInfo from './pages/SignUpInfo.js';
 import UserInterests from './pages/UserInterests.js';
 
+// redirect to /dashboard from
+// https://stackoverflow.com/questions/63690695/react-redirect-is-not-exported-from-react-router-dom
+
 function App() {
   return (
     <BrowserRouter>
@@ -55,9 +58,10 @@ function App() {
         <Route path="/logMeal" element={<RequireAuth loginPath='/welcome'><LogMeal/></RequireAuth>}/>
         <Route path="/" element={<Welcome />} />
         <Route path="/login" element={<Login />} />
-        <Route path ="/signup-initial" element={<SignUpInitial />} />
-        <Route path ="/signup-info" element={<SignUpInfo />} />
-        <Route path ="/signup-userinterests" element={<UserInterests />} />
+        <Route path="/signup-initial" element={<SignUpInitial />} />
+        <Route path="/signup-info" element={<SignUpInfo />} />
+        <Route path="/signup-userinterests" element={<UserInterests />} />
+        <Route path="*" element={<Navigate replace to="/dashboard" />} />
     </Routes>
     </ThemeProvider>
   </BrowserRouter>

@@ -5,6 +5,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const jwt = require("jsonwebtoken");
+const sha256 = require('js-sha256');
 
 //create connection
 const db = mysql.createConnection({
@@ -68,7 +69,6 @@ app.post('/login', (req,res) => {
 app.post('/getUserInfo', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT * FROM USER WHERE UserID = ${userId}`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -80,7 +80,6 @@ app.post('/getUserInfo', (req, res) => {
 app.post('/getFollowingCount', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT UserName, FolloweeUserID as UserID FROM FOLLOWS JOIN USER ON UserID = FolloweeUserID WHERE FollowerUserID = ${userId}`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -172,7 +171,6 @@ app.post('/searchRecipes', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -190,7 +188,6 @@ app.post('/createRecipe', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -258,7 +255,8 @@ app.post('/getRecipeReviews', (req, res) => {
 
 app.post('/getUserPassword', (req, res) => {
     const userPassword = req.body.userPassword;
-    let sql = `SELECT * FROM USER WHERE UserPassword = "${userPassword}"`;
+    const hash = sha256(userPassword);
+    let sql = `SELECT * FROM USER WHERE UserPassword = "${hash}"`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -465,12 +463,10 @@ app.post('/flagReview', (req, res) => {
     (req.body.ReviewFlagged === 1) ? ReviewFlag = 0 : ReviewFlag = 1
 
     let sql = `UPDATE ADMIN_REVIEW SET ReviewFlagged = ${ReviewFlag} WHERE ReviewID = ${ReviewID};`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -753,6 +749,20 @@ app.post("/setIngredientPerServing", (req, res) => {
         }
         res.send(result);
     })
+})
+
+//https://stackoverflow.com/questions/1676551/best-way-to-test-if-a-row-exists-in-a-mysql-table
+app.post('/checkUserCredentials', (req, res) => {
+    const UserEmail = req.body.Email;
+    const hash = req.body.Password;
+    let sql = `SELECT UserID FROM USER WHERE UserEmail = "${UserEmail}" AND UserPassword = "${hash}"`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+
 })
 
 app.listen(3001, () => {
