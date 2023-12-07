@@ -7,10 +7,6 @@ const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const sha256 = require('js-sha256');
 
-console.log(sha256("bean"));
-
-
-
 //create connection
 const db = mysql.createConnection({
     host: "localhost",
@@ -73,7 +69,6 @@ app.post('/login', (req,res) => {
 app.post('/getUserInfo', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT * FROM USER WHERE UserID = ${userId}`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -85,7 +80,6 @@ app.post('/getUserInfo', (req, res) => {
 app.post('/getFollowingCount', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT UserName, FolloweeUserID as UserID FROM FOLLOWS JOIN USER ON UserID = FolloweeUserID WHERE FollowerUserID = ${userId}`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -114,7 +108,6 @@ app.post('/getUserMeals', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -178,7 +171,6 @@ app.post('/searchRecipes', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -196,7 +188,6 @@ app.post('/createRecipe', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -472,12 +463,10 @@ app.post('/flagReview', (req, res) => {
     (req.body.ReviewFlagged === 1) ? ReviewFlag = 0 : ReviewFlag = 1
 
     let sql = `UPDATE ADMIN_REVIEW SET ReviewFlagged = ${ReviewFlag} WHERE ReviewID = ${ReviewID};`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
