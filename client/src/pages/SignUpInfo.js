@@ -21,13 +21,10 @@ const SignUpInfo = () => {
     const [userDiet, setUserDiet] = useState("");
     const [userDietDescription, setUserDietDescription] = useState("");
     const [userAge, setUserAge] = useState(-1);
-
     const[userDietDescSize, setUserDietDescSize] = useState(true);
-
     const[userDone, setUserDone] = useState(true);
-
-    const today = dayjs();
     const earlyDate = dayjs('1920-01-01')
+    const today = dayjs();
 
     const dietNames = [
         'None',
@@ -94,16 +91,18 @@ const SignUpInfo = () => {
         else {
             setUserDone(false);
         }
+        console.log("in after check info");
     }
 
     const calculateUserAge = (theDate) => {
-    const calculation = today.diff(theDate, "y")
+        const calculation = today.diff(theDate, "y")
 
-    setUserAge(calculation)
+        setUserAge(calculation)
     }
 
     useEffect(() => {
         // This effect will run whenever the variables in the array change
+        console.log("before checkInfo");
         checkInfo();
     }, [userBirthDate, userHeight, userWeight, userDiet, userDietDescription]);
 

@@ -68,7 +68,6 @@ app.post('/login', (req,res) => {
 app.post('/getUserInfo', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT * FROM USER WHERE UserID = ${userId}`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -80,7 +79,6 @@ app.post('/getUserInfo', (req, res) => {
 app.post('/getFollowingCount', (req, res) => {
     const userId = req.body.UserID;
     let sql = `SELECT UserName, FolloweeUserID as UserID FROM FOLLOWS JOIN USER ON UserID = FolloweeUserID WHERE FollowerUserID = ${userId}`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
@@ -172,7 +170,6 @@ app.post('/searchRecipes', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -190,7 +187,6 @@ app.post('/createRecipe', (req, res) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -465,12 +461,10 @@ app.post('/flagReview', (req, res) => {
     (req.body.ReviewFlagged === 1) ? ReviewFlag = 0 : ReviewFlag = 1
 
     let sql = `UPDATE ADMIN_REVIEW SET ReviewFlagged = ${ReviewFlag} WHERE ReviewID = ${ReviewID};`;
-    console.log(sql);
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
         }
-        console.log(result);
         res.send(result);
     })
 })
@@ -764,7 +758,35 @@ app.post("/assignCreateAccountAchievement", (req, res) => {
                     (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "Account Created"));`;
     db.query(sql, [value], (err, result) => {
         if(err){
-            console.log(err);
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/isFirstMeal", (req, res) => {
+    const UserID = req.body.UserID;
+    // let sql = `SELECT COUNT(MealID) AS NumMeals FROM MEAL WHERE UserID = ?;`;
+    let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
+    AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First meal logged");`;
+    db.query(sql, UserID, (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result[0].AchievementCount <= 0);
+    })
+})
+
+app.post("/assignFirstMealAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First meal logged"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
         }
         res.send(result);
     })

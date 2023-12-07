@@ -10,7 +10,6 @@ import AddFoodModal from "../components/AddFoodModal";
 const SearchRecipes = () => {
     const location = useLocation();
     const [prevPageData, setPrevPageData] = useState(location.state)
-    console.log(location.state);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
