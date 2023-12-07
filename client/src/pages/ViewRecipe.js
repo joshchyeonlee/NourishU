@@ -215,7 +215,7 @@ const ViewRecipe = () => {
                         readOnly
                     />
                 </Box>
-                <Box display="flex" justifyContent="space-between" padding={1} sx={{width:"30%"}}>
+                <Box display="flex" justifyContent="space-between" paddingTop={1} sx={{width:"30%"}}>
                     <Typography>Overall Rating</Typography>
                     <Rating
                         value={overallRating}

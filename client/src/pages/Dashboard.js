@@ -129,14 +129,10 @@ const Dashboard = (props) => {
     }, [mealIDs, meals ])
 
     useEffect(() => {
+        if(userId === -1 || typeof userId === 'undefined') return;
         fetchUserMeals();
         fetchUserGoal();
-    }, []);
-
-    useEffect(() => {
-        fetchUserMeals();
-        fetchUserGoal();
-    }, [isGoalModalOpen])
+    }, [userId, isGoalModalOpen]);
 
     useEffect(() => {
         if(goal === null) return;
