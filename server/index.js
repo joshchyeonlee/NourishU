@@ -819,6 +819,33 @@ app.post("/assignGoalAchievement", (req, res) => {
     })
 })
 
+app.post("/isFirstRecipe", (req, res) => {
+    const UserID = req.body.UserID;
+    let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
+    AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Recipe Created");`;
+    db.query(sql, UserID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result[0].AchievementCount <= 0);
+    })
+})
+
+app.post("/assignFirstRecipeAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Recipe Created"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
