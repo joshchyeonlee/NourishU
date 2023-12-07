@@ -2,6 +2,7 @@ import { Box, IconButton, Modal, Typography, FormControl, Select, MenuItem, Butt
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 import axios from "axios";
+import { formatNumber } from "../utils/inputCheck";
 
 const style = {
     position: 'absolute',
@@ -29,7 +30,7 @@ const AddFoodModal = (props) => {
     };
 
     const handleAmountSelect = (event) => {
-        setAmountConsumed(event.target.value);
+        setAmountConsumed(formatNumber(event.target.value, 1, 10));
     }
 
     const addToMeal = async (recipe, meal) => {

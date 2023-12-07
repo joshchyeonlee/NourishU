@@ -7,6 +7,7 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { formatNumber } from "../utils/inputCheck";
 
 const ConfidenceIcon = (props) => {
   //scale based off of 
@@ -31,10 +32,7 @@ const CookingConfidence = () => {
   const [userDiet, setUserDiet] = useState(location.state.UserDiet);
   const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
   const [userAge, setUserAge] = useState(location.state.UserAge);
-  const [userCookingConf, setUserCookingConf] = useState(-1);
-
   const [userID, setUserID] = useState(-1);
-
   const [value, setValue] = useState(3);
 
   const blue = "#035E7B";
@@ -52,8 +50,7 @@ const CookingConfidence = () => {
   }
 
   const changeSliderValue = (value) => {
-    setValue(value)
-    setUserCookingConf(value)
+    setValue(formatNumber(value));
   }
 
   const insertUser = async () => {
@@ -66,7 +63,7 @@ const CookingConfidence = () => {
       UserAge: userAge,
       DietName: userDiet,
       DietDescription: userDietDescription,
-      CookingConfidence: userCookingConf,
+      CookingConfidence: value,
       UserPassword: userPass
     }
     const res = await axios.post("http://localhost:3001/createUser", user);
@@ -105,8 +102,7 @@ const CookingConfidence = () => {
           />
         </Box>
         <Box position="absolute" bottom={50}>
-          <Button variant="contained" sx={{width: '400px'}} onClick={insertUser}
-          disabled = {userCookingConf == -1}>Create my account!</Button>
+          <Button variant="contained" sx={{width: '400px'}} onClick={insertUser}>Create my account!</Button>
         </Box>
     </Box>
   );
