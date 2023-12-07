@@ -19,7 +19,7 @@ const EditMeal = () => {
             MealID: meal.MealID,
         }
         try{
-            const res = await axios.post("http://localhost:3001/removeRecipeFromMeal", RecipeID)
+            await axios.post("http://localhost:3001/removeRecipeFromMeal", RecipeID)
         } catch (err) {
             throw(err);
         }

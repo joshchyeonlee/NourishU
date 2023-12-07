@@ -121,7 +121,7 @@ const ViewRecipe = () => {
     
     const submitReview = async () => {
         const reviewInfo = {
-            WrittenBy: 0,
+            WrittenBy: auth().values.userID,
             RecipeID: recipeID,
             RDifficulty: userRating,
             RComment: userReview
