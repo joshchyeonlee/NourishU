@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton, Rating, Card, CardContent, TextField, Divider, Button } from "@mui/material";
+import { Box, Typography, IconButton, Rating, Card, CardContent, TextField, Divider, Button, Snackbar } from "@mui/material";
 import { useState, useEffect } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
@@ -8,6 +8,7 @@ import formatRecipeData from "../utils/formatRecipeData";
 import NutrInfo from "../components/NutrInfo";
 import { useLocation, Link } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
+import dayjs from "dayjs";
 
 const ViewRecipe = () => {
     const blue = "#035E7B";
@@ -33,6 +34,7 @@ const ViewRecipe = () => {
     const [userReviewLength, setUserReviewLength] = useState(0);
     const [overallRating, setOverallRating] = useState(0);
     const [recipeSteps, setRecipeSteps] = useState([]);
+    const [isAchievementOpen, setIsAchievementOpen] = useState();
 
     const [nutrInfo, setNutrInfo] = useState();
 
@@ -121,7 +123,7 @@ const ViewRecipe = () => {
     
     const submitReview = async () => {
         const reviewInfo = {
-            WrittenBy: 0,
+            WrittenBy: auth().values.userID,
             RecipeID: recipeID,
             RDifficulty: userRating,
             RComment: userReview
@@ -136,8 +138,39 @@ const ViewRecipe = () => {
         }
     }
 
+    const checkIfFirstReview = async () => {
+        const UserID = {
+            UserID: auth().values.userID,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/isFirstReview", UserID);
+            console.log(res.data);
+            if(res.data === true){
+                setIsAchievementOpen(true);
+                assignAchievement();
+            }
+            else setIsAchievementOpen(false);
+        } catch (err) {
+            throw(err)
+        }
+    }
+
+    const assignAchievement = async () => {
+        const UID = {
+            UserID: auth().values.userID,
+            Time: dayjs().format("YYYY-MM-DD hh:mm:ss"),
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/assignFirstReviewAchievement", UID);
+            console.log(res);
+        } catch (err) {
+            throw (err)
+        }
+    }
+
     const handleSubmitReview = () => {
         submitReview();
+        checkIfFirstReview();
     }
 
     const fetchRecipeSteps = async () => {
@@ -148,6 +181,11 @@ const ViewRecipe = () => {
         } catch (err) {
             throw(err);
         }
+    }
+
+    const handleAchievementClose = (event, reason) => {
+        if(reason === 'clickaway') return;
+        setIsAchievementOpen(false);
     }
 
     //remove useEffect if passing in recipe information from previous page
@@ -161,6 +199,7 @@ const ViewRecipe = () => {
 
     return(
         <div>
+            <Snackbar open={isAchievementOpen} autoHideDuration={1500} onClose={handleAchievementClose} message="Achievement Unlocked! First Review Created"/>
             <IconButton sx={{position: "absolute", top:10, left: 10}}
                 component={Link}
                 to={{pathname: prevPageState.from}}
