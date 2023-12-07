@@ -30,8 +30,10 @@ const Login = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/checkUserCredentials", userCredentials);
-            setUserID(res.data[0].UserID);
-            setIsCredentialValid(res.data.length > 0);
+            if(res.data.length > 0){
+                setUserID(res.data[0].UserID);
+                setIsCredentialValid(true);
+            }
         } catch(err){
             throw(err);
         }
