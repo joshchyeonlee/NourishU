@@ -8,7 +8,8 @@ const formatNumber = (val, min, max) => {
 
 const formatString = (val, maxLen) => {
     var str = String(val);
-    console.log(str);
+    if(str.length > maxLen) str = str.substring(0, maxLen);
+
     return str;
 }
 

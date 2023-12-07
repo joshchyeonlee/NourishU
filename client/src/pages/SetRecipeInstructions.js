@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Box, IconButton, TextField, Typography, Button, Card, CardContent, Grid } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+import { formatString } from "../utils/inputCheck";
 
 const SetRecipeInstructions = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
     const [instructions, setInstructions] = useState([]);
+    const [valid, setValid] = useState(false);
     
     const insertInstruction = async () => {
         for(var i = 0; i < instructions.length; i++){
@@ -46,10 +48,9 @@ const SetRecipeInstructions = () => {
     const handleChange = (e, i) => {
         const { value, instruction } = e.target;
         const newState = [...instructions];
-
         newState[i] = {
             ...newState[i],
-            instructions: value
+            instructions: formatString(value, 255)
         };
 
         setInstructions(newState);
@@ -60,6 +61,15 @@ const SetRecipeInstructions = () => {
         newInstr.splice(i, 1);
         setInstructions(newInstr);
     }
+
+    useEffect(() => {
+        var check = true;
+        for(var i = 0; i < instructions.length; i++) {
+            check &= instructions[i].instructions.length > 0;
+            if(check === false) return;
+        }
+        setValid(check && instructions.length > 0);
+    }, [instructions])
 
     //need to set limits on text fields and put in db
     return (
@@ -79,6 +89,7 @@ const SetRecipeInstructions = () => {
                                         error={instructions[key].instructions.length === 0}
                                         helperText={(instructions[key].instructions.length === 0) ? "Cannot be blank" : ""}
                                         sx={{width:"90%"}}
+                                        inputProps={{maxLength: 255}}
                                         onChange={(e) => handleChange(e, key)}/>
                                     <Box display="flex">
                                         <IconButton onClick={() => handleDelete(key)}>
@@ -98,7 +109,7 @@ const SetRecipeInstructions = () => {
             </Box>
         </Card>
         <Box position="absolute" bottom={30}>
-            <Button variant="contained" onClick={handleContinue}>Done</Button>
+            <Button disabled={!valid} variant="contained" onClick={handleContinue}>Done</Button>
         </Box>
     </Box>
     )

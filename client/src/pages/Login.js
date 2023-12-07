@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSignIn } from 'react-auth-kit';
 import sha256 from 'js-sha256'
+import { formatString } from '../utils/inputCheck';
 
 const Login = () => {
     const[emailInput, setEmailInput] = useState("")
@@ -15,11 +16,11 @@ const Login = () => {
     const signIn = useSignIn();
 
     const handleEmailChange = (value) => {
-        setEmailInput(value)
+        setEmailInput(formatString(value))
     }
 
     const handlePasswordChange = (value) => {
-        setPasswordInput(value)
+        setPasswordInput(formatString(value))
     }
 
     const checkUserCredentials = async () => {

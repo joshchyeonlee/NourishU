@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
 import { useState } from "react";
+import { formatString } from "../utils/inputCheck";
 
 const EditMeal = () => {
     const location = useLocation();
@@ -54,6 +55,10 @@ const EditMeal = () => {
         updateMealTitle();
     }
 
+    const handleMealNameChange = (val) => {
+        setMealName(formatString(val, 50));
+    }
+
     return(
         <div>
             <IconButton sx={{position: "absolute", top:10, left: 10}} component={Link} to={{pathname:"/viewMeal"}} state={{ meal:meal }}>
@@ -69,7 +74,7 @@ const EditMeal = () => {
                     label="Meal Name"
                     variant="standard"
                     defaultValue={mealName}
-                    onChange={(event) => {setMealName(event.target.value)}}/>
+                    onChange={(event) => {handleMealNameChange(event.target.value)}}/>
             </Box>
             <Box padding={4} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                 {recipes.map((value, key) => {

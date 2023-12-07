@@ -15,19 +15,10 @@ const UserInterests = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const [userName, setUserName] = useState(location.state.UserName);
     const [userEmail, setUserEmail] = useState(location.state.UserEmail);
     const [userPass, setUserPass] = useState(location.state.UserPass);
-    const [userBirthDate, setUserBirthDate] = useState(location.state.UserBirthDate);
-    const [userHeight, setUserHeight] = useState(location.state.UserHeight);
-    const [userWeight, setUserWeight] = useState(location.state.UserWeight);
-    const [userDiet, setUserDiet] = useState(location.state.UserDiet);
-    const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
-    const [userAge, setUserAge] = useState(location.state.UserAge);
-
     const [userID, setUserID] = useState(location.state.user);
     const [userInterest, setUserInterest] = useState("");
-
     const [userNotReady, setUserNotReady] = useState(true);
     const signIn = useSignIn();
 
@@ -64,9 +55,12 @@ const UserInterests = () => {
       const theInterests = {
         UserID: userID,
         UserInterests: userInterest
-
       }
-      const res = await axios.post("http://localhost:3001/createUserInterests", theInterests);
+      try {
+        await axios.post("http://localhost:3001/createUserInterests", theInterests);
+      } catch (err) {
+        throw (err);
+      }
   }
     
 

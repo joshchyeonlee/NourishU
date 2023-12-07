@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, Link } from "react-router-dom";
 import AddFoodModal from "../components/AddFoodModal";
+import { formatString } from "../utils/inputCheck";
 
 const SearchRecipes = () => {
     const location = useLocation();
     const [prevPageData, setPrevPageData] = useState(location.state)
-    console.log(location.state);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
@@ -19,7 +19,7 @@ const SearchRecipes = () => {
 
     const searchRecipes = async () => {
         const searchQuery = {
-            Search: search,
+            Search: formatString(search, 255),
         }
         try{
             const res = await axios.post("http://localhost:3001/searchRecipes", searchQuery);
@@ -73,7 +73,12 @@ const SearchRecipes = () => {
                     <IconButton disabled>
                         <SearchIcon/>
                     </IconButton>
-                    <InputBase placeholder="search recipes" sx={{ width:"80%" }} onChange={(event) => handleSearchBar(event.target.value)}></InputBase>
+                    <InputBase
+                        inputProps={{maxLength: 255}}
+                        placeholder="search recipes"
+                        sx={{ width:"80%" }}
+                        onChange={(event) => handleSearchBar(event.target.value)}
+                    />
                     <Button onClick={() => handleSearch()}>
                         Search
                     </Button>

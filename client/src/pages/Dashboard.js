@@ -11,7 +11,6 @@ import SetGoal from "../components/SetGoal";
 const Dashboard = (props) => {
     const auth = useAuthUser();
     const [userId, setUserId] = useState((props.userID) ? props.userID : auth().values.userID);
-    const [isSelf, setIsSelf] = useState((props.userID) ? false : true);
     const [meals, setMeals] = useState([]);
     const [mealIDs, setMealIDs] = useState([]);
     const [goal, setGoal] = useState();

@@ -6,6 +6,7 @@ import axios from 'axios';
 import {Link} from "react-router-dom"
 import { InputAdornment, InputLabel } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
+import { formatString } from "../utils/inputCheck";
 
 const SignUpInitial = () => {
     const [userNameTextField, setUserNameTextField] = useState("");
@@ -27,21 +28,24 @@ const SignUpInitial = () => {
 
     // Stores user name and performs checks
     const storeUserNameInput = (typedUserName) => {
-        setUserNameTextField(typedUserName)
-        checkUserName(typedUserName)
+        const formatName = formatString(typedUserName, 25)
+        setUserNameTextField(formatName)
+        checkUserName(formatName)
         setEnteredUserNameTextField(true)
-        queryUserUnique(typedUserName)
+        queryUserUnique(formatName)
     }
 
     // Stores user email and performs checks
     const storeUserEmailInput = (typedUserEmail) => {
+        const formatEmail = formatString(typedUserEmail, 50)
         setUserEmailTextField(typedUserEmail)
-        checkUserEmail(typedUserEmail)
+        checkUserEmail(formatEmail)
         setEnteredUserEmailTextField(true)
-        queryUserEmailUnique(typedUserEmail)
+        queryUserEmailUnique(formatEmail)
     }
 
     // stores user password and performs checks
+    // will be hashed using sha256, will always end up being length 64 in BE/DB
     const storeUserPassInput = (typedUserPass) => {
         checkPassValid(typedUserPass)
         setUserPassTextField(typedUserPass)
@@ -112,13 +116,7 @@ const SignUpInitial = () => {
         .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
 
-        if (check === null || userEmailInput.length > 50) {
-            setUserEmailValid(false)
-            return;
-        }
-        else {
-            setUserEmailValid(true)
-        }
+        setUserEmailValid(check !== null && userEmailInput.length <= 50 && userEmailInput.length > 0);
     }
 
     // Checks if username already exists in the DB (must be unique)
@@ -148,14 +146,7 @@ const SignUpInitial = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/queryUserEmailExists", userEmail)
-
-            if (res.data.length > 0) {
-                setUserEmailUnique(false)
-            }
-
-            else {
-                setUserEmailUnique(true)
-            }
+            setUserEmailUnique(res.data.length <= 0);
         } catch(err){
             throw(err);
         }

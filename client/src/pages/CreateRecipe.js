@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthUser } from 'react-auth-kit'
+import { formatNumber, formatString } from "../utils/inputCheck"
 
 const CreateRecipe = () => {
     const auth = useAuthUser();
@@ -50,19 +51,36 @@ const CreateRecipe = () => {
         if(recipeDescription.length === 0){
             setDescErr(true);
             isValid = false;
-        }
-        else setDescErr(false);
+        } else setDescErr(false);
 
         if(selectedIngredients.length === 0){
             setIngrErr(true);
             isValid = false;
-        }
-        else setIngrErr(false);
+        } else setIngrErr(false);
 
-        
         if(!isValid) return;
 
         insertRecipe()
+    }
+
+    const handleRecipeTitle = (val) => {
+        setRecipeTitle(formatString(val, 50));
+    }
+
+    const handleRecipeDescription = (val) => {
+        setRecipeDescription(formatString(val, 300));
+    }
+
+    const handleServingSize = (val) => {
+        setServingSize(formatNumber(val, 1, 10))
+    }
+
+    const handleDifficulty = (val) => {
+        setDifficultyValue(formatNumber(val, 1, 5));
+    }
+
+    const handleCooktime = (val) => {
+        setCookTime(formatNumber(val, 1, 120));
     }
 
     useEffect(() => {
@@ -91,7 +109,7 @@ const CreateRecipe = () => {
                     <TextField
                         error={titleErr}
                         helperText={titleErr ? "Please provide a title for your recipe" : ""}
-                        onChange={(event) => {setRecipeTitle(event.target.value)}}
+                        onChange={(event) => {handleRecipeTitle(event.target.value)}}
                     />
                 </Box>
                 <Box display="flex" justifyContent="left" flexDirection="column" padding={1}>
@@ -99,7 +117,7 @@ const CreateRecipe = () => {
                     <TextField
                         error={descErr}
                         helperText={descErr ? "Please provide a description for your recipe" : ""}
-                        onChange={(event) => {setRecipeDescription(event.target.value)}}/>
+                        onChange={(event) => {handleRecipeDescription(event.target.value)}}/>
                 </Box>
                 <Box display="flex" justifyContent="left" flexDirection="column" padding={1}>
                     <Typography variant="h6">Set Serving Size</Typography>
@@ -108,7 +126,7 @@ const CreateRecipe = () => {
                         min={1}
                         max={10}
                         defaultValue={servingSize}
-                        onChange={(event) => setServingSize(event.target.value)}
+                        onChange={(event) => handleServingSize(event.target.value)}
                         />
                     <Box display="flex" justifyContent="flex-end">
                         <Typography>{servingSize}</Typography>
@@ -121,7 +139,7 @@ const CreateRecipe = () => {
                         min={1}
                         max={5}
                         defaultValue={difficultyValue}
-                        onChange={(event) => setDifficultyValue(event.target.value)}
+                        onChange={(event) => handleDifficulty(event.target.value)}
                         />
                     <Box display="flex" justifyContent="flex-end">
                         <Typography>{difficultyValue}</Typography>
@@ -134,7 +152,7 @@ const CreateRecipe = () => {
                         min={1}
                         max={120}
                         defaultValue={30}
-                        onChange={(event) => setCookTime(event.target.value)}
+                        onChange={(event) => handleCooktime(event.target.value)}
                     />
                     <Box display="flex" justifyContent="flex-end">
                         <Typography>{cookTime >= 60 ? `${Math.floor(Number(cookTime / 60))} h ${Math.round(((cookTime/60) - Math.floor(cookTime/60)) * 60)} min` : `${cookTime} minutes`}</Typography>

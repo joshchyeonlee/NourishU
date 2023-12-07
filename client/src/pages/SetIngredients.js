@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Box, IconButton, Select, Typography, MenuItem, FormControl, Button, InputAdornment } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
+import { formatNumber } from "../utils/inputCheck";
 
 const SetIngredients = () => {
     const location = useLocation();
@@ -12,14 +13,16 @@ const SetIngredients = () => {
     const [state, setState] = useState([]);
 
     //https://stackoverflow.com/questions/69206649/handle-multiple-input-boxes-rendered-using-map-function-javascript
-    const handleChange = (e, i) => {
+    const handleChange = (e, i, max) => {
         const { value, quantity } = e.target;
         const newState = [...state];
 
         newState[i] = {
             ...newState[i],
-            quantity: value
+            quantity: formatNumber(value, 1, max)
         };
+
+        console.log(newState[i]);
 
         setState(newState);
     }
@@ -84,7 +87,7 @@ const SetIngredients = () => {
                                 <Select
                                     value={state[index] ? state[index].quantity : 0}
                                     sx={{width:"150px"}}
-                                    onChange={(e) => handleChange(e, index)}
+                                    onChange={(e) => handleChange(e, index, 10)}
                                     endAdornment={
                                         <InputAdornment position="end" sx={{marginRight:"30px"}}>servings</InputAdornment>
                                     }
@@ -101,7 +104,7 @@ const SetIngredients = () => {
                                 <Select
                                     value={state[index] ? state[index].quantity : 0}
                                     sx={{width:"150px"}}
-                                    onChange={(e) => handleChange(e, index)}
+                                    onChange={(e) => handleChange(e, index, 500)}
                                     endAdornment={
                                         <InputAdornment position="end" sx={{marginRight:"30px"}}>g</InputAdornment>
                                     }

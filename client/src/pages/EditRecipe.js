@@ -2,6 +2,7 @@ import { Box, Slider, TextField, Typography, Button, IconButton } from "@mui/mat
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { formatNumber, formatString } from "../utils/inputCheck";
 import axios from "axios";
 
 const EditRecipe = () => {
@@ -53,6 +54,26 @@ const EditRecipe = () => {
         navigate(location.state.prev.from);
     }
 
+    const handleRecipeTitle = (val) => {
+        setRecipeTitle(formatString(val, 50));
+    }
+
+    const handleRecipeDescription = (val) => {
+        setRecipeDescription(formatString(val, 255));
+    }
+
+    const handleServingSize = (val) => {
+        setServingSize(formatNumber(val, 1, 5));
+    }
+
+    const handleRecipeDifficulty = (val) => {
+        setRecipeDifficulty(formatNumber(val, 1, 5));
+    }
+
+    const handleRecipeCookTime = (val) => {
+        setCookTime(formatNumber(val, 1, 120));
+    }
+
     useEffect(() => {
         fetchRecipe();
     },[])
@@ -74,7 +95,7 @@ const EditRecipe = () => {
                         error={recipeTitle.length === 0}
                         fullWidth
                         value={recipeTitle}
-                        onChange={(e) => setRecipeTitle(e.target.value)}
+                        onChange={(e) => handleRecipeTitle(e.target.value)}
                         inputProps={{ maxLength: 50 }}
                     />
                     <Box display="flex" justifyContent="right">
@@ -88,7 +109,7 @@ const EditRecipe = () => {
                         error={recipeDescription.length === 0}
                         fullWidth
                         value={recipeDescription}
-                        onChange={(e) => setRecipeDescription(e.target.value)}
+                        onChange={(e) => handleRecipeDescription(e.target.value)}
                         inputProps={{ maxLength: 255 }}
                     />
                     <Box display="flex" justifyContent="right">
@@ -104,7 +125,7 @@ const EditRecipe = () => {
                         step={1}
                         valueLabelDisplay="auto"
                         value={servingSize}
-                        onChange={(e) => setServingSize(e.target.value)}
+                        onChange={(e) => handleServingSize(e.target.value)}
                         
                     />
                     <Box display="flex" justifyContent="right">
@@ -120,7 +141,7 @@ const EditRecipe = () => {
                         step={1}
                         valueLabelDisplay="auto"
                         value={recipeDifficulty}
-                        onChange={(e) => setRecipeDifficulty(e.target.value)}
+                        onChange={(e) => handleRecipeDifficulty(e.target.value)}
                     />
                     <Box display="flex" justifyContent="right">
                         <Typography variant="caption">{recipeDifficulty}</Typography>
@@ -135,7 +156,7 @@ const EditRecipe = () => {
                         step={1}
                         valueLabelDisplay="auto"
                         value={cookTime}
-                        onChange={(e) => setCookTime(e.target.value)}
+                        onChange={(e) => handleRecipeCookTime(e.target.value)}
                     />
                     <Box display="flex" justifyContent="right">
                         <Typography variant="caption">{cookTime >= 60 ? `${Math.floor(Number(cookTime / 60))} h ${Math.round(((cookTime/60) - Math.floor(cookTime/60)) * 60)} min` : `${cookTime} minutes`}</Typography>
