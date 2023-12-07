@@ -8,6 +8,7 @@ import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfi
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { formatNumber } from "../utils/inputCheck";
+import { sha256 } from 'js-sha256';
 
 const ConfidenceIcon = (props) => {
   //scale based off of 
@@ -54,6 +55,7 @@ const CookingConfidence = () => {
   }
 
   const insertUser = async () => {
+    const hash = sha256(userPass);
     const user = {
       UserName: userName,
       UserEmail: userEmail,
@@ -64,7 +66,7 @@ const CookingConfidence = () => {
       DietName: userDiet,
       DietDescription: userDietDescription,
       CookingConfidence: value,
-      UserPassword: userPass
+      UserPassword: hash
     }
     const res = await axios.post("http://localhost:3001/createUser", user);
     setUserID(res.data.insertId);
