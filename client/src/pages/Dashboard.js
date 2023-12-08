@@ -4,12 +4,13 @@ import BottomNav from "../components/BottomNav";
 import { useState, useEffect } from "react";
 import { useAuthUser } from 'react-auth-kit'
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatRecipeData from "../utils/formatRecipeData";
 import SetGoal from "../components/SetGoal";
 
 const Dashboard = (props) => {
     const auth = useAuthUser();
+    const navigate = useNavigate();
     const [userId, setUserId] = useState((props.userID) ? props.userID : auth().values.userID);
     const [meals, setMeals] = useState([]);
     const [mealIDs, setMealIDs] = useState([]);
@@ -24,8 +25,8 @@ const Dashboard = (props) => {
         try{
             const res = await axios.post("http://localhost:3001/fetchUserGoal", uid);
             setGoal(res.data[0]);
-        } catch(err) {
-            throw(err);
+        } catch (err) {
+            navigate("/not-found");
         }
     } 
 
@@ -39,7 +40,7 @@ const Dashboard = (props) => {
             return formatRecipeData(res.data).totalCalories;
 
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -54,7 +55,7 @@ const Dashboard = (props) => {
             setMealIDs(mealIDs);
 
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -87,7 +88,7 @@ const Dashboard = (props) => {
         try{
             await axios.post("http://localhost:3001/deleteMeal", mealObj);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 

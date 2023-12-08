@@ -29,7 +29,7 @@ const EditRecipe = () => {
             setRecipeDescription(res.data[0].RecipeDescription);
 
         } catch (err) {
-            throw (err);
+            navigate("/not-found");
         }
     }
 
@@ -45,7 +45,7 @@ const EditRecipe = () => {
         try{
             await axios.post("http://localhost:3001/updateRecipe", recipe);
         } catch (err) {
-            throw (err)
+            navigate("/not-found");
         }
     }
 

@@ -1,10 +1,11 @@
 import { Box, Typography, Select, MenuItem, Button, FormControl } from "@mui/material";
 import { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { formatNumber } from "../utils/inputCheck";
 
 const EditFood = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const food = location.state.food;
     const meal = location.state.meal;
@@ -23,10 +24,9 @@ const EditFood = () => {
         };
 
         try{
-            const res = await axios.post("http://localhost:3001/editFood", MealID);
-            console.log(res);
+            await axios.post("http://localhost:3001/editFood", MealID);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 

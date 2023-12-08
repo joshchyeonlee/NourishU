@@ -45,7 +45,7 @@ const LogMeal = () => {
             navigate("/searchRecipes", {state:{meal: meal, from:"/logMeal", recipes:[]}});
 
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -54,8 +54,8 @@ const LogMeal = () => {
             setSelectedTextField(true);
             return;
         }
-        const datetime = date.toISOString().substring(0,10) + " " + time.format("h:m:s");
-        setDateTime(datetime);
+        const d = dayjs().format("YYYY-MM-DD hh:mm:ss");
+        setDateTime(d);
     }
 
     useEffect(() => {

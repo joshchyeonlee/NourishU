@@ -26,7 +26,7 @@ const EditRecipeSteps = () => {
 
             setRecipeSteps(steps);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 

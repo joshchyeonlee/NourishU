@@ -59,7 +59,7 @@ const UserInterests = () => {
       try {
         await axios.post("http://localhost:3001/createUserInterests", theInterests);
       } catch (err) {
-        throw (err);
+        navigate("/not-found");
       }
   }
     
@@ -87,7 +87,7 @@ const UserInterests = () => {
         })
         
     } catch (err) {
-        throw(err);
+      navigate("/not-found");
     }
 }
     return (

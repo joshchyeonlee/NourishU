@@ -6,13 +6,14 @@ import ListModal from "../components/ListModal";
 import BottomNav from "../components/BottomNav";
 import AchievementList from "../components/AchievementList";
 import AchievementModal from "../components/AchievementModal";
-import { Link, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuthUser } from 'react-auth-kit'
 import YourRecipesList from "../components/YourRecipesList";
 
 const Profile = ( props ) => {
     const auth = useAuthUser();
     const location = useLocation();
+    const navigate = useNavigate();
     const [userId, setUserId] = useState();
     const [isSelf, setIsSelf] = useState(true);
     const [userName, setUserName] = useState();
@@ -35,7 +36,7 @@ const Profile = ( props ) => {
             const res = await axios.post("http://localhost:3001/getUserInfo", uid)
             setUserName(res.data[0].UserName);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -48,7 +49,7 @@ const Profile = ( props ) => {
             setFollowingCount(res.data.length);
             setFollowing(res.data);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -61,7 +62,7 @@ const Profile = ( props ) => {
             setFollowerCount(res.data.length);
             setFollowers(res.data);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -73,7 +74,7 @@ const Profile = ( props ) => {
             const res = await axios.post("http://localhost:3001/getUserAchievements", uid);
             setAchievements(res.data);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -85,7 +86,7 @@ const Profile = ( props ) => {
             const res = await axios.post("http://localhost:3001/getUserCreatedRecipes", uid);
             setUserRecipes(res.data);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 

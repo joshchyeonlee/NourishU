@@ -24,11 +24,16 @@ const CreateRecipe = () => {
     const [recipeID, setRecipeID] = useState(-1);
 
     const fetchIngredients = async () => {
-        const res = await axios.get("http://localhost:3001/ingredients");
-        setIngredients(res.data);
+        try{
+            const res = await axios.get("http://localhost:3001/ingredients");
+            setIngredients(res.data);
+        } catch (err) {
+            navigate("/not-found");
+        }
     }
 
     const insertRecipe = async () => {
+        console.log("insertRecipe")
         const recipe = {
             UserID: userId,
             RDifficulty: difficultyValue,
@@ -37,11 +42,16 @@ const CreateRecipe = () => {
             RecipeDescription: recipeDescription,
             ServingSize: servingSize
         }
-        const res = await axios.post("http://localhost:3001/createRecipe", recipe);
-        setRecipeID(res.data.insertId);
+        try{
+            const res = await axios.post("http://localhost:3001/createRecipe", recipe);
+            setRecipeID(res.data.insertId);
+        } catch (err){
+            navigate("/not-found");
+        }
     }
 
     const handleCreate = () => {
+        console.log("create!")
         var isValid = true;
         if(recipeTitle.length === 0){
             setTitleErr(true);

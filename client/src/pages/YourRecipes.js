@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import YourRecipesList from "../components/YourRecipesList";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const YourRecipes = () => {
     const auth = useAuthUser();
+    const navigate = useNavigate();
     const [userId, setUserId] = useState(auth().values.userID);
     const [userRecipes, setUserRecipes] = useState([]);
 
@@ -19,7 +20,7 @@ const YourRecipes = () => {
             const res = await axios.post("http://localhost:3001/getUserCreatedRecipes", uid);
             setUserRecipes(res.data);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 

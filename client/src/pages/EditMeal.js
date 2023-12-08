@@ -1,5 +1,5 @@
 import { Box, Typography, TextField, IconButton, Button } from "@mui/material";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -9,6 +9,7 @@ import { formatString } from "../utils/inputCheck";
 
 const EditMeal = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [meal, setMeal] = useState(location.state.meal);
     const [recipes, setRecipes] = useState(location.state.recipes);
     const [mealName, setMealName] = useState(location.state.meal.MealTitle);
@@ -21,7 +22,7 @@ const EditMeal = () => {
         try{
             await axios.post("http://localhost:3001/removeRecipeFromMeal", RecipeID)
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -46,7 +47,7 @@ const EditMeal = () => {
             m.MealTitle = mealName;
             setMeal(m);
         } catch (err) {
-            throw (err);
+            navigate("/not-found");
         }
     }
 

@@ -4,12 +4,13 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import AddFoodModal from "../components/AddFoodModal";
 import { formatString } from "../utils/inputCheck";
 
 const SearchRecipes = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [prevPageData, setPrevPageData] = useState(location.state)
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
@@ -25,7 +26,7 @@ const SearchRecipes = () => {
             const res = await axios.post("http://localhost:3001/searchRecipes", searchQuery);
             setSearchResults(res.data);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 

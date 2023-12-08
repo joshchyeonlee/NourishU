@@ -22,10 +22,9 @@ const SetRecipeInstructions = () => {
             }
             
             try{
-                const res = await axios.post("http://localhost:3001/setRecipeInstruction", recipeStep)
-                console.log(res);
+                await axios.post("http://localhost:3001/setRecipeInstruction", recipeStep)
             } catch (err) {
-                throw(err);
+                navigate("/not-found");
             }
         }
     }

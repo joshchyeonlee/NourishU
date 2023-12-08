@@ -6,7 +6,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import formatRecipeData from "../utils/formatRecipeData";
 import NutrInfo from "../components/NutrInfo";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
 
 const ViewRecipe = () => {
@@ -16,6 +16,7 @@ const ViewRecipe = () => {
     const yellow = "#FDCA40";
     const orange = "#F78764";
 
+    const navigate = useNavigate();
     const auth = useAuthUser();
     const [isSelf, setIsSelf] = useState(false);
     const location = useLocation();
@@ -53,7 +54,7 @@ const ViewRecipe = () => {
 
             setNutrInfo(obj);
         } catch (err) {
-            throw (err);
+            navigate("/not-found");
         }
     }
 
@@ -65,7 +66,7 @@ const ViewRecipe = () => {
             const res = await axios.post("http://localhost:3001/getRecipeVitamins", rID);
             setVitamins(res.data);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -78,7 +79,7 @@ const ViewRecipe = () => {
             setReviews(res.data);
             parseReviewRatings(res.data);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -132,7 +133,7 @@ const ViewRecipe = () => {
             setUserReview("");
             setUserReviewLength(0);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -146,7 +147,7 @@ const ViewRecipe = () => {
             const res = await axios.post("http://localhost:3001/fetchRecipeSteps", RecipeID);
             setRecipeSteps(res.data);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 

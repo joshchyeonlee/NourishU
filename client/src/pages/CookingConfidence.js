@@ -68,8 +68,12 @@ const CookingConfidence = () => {
       CookingConfidence: value,
       UserPassword: hash
     }
-    const res = await axios.post("http://localhost:3001/createUser", user);
-    setUserID(res.data.insertId);
+    try{
+      const res = await axios.post("http://localhost:3001/createUser", user);
+      setUserID(res.data.insertId);
+    } catch (err) {
+      navigate("/not-found");
+    }
 }
 
   const marks = [{value: 1, label: "Not confident at all"}

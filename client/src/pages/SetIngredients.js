@@ -56,7 +56,11 @@ const SetIngredients = () => {
             IngredientID: val.ingredientID,
             Quantity: val.quantity,
         }
-        await axios.post("http://localhost:3001/setRecipeIngredient", ing);
+        try{
+            await axios.post("http://localhost:3001/setRecipeIngredient", ing);
+        } catch (err){
+            navigate("/not-found");
+        }
     }
 
     const handleContinue = () => {

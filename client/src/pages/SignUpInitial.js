@@ -3,12 +3,13 @@ import { Typography, TextField, Grid, Button, Box, IconButton } from '@mui/mater
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import { InputAdornment, InputLabel } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
 import { formatString } from "../utils/inputCheck";
 
 const SignUpInitial = () => {
+    const navigate = useNavigate();
     const [userNameTextField, setUserNameTextField] = useState("");
     const [userEmailTextField, setUserEmailTextField] = useState("");
     const [userPassTextField, setUserPassTextField] = useState("");
@@ -113,8 +114,7 @@ const SignUpInitial = () => {
     // Regex from: https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
     const checkUserEmail = (userEmailInput) => {
         const check = userEmailInput.toLowerCase()
-        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
+        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
         setUserEmailValid(check !== null && userEmailInput.length <= 50 && userEmailInput.length > 0);
     }
@@ -135,7 +135,7 @@ const SignUpInitial = () => {
                 setUserNameUnique(true)
             }
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -148,7 +148,7 @@ const SignUpInitial = () => {
             const res = await axios.post("http://localhost:3001/queryUserEmailExists", userEmail)
             setUserEmailUnique(res.data.length <= 0);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 

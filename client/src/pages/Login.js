@@ -7,11 +7,11 @@ import sha256 from 'js-sha256'
 import { formatString } from '../utils/inputCheck';
 
 const Login = () => {
-    const[emailInput, setEmailInput] = useState("")
-    const[passwordInput, setPasswordInput] = useState("")
-    const[isCredentialValid, setIsCredentialValid] = useState(false);
-    const[isButtonClicked, setIsButtonClicked] = useState(false)
-    const[userID, setUserID] = useState();
+    const [emailInput, setEmailInput] = useState("")
+    const [passwordInput, setPasswordInput] = useState("")
+    const [isCredentialValid, setIsCredentialValid] = useState(false);
+    const [isButtonClicked, setIsButtonClicked] = useState(false)
+    const [userID, setUserID] = useState();
     const navigate = useNavigate()
     const signIn = useSignIn();
 
@@ -23,7 +23,17 @@ const Login = () => {
         setPasswordInput(formatString(value))
     }
 
+    // Checks if email is in valid format
+    // Regex from: https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
+    const checkUserEmail = (email) => {
+        const check = email.toLowerCase()
+        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+        return (check !== null && email.length <= 50 && email.length > 0);
+    }
+
     const checkUserCredentials = async () => {
+        if(!checkUserEmail(emailInput)) return;
         const hash = sha256(passwordInput);
         const userCredentials = {
             Email: emailInput,
@@ -34,7 +44,7 @@ const Login = () => {
             setUserID(res.data[0].UserID);
             setIsCredentialValid(res.data.length > 0);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
