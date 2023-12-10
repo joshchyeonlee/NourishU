@@ -99,8 +99,8 @@ const Profile = ( props ) => {
         try{
             const res = await axios.post("http://localhost:3001/isFollowing", info);
             setIsFollowing(res.data);
-            console.log(res.data);
         } catch (err){
+            // leaving here on purpose since need to redirect to error page
             console.log(err);
         }
     }
@@ -111,9 +111,9 @@ const Profile = ( props ) => {
             ProfileID: userId,
         }
         try{
-            const res = await axios.post("http://localhost:3001/followUser", info);
-            console.log(res);
+            await axios.post("http://localhost:3001/followUser", info);
         } catch (err){
+            // leaving here on purpose since need to redirect to error page
             console.log(err);
         }
     }
@@ -124,9 +124,9 @@ const Profile = ( props ) => {
             ProfileID: userId,
         }
         try{
-            const res = await axios.post("http://localhost:3001/unfollowUser", info);
-            console.log(res);
+            await axios.post("http://localhost:3001/unfollowUser", info);
         } catch (err){
+            // leaving here on purpose since need to redirect to error page
             console.log(err);
         }
     }
@@ -139,18 +139,18 @@ const Profile = ( props ) => {
 
     useEffect(() => {
         if(props.userID){
-            console.log("shouldn't pass props here");
             setUserId(props.userID);
             return;
         }
         
         if (location.state && location.state.userID){
-            console.log("shouldn't pass state here");
             setUserId(location.state.userID);
+
+            //remove state from https://stackoverflow.com/questions/40099431/how-do-i-clear-location-state-in-react-router-on-page-reload
+            window.history.replaceState({}, document.title)
             return;
         }
 
-        console.log("should be here")
         setUserId(auth().values.userID)
     },[])
 
@@ -166,7 +166,6 @@ const Profile = ( props ) => {
 
     useEffect(() => {
         if( typeof userId === 'undefined' || userId === -1) return
-        console.log(userId);
         setIsSelf(userId === auth().values.userID)
         fetchUsers();
         fetchFollowingInformation();
