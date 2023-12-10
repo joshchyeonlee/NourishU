@@ -56,7 +56,17 @@ const macAndCheese_pasta = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, Ing
 VALUES(7, 15, 1);`;
 const macAndCheese_cheese = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
 VALUES(7, 10, 1);`;
+const strawBanSmoothie_strawberry = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
+VALUES(8, 11, 1);`;
+const strawBanSmoothie_banana = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
+VALUES(8, 12, 1);`;
+const strawBanSmoothie_milk = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
+VALUES(8, 14, 1);`;
+const strawBanSmoothie_yogurt = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
+VALUES(8, 24, 1);`;
 
-const data = [proteinShake_Powder, proteinShake_Banana, proteinShake_Milk, chili_ingr1, chili_ingr2, chili_ingr3, pasta_tomato, pasta_noodles, pasta_beef, tunaSand_bread, tunaSand_mayo, tunaSand_tuna, chickenStirFry_rice, chickenStirFry_chicken, chickenStirFry_sesameSeed, chickenStirFry_carrot, chickenStirFry_mushroom, chickenStirFry_redPepper, chickenStirFry_greenPepper, macAndCheese_pasta, macAndCheese_cheese];
+
+const data = [proteinShake_Powder, proteinShake_Banana, proteinShake_Milk, chili_ingr1, chili_ingr2, chili_ingr3, pasta_tomato, pasta_noodles, pasta_beef, tunaSand_bread, tunaSand_mayo, tunaSand_tuna, chickenStirFry_rice, chickenStirFry_chicken, chickenStirFry_sesameSeed, chickenStirFry_carrot, chickenStirFry_mushroom, chickenStirFry_redPepper, chickenStirFry_greenPepper, macAndCheese_pasta, macAndCheese_cheese,
+strawBanSmoothie_strawberry, strawBanSmoothie_banana, strawBanSmoothie_milk, strawBanSmoothie_yogurt];
 
 module.exports = { checkTable, createTable, data };
