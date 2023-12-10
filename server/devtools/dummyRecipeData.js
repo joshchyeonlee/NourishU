@@ -35,6 +35,10 @@ const recipe5 = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, 
 const recipe6 = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize) 
                 VALUES(4, 5, 30, "Chicken and Veggies Stir Fry", "Create a delicious dish with meat and veggies", 3);`;
 
-const data = [recipe1, recipe2, recipe3, recipe4, recipe5, recipe6];
+const recipe7 = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize) 
+VALUES(3, 2, 20, "Mac and Cheese", "Create a quick and easy on the go mac and cheese dish!", 1);`;
+
+
+const data = [recipe1, recipe2, recipe3, recipe4, recipe5, recipe6, recipe7];
 
 module.exports = { checkTable, createTable, data };
