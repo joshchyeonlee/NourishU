@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton, Rating, Card, CardContent, TextField, Divider, Button } from "@mui/material";
+import { Box, Typography, IconButton, Rating, Card, CardContent, TextField, Divider, Button, Modal, ListItemButton } from "@mui/material";
 import { useState, useEffect } from "react";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
@@ -6,8 +6,23 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import formatRecipeData from "../utils/formatRecipeData";
 import NutrInfo from "../components/NutrInfo";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useAuthUser } from "react-auth-kit";
+import Close from '@mui/icons-material/Close';
+
+const modalFormat = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    height: 500,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 5,
+};
 
 const ViewRecipe = () => {
     const blue = "#035E7B";
@@ -17,6 +32,7 @@ const ViewRecipe = () => {
     const orange = "#F78764";
 
     const auth = useAuthUser();
+    const navigate = useNavigate();
     const [isSelf, setIsSelf] = useState(false);
     const location = useLocation();
     const [prevPageState, setPrevPageState] = useState(location.state);
@@ -33,8 +49,8 @@ const ViewRecipe = () => {
     const [userReviewLength, setUserReviewLength] = useState(0);
     const [overallRating, setOverallRating] = useState(0);
     const [recipeSteps, setRecipeSteps] = useState([]);
-
     const [nutrInfo, setNutrInfo] = useState();
+    const [creator, setCreator] = useState();
 
     const fetchRecipe = async () => {
         const rID = {
@@ -42,16 +58,18 @@ const ViewRecipe = () => {
         }
 
         try{
-            const res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
-            console.log(res.data);
+            var res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
             setRecipeIngredients(res.data);
             setRecipeDifficulty(res.data[0].RDifficulty);
             setRecipeTitle(res.data[0].RecipeTitle);
             setRecipeDescription(res.data[0].RecipeDescription);
             setIsSelf(auth().values.userID === res.data[0].UserID);
-            const obj = formatRecipeData(res.data);
+            
+            const creator = {UserID: res.data[0].UserID};
+            res = await axios.post("http://localhost:3001/fetchRecipeCreator", creator);
+            creator.UserName = res.data[0].UserName;
+            setCreator(creator);
 
-            setNutrInfo(obj);
         } catch (err) {
             throw (err);
         }
@@ -150,6 +168,10 @@ const ViewRecipe = () => {
         }
     }
 
+    const handleCreatedByClick = () => {
+        navigate("/profile", {state: {userID: creator.UserID}})
+    }
+
     //remove useEffect if passing in recipe information from previous page
     useEffect(() => {
         fetchRecipe();
@@ -157,7 +179,6 @@ const ViewRecipe = () => {
         fetchReviews();
         fetchRecipeSteps();
     },[]);
-
 
     return(
         <div>
@@ -170,6 +191,9 @@ const ViewRecipe = () => {
             <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" paddingTop={3}>
                 <Typography paddingTop={4} variant="h5">{recipeTitle}</Typography>
                 <Typography padding={1} variant="caption">{recipeDescription}</Typography>
+                <ListItemButton onClick={handleCreatedByClick}>
+                    CreatedBy: {(!creator || creator === null) ? "" : creator.UserName}
+                </ListItemButton>
                 <Box display="flex" justifyContent="space-between" paddingTop={3} sx={{width:"30%"}}>
                     <Typography>Difficulty</Typography>
                     <Rating
