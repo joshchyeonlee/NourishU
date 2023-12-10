@@ -26,7 +26,13 @@ const chili_ingr2 = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, Ingredient
 VALUES(2, 8, 100);`;
 const chili_ingr3 = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
 VALUES(2, 10, 10);`;
+const pasta_tomato = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
+VALUES(3, 16, 1);`;
+const pasta_noodles = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
+VALUES(3, 15, 1);`;
+const pasta_beef = `INSERT INTO RECIPE_CONTAINS_INGREDIENT(RecipeID, IngredientID, AmountIngredient)
+VALUES(3, 4, 1);`;
 
-const data = [proteinShake_Powder, proteinShake_Banana, proteinShake_Milk, chili_ingr1, chili_ingr2, chili_ingr3];
+const data = [proteinShake_Powder, proteinShake_Banana, proteinShake_Milk, chili_ingr1, chili_ingr2, chili_ingr3, pasta_tomato, pasta_noodles, pasta_beef];
 
 module.exports = { checkTable, createTable, data };

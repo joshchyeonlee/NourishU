@@ -36,8 +36,10 @@ const strawberry = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, 
 const banana = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (12, "Banana", 2.07, 0.18, 0.08, 0.0, 1, 6, 0, '2023-11-20');`;
 const proteinPowder = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (13, "Protein Powder", 2.07, 18.05, 0.08, 0.0, 1, 150, 0, '2023-11-20');`
 const milk = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (14, "Milk", 3.58, 7.45, 0.83, 23.90, 0, 200, 0, '2023-11-20');`
+const pasta = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (15, "Pasta", 3.58, 7.45, 0.83, 23.90, 0, 200, 0, '2023-11-20');`
+const tomatoSauce = `INSERT INTO INGREDIENT(IngredientID, IngredientName, Carbs, Protein, SaturatedFats, UnsaturatedFats, IsPerServing, Calories, AdminID, DatePosted) VALUES (16, "Tomato Sauce", 3.58, 7.45, 0.83, 23.90, 0, 50, 0, '2023-11-20');`
 
-const data = [apple, bean, chicken, beef, salmon, shrimp, egg, rice, bread, cheese, strawberry, banana, proteinPowder, milk];
+const data = [apple, bean, chicken, beef, salmon, shrimp, egg, rice, bread, cheese, strawberry, banana, proteinPowder, milk, pasta, tomatoSauce];
 
 
 module.exports = { checkTable, createTable, data };

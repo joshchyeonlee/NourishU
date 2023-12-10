@@ -21,7 +21,8 @@ const mealcr3 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityCons
 const mealcr4 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(4, 1, 1);`;
 const mealcr5 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(5, 1, 1);`;
 const mealcr6 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(6, 3, 1);`;
+const mealcr7 = `INSERT INTO MEAL_CONTAINS_RECIPE(MealID, RecipeID, QuantityConsumed) VALUES(7, 4, 1);`;
 
-const data = [mealcr0, mealcr1, mealcr2, mealcr3, mealcr4, mealcr5, mealcr6];
+const data = [mealcr0, mealcr1, mealcr2, mealcr3, mealcr4, mealcr5, mealcr6, mealcr7];
 
 module.exports = { checkTable, createTable, data };
