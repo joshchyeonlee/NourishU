@@ -191,12 +191,9 @@ const ViewRecipe = () => {
             <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" paddingTop={3}>
                 <Typography paddingTop={4} variant="h5">{recipeTitle}</Typography>
                 <Typography padding={1} variant="caption">{recipeDescription}</Typography>
-                {
-                    isSelf? <></> :
-                    <ListItemButton onClick={handleCreatedByClick}>
-                        CreatedBy: {(!creator || creator === null) ? "" : creator.UserName}
-                    </ListItemButton>
-                }
+                <ListItemButton onClick={handleCreatedByClick}>
+                    CreatedBy: {(!creator || creator === null) ? "" : creator.UserName}
+                </ListItemButton>
                 <Box display="flex" justifyContent="space-between" paddingTop={3} sx={{width:"30%"}}>
                     <Typography>Difficulty</Typography>
                     <Rating
