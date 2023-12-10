@@ -23,7 +23,10 @@ const shrimp = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUE
 const bread = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(9, 100)`
 const milk = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(14, 200)`
 const mayo = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(18, 100)`
+const sesameSeeds = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(21, 100)`
+const carrot = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(22, 100)`
+const mushroom = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(23, 100)`
 
-const data = [chicken, beef, salmon, shrimp, bread, milk];
+const data = [chicken, beef, salmon, shrimp, bread, milk, mayo, sesameSeeds, carrot, mushroom];
 
 module.exports = { checkTable, createTable, data };
