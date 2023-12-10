@@ -22,6 +22,7 @@ const salmon = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUE
 const shrimp = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(6, 250)`
 const bread = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(9, 100)`
 const milk = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(14, 200)`
+const mayo = `INSERT INTO INGREDIENT_PER_100g(IngredientID, ServingSize) VALUES(18, 100)`
 
 const data = [chicken, beef, salmon, shrimp, bread, milk];
 

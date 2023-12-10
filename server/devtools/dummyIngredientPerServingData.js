@@ -26,9 +26,10 @@ const banana = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(
 const proteinPowder = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(13, 100)`
 const pasta = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(15, 100)`
 const tomatoSauce = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(16, 70)`
+const tuna = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(17, 30)`
 
 
 
-const data = [apple, bean, egg, rice, cheese, strawberry, banana, proteinPowder, pasta, tomatoSauce];
+const data = [apple, bean, egg, rice, cheese, strawberry, banana, proteinPowder, pasta, tomatoSauce, tuna];
 
 module.exports = { checkTable, createTable, data };

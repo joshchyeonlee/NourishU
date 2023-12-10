@@ -27,8 +27,11 @@ const recipe3 = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, 
                 VALUES(3, 5, 60, "Steak", "Create hearty steak with a mushroom wine reduction", 2);`; 
 
 const recipe4 = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize) 
-                VALUES(2, 3, 30, "Pasta", "Create a classic delicious pasta dish with tomato sauce, pasta, and cheese", 1);`; 
+                VALUES(2, 3, 30, "Pasta", "Create a classic delicious pasta dish with tomato sauce, pasta, and cheese", 1);`;
 
-const data = [recipe1, recipe2, recipe3, recipe4];
+const recipe5 = `INSERT INTO RECIPE(UserID, RDifficulty, CookTime, RecipeTitle, RecipeDescription, ServingSize) 
+                VALUES(4, 2, 30, "Tuna Sandwich", "Create a quick and easy tuna sandwich!", 1);`;
+
+const data = [recipe1, recipe2, recipe3, recipe4, recipe5];
 
 module.exports = { checkTable, createTable, data };
