@@ -850,7 +850,7 @@ app.post('/removeAllSteps', (req, res) => {
 //assuming this might have to change???
 app.post('/createUserInterests', (req, res) => {
     const userID = Number(req.body.UserID);
-    const userInterests = req.body.UserInterests;
+    const userInterests = req.body.InterestID;
     const values = [userID, userInterests];
 
     if(!isValidNumber(userID)){
@@ -858,8 +858,7 @@ app.post('/createUserInterests', (req, res) => {
         return;
     }
 
-    let sql = `INSERT INTO USER_INTERESTS(UserID, UserInterests)
-    VALUES (?);`;
+    let sql = `INSERT INTO USER_INTERESTS(UserID, InterestID) VALUES (?);`;
     db.query(sql, [values], (err, result) => {
         if(err){
             res.status(500);
@@ -1055,7 +1054,6 @@ app.post("/assignCreateAccountAchievement", (req, res) => {
 
 app.post("/isFirstMeal", (req, res) => {
     const UserID = req.body.UserID;
-    // let sql = `SELECT COUNT(MealID) AS NumMeals FROM MEAL WHERE UserID = ?;`;
     let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
     AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First meal logged");`;
     db.query(sql, UserID, (err, result) => {
@@ -1231,6 +1229,16 @@ app.post('/unfollowUser', (req, res) => {
     db.query(sql, [UserID, ProfileID], (err, result) => {
         if(err){
             console.log(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/interests', (req, res) => {
+    let sql = `SELECT * FROM INTERESTS`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
         }
         res.send(result);
     })

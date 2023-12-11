@@ -24,6 +24,7 @@ const dropReviewTable = `DROP TABLE IF EXISTS REVIEW;`;
 const dropAdminReviewTable = `DROP TABLE IF EXISTS ADMIN_REVIEW;`;
 const dropRecipeIngrTable = `DROP TABLE IF EXISTS RECIPE_CONTAINS_INGREDIENT;`;
 const dropRecipeStepTable = `DROP TABLE IF EXISTS RECIPE_STEP;`;
+const dropInterestTable = `DROP TABLE IF EXISTS INTERESTS;`;
 //add more here
 
 const dropForeignKeyCheck = `SET FOREIGN_KEY_CHECKS = 0;`;
@@ -48,6 +49,7 @@ const review = require(`./dummyReviewData`);
 const adminReview = require('./dummyAdminReviewData');
 const recipeIngr = require('./dummyRecipeContainsIngredientData');
 const recipeStep = require('./dummyRecipeStep');
+const interest = require('./dummyInterests');
 //import here
 
 
@@ -107,7 +109,6 @@ const runQueries = async () => {
     const dropFollowsTablePromise = [query(dropFollowsTable)];
     const dropAchievementTablePromise = [query(dropAchievementTable)];
     const dropAchievementsEarnedTablePromise = [query(dropAchievementsEarnedTable)];
-    const dropUserInterestsTablePromise = [query(dropUserInterestsTable)];
     const dropGoalTablePromise = [query(dropGoalTable)];
     const dropIngredientTablePromise = [query(dropIngredientTable)];
     const dropVitaminsTablePromise = [query(dropVitaminsTable)];
@@ -121,14 +122,17 @@ const runQueries = async () => {
     const dropAdminReviewTablePromise = [query(dropAdminReviewTable)];
     const dropRecipeIngrtTablePromise = [query(dropRecipeIngrTable)];
     const dropRecipeStepTablePromise = [query(dropRecipeStepTable)];
+    const dropInterestTablePromise = [query(dropInterestTable)];
+    const dropUserInterestsTablePromise = [query(dropUserInterestsTable)];
 
     //add to end of this
     await Promise.all(dropUserTablePromise, dropFollowsTablePromise, dropAchievementTablePromise,
-        dropAchievementsEarnedTablePromise, dropUserInterestsTablePromise, dropGoalTablePromise,
+        dropAchievementsEarnedTablePromise, dropGoalTablePromise,
         dropIngredientTablePromise, dropVitaminsTablePromise, dropIngredientPerServingTablePromise,
         dropIngredientPer100gPromise, dropMealTablePromise, dropRecipeTablePromise,
         dropMealContainsRecipePromise,dropAdminTablePromise, dropReviewTablePromise,
-        dropAdminReviewTablePromise, dropRecipeIngrtTablePromise, dropRecipeStepTablePromise);
+        dropAdminReviewTablePromise, dropRecipeIngrtTablePromise, dropRecipeStepTablePromise, dropInterestTablePromise, 
+        dropUserInterestsTablePromise);
 
     const setForeignKeyCheckPromise = [query(setForeignKeyCheck)];
     await Promise.all(setForeignKeyCheckPromise);
@@ -138,7 +142,6 @@ const runQueries = async () => {
     const followsPromise = [checkTable(followers.checkTable, followers.createTable, followers.data)];
     const achievementPromise =[checkTable(achievement.checkTable, achievement.createTable, achievement.data)];
     const achievementsEarnedPromise = [checkTable(achievementsEarned.checkTable, achievementsEarned.createTable, achievementsEarned.data)];
-    const userInterestsPromise = [checkTable(userInterests.checkTable, userInterests.createTable, userInterests.data)];
     const goalPromise = [checkTable(goal.checkTable, goal.createTable, goal.data)];
     const ingredientPromise = [checkTable(ingredient.checkTable, ingredient.createTable, ingredient.data)];
     const vitaminPromise = [checkTable(vitamins.checkTable, vitamins.createTable, vitamins.data)];
@@ -152,11 +155,14 @@ const runQueries = async () => {
     const adminReviewPromise = [checkTable(adminReview.checkTable, adminReview.createTable, adminReview.data)];
     const recipeIngrPromise = [checkTable(recipeIngr.checkTable, recipeIngr.createTable, recipeIngr.data)];
     const recipeStepPromise = [checkTable(recipeStep.checkTable, recipeStep.createTable, recipeStep.data)];
+    const interestPromise = [checkTable(interest.checkTable, interest.createTable, interest.data)];
+    const userInterestsPromise = [checkTable(userInterests.checkTable, userInterests.createTable, userInterests.data)];
     
-    await Promise.all(userPromise, followsPromise, achievementPromise, achievementsEarnedPromise,
-        userInterestsPromise, goalPromise, ingredientPromise, vitaminPromise,
+    await Promise.all(userPromise, followsPromise, achievementPromise, achievementsEarnedPromise, 
+        goalPromise, ingredientPromise, vitaminPromise,
         ingredientPerServingPromise, ingredientPer100gPromise, mealPromise, recipePromise,
-        mealContainsRecipePromise,adminPromise, reviewPromise, adminReviewPromise, recipeIngrPromise, recipeStepPromise);
+        mealContainsRecipePromise,adminPromise, reviewPromise, adminReviewPromise, recipeIngrPromise, recipeStepPromise,
+        interestPromise, userInterestsPromise);
 
     db.end((err) => {
         if(err){

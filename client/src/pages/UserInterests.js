@@ -1,5 +1,5 @@
 import { Typography, Button, Box, Grid} from "@mui/material";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -10,6 +10,7 @@ import Chip from '@mui/material/Chip';
 import axios from "axios";
 import { useSignIn } from 'react-auth-kit';
 import sha256 from 'js-sha256'
+import FormHelperText from '@mui/material/FormHelperText';
 
 const UserInterests = () => {
 
@@ -18,23 +19,19 @@ const UserInterests = () => {
     const [userEmail, setUserEmail] = useState(location.state.UserEmail);
     const [userPass, setUserPass] = useState(location.state.UserPass);
     const [userID, setUserID] = useState(location.state.user);
-    const [userInterest, setUserInterest] = useState("");
+    const [userInterest, setUserInterest] = useState([]);
+    const [interestsList, setInterestsList] = useState([]);
     const [userNotReady, setUserNotReady] = useState(true);
     const signIn = useSignIn();
 
-    const interestsList = [
-        'Reading',
-        'Video Games',
-        'Traveling',
-        'Cooking',
-        'Sports',
-        'Programming',
-        'Dancing',
-        'Fitness',
-        'Fashion',
-        'Technology',
-        'Movies/Tv Shows',
-      ];
+    const fetchInterests = async () => {
+      try{
+        const res = await axios.get("http://localhost:3001/interests");
+        setInterestsList(res.data);
+      } catch (err) {
+        navigate("/not-found");
+      }
+  }
 
     const handleInterestSelected = (interestInput) => {
         setUserInterest(interestInput)
@@ -42,7 +39,7 @@ const UserInterests = () => {
     }
 
     const checkInterest = (interestInput) => {
-        if (interestInput === "") {
+        if (interestInput.length === 0) {
             setUserNotReady(true);
         }
         
@@ -52,20 +49,23 @@ const UserInterests = () => {
     }
 
     const insertUserInterest = async () => {
-      const theInterests = {
-        UserID: userID,
-        UserInterests: userInterest
-      }
       try {
-        await axios.post("http://localhost:3001/createUserInterests", theInterests);
+          // Use Promise.all to wait for all asynchronous calls to complete
+          await Promise.all(userInterest.map(async (interest) => {
+              const theInterest = {
+                  UserID: userID,
+                  InterestID: interest.InterestID, 
+              };
+  
+              await axios.post("http://localhost:3001/createUserInterests", theInterest);
+          }));
       } catch (err) {
         navigate("/not-found");
       }
-  }
-    
+  };
 
   const handleContinue = async () => {
-    insertUserInterest();
+    await insertUserInterest();
     await authenticateUser();
     navigate("/dashboard", {state:{UserID: userID}});
   }
@@ -90,6 +90,11 @@ const UserInterests = () => {
       navigate("/not-found");
     }
 }
+
+useEffect(() => {
+  fetchInterests();
+}, []);
+
     return (
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
         <Box padding={8}>
@@ -97,22 +102,29 @@ const UserInterests = () => {
         </Box>
   
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="demo-multiple-chip-label">What is your top interest?</InputLabel>
+          <InputLabel id="demo-multiple-chip-label">What are your interests?</InputLabel>
           <Select
-            labelId="What is your top interest?"
-            id="What is your top interest?"
+            labelId="What are your interests?"
+            id="What are your interests?"
+            multiple
+            value = {userInterest}
             onChange={(e) => handleInterestSelected(e.target.value)}
-            input={<OutlinedInput id="What is your top interest?" label="What is your top interest?" />}
+            input={<OutlinedInput id="What are your interests?" label="What are your interests?" />}
             renderValue={(selected) => (
-              <Chip key={selected} label={selected} />
-            )}
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value.InterestID} label={value.InterestName} />
+              ))}
+            </Box>
+          )}
           >
             {interestsList.map((name) => (
-              <MenuItem key={name} value={name}>
-                {name}
+              <MenuItem key={name.InterestID} value={name}>
+                {name.InterestName}
               </MenuItem>
             ))}
           </Select>
+          <FormHelperText>At least one interest must be selected!</FormHelperText>
         </FormControl>
 
         <Grid item style={{ marginTop: '10px' }}>

@@ -9,32 +9,27 @@ LIMIT 1;`;
 
 const createTable=`
 CREATE TABLE USER_INTERESTS (
-UserID		        INT			    NOT NULL,
-UserInterests		VARCHAR(50) 	NOT NULL,
-PRIMARY KEY(UserID),
-FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE);`;
+UserID		    INT     NOT NULL,
+InterestID		INT 	NOT NULL,
+PRIMARY KEY(UserID, InterestID),
+FOREIGN KEY(UserID) REFERENCES USER(UserID) ON UPDATE CASCADE,
+FOREIGN KEY(InterestID) REFERENCES INTERESTS(InterestID) ON UPDATE CASCADE);`;
 
 const user0Interest0 = `
-INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (1, "Italian cuisine");`
+INSERT INTO USER_INTERESTS (UserID, InterestID)
+VALUES (1, 0);`
 const user1Interest0 = `
-INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (2, "Brunch items");`
+INSERT INTO USER_INTERESTS (UserID, InterestID)
+VALUES (2, 5);`
 const user2Interest0 = `
-INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (3, "Cheese");`
+INSERT INTO USER_INTERESTS (UserID, InterestID)
+VALUES (3, 7);`
 const user3Interest0 = `
-INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (4, "Gourmet Burgers");`
+INSERT INTO USER_INTERESTS (UserID, InterestID)
+VALUES (4, 4);`
 const user4Interest0 = `
-INSERT INTO USER_INTERESTS (UserID, userInterests)
-VALUES (5, "Tofu recipes");`
-// const user0Interest1 = `
-// INSERT INTO USER_INTERESTS (UserID, userInterests)
-// VALUES (0, "did I mention beans??");`
-// const user0Interest2 = `
-// INSERT INTO USER_INTERESTS (UserID, userInterests)
-// VALUES (0, "o and beans");`
+INSERT INTO USER_INTERESTS (UserID, InterestID)
+VALUES (5, 10);`
 
 const data = [user0Interest0, user1Interest0, user2Interest0, user3Interest0, user4Interest0];
 
