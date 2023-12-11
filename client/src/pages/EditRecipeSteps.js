@@ -47,6 +47,7 @@ const EditRecipeSteps = () => {
             try{
                 await axios.post("http://localhost:3001/setRecipeInstruction", step);
             } catch (err) {
+                console.log("failed FE");
                 throw(err);
             }
         }
