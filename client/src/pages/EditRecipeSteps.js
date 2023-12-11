@@ -4,6 +4,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { formatString } from "../utils/inputCheck";
 import axios from "axios";
 
 const EditRecipeSteps = () => {
@@ -25,7 +26,7 @@ const EditRecipeSteps = () => {
 
             setRecipeSteps(steps);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -46,6 +47,7 @@ const EditRecipeSteps = () => {
             try{
                 await axios.post("http://localhost:3001/setRecipeInstruction", step);
             } catch (err) {
+                console.log("failed FE");
                 throw(err);
             }
         }
@@ -65,7 +67,7 @@ const EditRecipeSteps = () => {
     const handleChange = (e, i) => {
         const { value, instruction } = e.target;
         const newState = [...recipeSteps];
-        newState[i] = value;
+        newState[i] = formatString(value, 255);
         setRecipeSteps(newState);
     }
 
@@ -108,9 +110,11 @@ const EditRecipeSteps = () => {
                                         <TextField
                                             value={recipeSteps[key]}
                                             error={recipeSteps[key].length === 0}
+                                            inputProps= {{maxLength: 255}}
                                             helperText={(recipeSteps[key].length === 0) ? "Cannot be blank" : ""}
                                             sx={{width:"90%"}}
                                             onChange={(e) => handleChange(e, key)}/>
+                                            
                                         <Box display="flex">
                                             <IconButton onClick={() => handleDelete(key)}>
                                                 <DeleteIcon/>

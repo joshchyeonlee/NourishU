@@ -11,7 +11,7 @@ const AchievementList = (props) => {
     else if(props.val.AchievementID === 2) return <AssignmentTurnedInIcon/>
     else if(props.val.AchievementID === 3) return <PostAddIcon/>
     else if(props.val.AchievementID === 4) return <PlaylistRemoveIcon/>
-    else if(props.val.AchievementID === 4) return <PlaylistAddIcon/>
+    else if(props.val.AchievementID === 5) return <PlaylistAddIcon/>
 }
 
 export default AchievementList;

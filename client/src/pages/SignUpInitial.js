@@ -3,11 +3,13 @@ import { Typography, TextField, Grid, Button, Box, IconButton } from '@mui/mater
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import { InputAdornment, InputLabel } from '@mui/material';
 import ErrorIcon from '@mui/icons-material/Error';
+import { formatString } from "../utils/inputCheck";
 
 const SignUpInitial = () => {
+    const navigate = useNavigate();
     const [userNameTextField, setUserNameTextField] = useState("");
     const [userEmailTextField, setUserEmailTextField] = useState("");
     const [userPassTextField, setUserPassTextField] = useState("");
@@ -15,33 +17,44 @@ const SignUpInitial = () => {
     const [isPasswordMatch, setIsPasswordMatch] = useState(false);
     const [isUserNameValid, setUserNameValid] = useState(false);
     const [isUserEmailValid, setUserEmailValid] = useState(false);
-
     const [enteredUserNameTextField, setEnteredUserNameTextField] = useState(false);
     const [enteredUserEmailTextField, setEnteredUserEmailTextField] = useState(false);
-
     const [userNameUnique, setUserNameUnique] = useState(true);
     const [userEmailUnique, setUserEmailUnique] = useState(true);
-
     const [isPasswordValid, setPasswordValid] = useState(false)
     const [isConfirmPasswordValid, setConfirmPasswordValid] = useState(false)
 
     // Stores user name and performs checks
     const storeUserNameInput = (typedUserName) => {
-        setUserNameTextField(typedUserName)
-        checkUserName(typedUserName)
+        const formatName = formatString(typedUserName, 25)
+        setUserNameTextField(formatName)
+        checkUserName(formatName)
         setEnteredUserNameTextField(true)
-        queryUserUnique(typedUserName)
+        if(typedUserName === "") return;
+        
+        const regex = /^[A-Za-z0-9]+$/
+        const parsed = typedUserName.match(regex);
+
+        if(parsed === null){
+            setUserNameValid(false);
+            return;
+        }
+
+        queryUserUnique(formatName)
     }
 
     // Stores user email and performs checks
     const storeUserEmailInput = (typedUserEmail) => {
+        const formatEmail = formatString(typedUserEmail, 50)
         setUserEmailTextField(typedUserEmail)
-        checkUserEmail(typedUserEmail)
+        const isValid = checkUserEmail(formatEmail)
         setEnteredUserEmailTextField(true)
-        queryUserEmailUnique(typedUserEmail)
+        if(typedUserEmail === "" || !isValid) return;
+        queryUserEmailUnique(formatEmail)
     }
 
     // stores user password and performs checks
+    // will be hashed using sha256, will always end up being length 64 in BE/DB
     const storeUserPassInput = (typedUserPass) => {
         checkPassValid(typedUserPass)
         setUserPassTextField(typedUserPass)
@@ -73,10 +86,7 @@ const SignUpInitial = () => {
     const checkPassValid = (userPassInput) => {
         if (userPassInput.length < 0 || userPassInput === "") {
             setPasswordValid(false)
-            return;
-        }
-
-        else {
+        } else {
             setPasswordValid(true)
         }
     }
@@ -84,23 +94,16 @@ const SignUpInitial = () => {
     const checkConfirmPassValid = (userConfirmPassInput) => {
         if (userConfirmPassInput.length < 0 || userConfirmPassInput === "") {
             setConfirmPasswordValid(false)
-            return;
-        }
-
-        else {
+        } else {
             setConfirmPasswordValid(true)
         }
     }
 
     // Checks if username is of valid input
     const checkUserName = (userNameInput) => {
-
         if (userNameInput.length > 3 && userNameInput.length <= 25) {
             setUserNameValid(true)
-            return;
-        }
-
-        else {
+        } else {
             setUserNameValid(false)
         }
     }
@@ -108,36 +111,30 @@ const SignUpInitial = () => {
     // Checks if email is in valid format
     // Regex from: https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
     const checkUserEmail = (userEmailInput) => {
-        const check = userEmailInput.toLowerCase()
-        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
+        const check = userEmailInput.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
-        if (check === null || userEmailInput.length > 50) {
-            setUserEmailValid(false)
-            return;
-        }
-        else {
-            setUserEmailValid(true)
+        if(check !== null && userEmailInput.length <= 50 && userEmailInput.length > 0){
+            setUserEmailValid(true);
+            return true;
+        } else {
+            setUserEmailValid(false);
+            return false;
         }
     }
 
-    // Checks if username already exists in the DB (must be unique)
     const queryUserUnique = async (userNameInput) => {
         const userName = {
             UserName: userNameInput,
         }
         try{
             const res = await axios.post("http://localhost:3001/queryUserNameExists", userName)
-
             if (res.data.length > 0) {
                 setUserNameUnique(false)
-            }
-
-            else {
+            } else {
                 setUserNameUnique(true)
             }
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -148,16 +145,9 @@ const SignUpInitial = () => {
         }
         try{
             const res = await axios.post("http://localhost:3001/queryUserEmailExists", userEmail)
-
-            if (res.data.length > 0) {
-                setUserEmailUnique(false)
-            }
-
-            else {
-                setUserEmailUnique(true)
-            }
+            setUserEmailUnique(res.data.length <= 0);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -180,7 +170,7 @@ const SignUpInitial = () => {
                 <Grid item>
                     <TextField id="outlined" label="User Name" variant="outlined" sx={{ m: 1, width: 350 }} inputProps={{maxLength: 25}}onChange = {(e) => {
                         storeUserNameInput(e.target.value)
-                    }} error = {(!isUserNameValid) && (enteredUserNameTextField)} helperText = {(isUserNameValid) || (!enteredUserNameTextField)? "" : "Username must be in between 3 to 25 characters!"}
+                    }} error = {(!isUserNameValid) && (enteredUserNameTextField)} helperText = {(isUserNameValid) || (!enteredUserNameTextField)? "" : "Username must be in between 3 to 25 characters with no special characters"}
                     InputProps={{
                         endAdornment: userNameUnique ? null : (
                           <InputAdornment position="end">

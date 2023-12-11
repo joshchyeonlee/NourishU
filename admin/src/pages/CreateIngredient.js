@@ -154,6 +154,10 @@ const CreateIngredient = () => {
         
     }, [ingredientID])
 
+    const handleSnackbarClose = () => {
+        setOpen(false);
+    }
+
     return (
         <Container>
             <Box display="flex" justifyContent="center" padding={2} flexDirection="column" alignItems="center">
@@ -262,7 +266,7 @@ const CreateIngredient = () => {
                     </Box>
                 </Box>
                 <Box display="flex" justifyContent="center" sx={{ marginTop: 2 }}>
-                    <Snackbar open={open}>
+                    <Snackbar open={open} autoHideDuration={1500} onClose={handleSnackbarClose}>
                         <Alert severity="success">You have successfully created an ingredient!</Alert>
                     </Snackbar>
                 </Box>
