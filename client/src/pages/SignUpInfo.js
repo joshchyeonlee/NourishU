@@ -182,7 +182,6 @@ const SignUpInfo = () => {
                 onChange = {(e) => {handleUserDietDescription(e.target.value)}}
                 error = {(!userDietDescSize)} helperText = {(userDietDescSize)? "" : "Description is blank or TOO long!" }/>
                 
-
                 <Grid item style={{ marginTop: '10px' }}>
                     <Button variant="contained" size="small" disabled={userDone || !userDietDescSize}
                     component = {Link}

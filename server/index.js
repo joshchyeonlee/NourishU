@@ -13,7 +13,7 @@ const isValidNumber = (val) => {
 }
 
 const isValidString = (val) => {
-    const regex = /^[A-Za-z0-9]+$/
+    const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]*$/
     return val.match(regex);
 }
 
@@ -800,7 +800,7 @@ app.post('/createUser', (req, res) => {
     if(!isValidString(userN) || !isValidEmail(userEm) || !isValidNumber(userHt) || !isValidNumber(userWt)
     || !isValidNumber(userAg) || !isValidString(userDt) || !isValidString(userDtDes) || !isValidNumber(userCkConf)) {
         res.status(500).send();
-        return;    
+        return;
     }
 
     let sql = `INSERT INTO USER(UserName, UserEmail, UserBirthdate, UserHeight, UserWeight, UserAge, DietName, DietDescription, CookingConfidence, UserPassword)
