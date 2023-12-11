@@ -1,4 +1,4 @@
-import { Typography, Box, Slider, Button, IconButton } from "@mui/material";
+import { Typography, Box, Slider, Button, IconButton, Snackbar } from "@mui/material";
 import { useState, useEffect } from "react";
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
@@ -7,6 +7,7 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import dayjs from "dayjs";
 
 const ConfidenceIcon = (props) => {
   //scale based off of 
@@ -19,22 +20,11 @@ const ConfidenceIcon = (props) => {
 }
 
 const CookingConfidence = () => {
-
   const navigate = useNavigate();
   const location = useLocation();
-  const [userName, setUserName] = useState(location.state.UserName);
-  const [userEmail, setUserEmail] = useState(location.state.UserEmail);
-  const [userPass, setUserPass] = useState(location.state.UserPass);
-  const [userBirthDate, setUserBirthDate] = useState(location.state.UserBirthDate);
-  const [userHeight, setUserHeight] = useState(location.state.UserHeight);
-  const [userWeight, setUserWeight] = useState(location.state.UserWeight);
-  const [userDiet, setUserDiet] = useState(location.state.UserDiet);
-  const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
-  const [userAge, setUserAge] = useState(location.state.UserAge);
   const [userCookingConf, setUserCookingConf] = useState(-1);
-
+  const [isAchievementOpen, setIsAchievementOpen] = useState();
   const [userID, setUserID] = useState(-1);
-
   const [value, setValue] = useState(3);
 
   const blue = "#035E7B";
@@ -58,29 +48,56 @@ const CookingConfidence = () => {
 
   const insertUser = async () => {
     const user = {
-      UserName: userName,
-      UserEmail: userEmail,
-      UserBirthdate: userBirthDate,
-      UserHeight: userHeight,
-      UserWeight: userWeight,
-      UserAge: userAge,
-      DietName: userDiet,
-      DietDescription: userDietDescription,
+      UserName:location.state.UserName,
+      UserEmail: location.state.UserEmail,
+      UserBirthdate: location.state.UserBirthDate,
+      UserHeight: location.state.UserHeight,
+      UserWeight: location.state.UserWeight,
+      UserAge: location.state.UserAge,
+      DietName: location.state.UserDiet,
+      DietDescription: location.state.UserDietDescription,
       CookingConfidence: userCookingConf,
-      UserPassword: userPass
+      UserPassword: location.state.UserPass
     }
     const res = await axios.post("http://localhost:3001/createUser", user);
     setUserID(res.data.insertId);
-}
+  }
+
+  const assignAchievement = async () => {
+    const t = dayjs().format("YYYY-MM-DD hh:mm:ss");
+    const UID = {
+      UserID: userID,
+      Time: t,
+    }
+    try{
+      await axios.post("http://localhost:3001/assignCreateAccountAchievement", UID);
+    } catch (err) {
+      throw(err)
+    }
+  }
+
+  const handleAchievementClose = (event, reason) => {
+    if(reason === 'clickaway') return;
+    setIsAchievementOpen(false);
+  }
 
   const marks = [{value: 1, label: "Not confident at all"}
                 ,{value: 5, label: "Extremely confident"}];
 
   useEffect(() => {
-      if (userID !== -1) navigate("/signup-userinterests", {state: {user: userID, UserEmail: userEmail, UserPass: userPass}});
-      }, [userID, userEmail, userPass])
+    if(userID !== -1){
+      assignAchievement();
+      setIsAchievementOpen(true);
+    }
+  }, [userID])
+    
+  useEffect(() => {
+    if(isAchievementOpen === false) navigate("/signup-userinterests", {state: {user: userID, UserEmail: location.state.UserEmail, UserPass: location.state.UserPass}});
+  }, [isAchievementOpen])
 
   return (
+    <div>
+      <Snackbar open={isAchievementOpen} autoHideDuration={1500} onClose={handleAchievementClose} message="Achievement Unlocked! New Account Created"/>
       <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
         <Box padding={8}>
           <Typography variant="h4">How Confident are you with cooking?</Typography>
@@ -109,6 +126,7 @@ const CookingConfidence = () => {
           disabled = {userCookingConf == -1}>Create my account!</Button>
         </Box>
     </Box>
+    </div>
   );
 };
 

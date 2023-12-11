@@ -765,6 +765,156 @@ app.post('/checkUserCredentials', (req, res) => {
 
 })
 
+app.post("/assignCreateAccountAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "Account Created"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/isFirstMeal", (req, res) => {
+    const UserID = req.body.UserID;
+    // let sql = `SELECT COUNT(MealID) AS NumMeals FROM MEAL WHERE UserID = ?;`;
+    let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
+    AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First meal logged");`;
+    db.query(sql, UserID, (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result[0].AchievementCount <= 0);
+    })
+})
+
+app.post("/assignFirstMealAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First meal logged"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/isFirstGoal", (req, res) => {
+    const UserID = req.body.UserID;
+    let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
+    AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First goal completed");`;
+    db.query(sql, UserID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result[0].AchievementCount <= 0);
+    })
+})
+
+app.post("/assignGoalAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First goal completed"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/isFirstRecipe", (req, res) => {
+    const UserID = req.body.UserID;
+    let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
+    AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Recipe Created");`;
+    db.query(sql, UserID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result[0].AchievementCount <= 0);
+    })
+})
+
+app.post("/assignFirstRecipeAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Recipe Created"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+
+app.post("/isFirstReview", (req, res) => {
+    const UserID = req.body.UserID;
+    let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
+    AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Review Created");`;
+    db.query(sql, UserID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result[0].AchievementCount <= 0);
+    })
+})
+
+app.post("/assignFirstReviewAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Review Created"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+app.post("/isFirstRecipe", (req, res) => {
+    const UserID = req.body.UserID;
+    let sql = `SELECT COUNT(AchievementID) AS AchievementCount FROM ACHIEVEMENTS_EARNED WHERE UserID = ? AND
+    AchievementID = (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Recipe Created");`;
+    db.query(sql, UserID, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result[0].AchievementCount <= 0);
+    })
+})
+
+app.post("/assignFirstRecipeAchievement", (req, res) => {
+    const UserID = req.body.UserID;
+    const Time = req.body.Time;
+    const value = [UserID, Time];
+    let sql = `INSERT INTO ACHIEVEMENTS_EARNED(UserID, TimeEarned, AchievementID)
+                VALUES(?,
+                    (SELECT a.AchievementID FROM ACHIEVEMENT as a WHERE a.Name = "First Recipe Created"));`;
+    db.query(sql, [value], (err, result) => {
+        if(err){
+            throw (err);
+        }
+        res.send(result);
+    })
+})
+
 app.post('/fetchRecipeCreator', (req, res) => {
     const CreatorID = req.body.UserID;
     let sql = `SELECT UserName FROM USER WHERE UserID = ?`;
