@@ -1188,6 +1188,54 @@ app.post("/assignFirstRecipeAchievement", (req, res) => {
     })
 })
 
+app.post('/fetchRecipeCreator', (req, res) => {
+    const CreatorID = req.body.UserID;
+    let sql = `SELECT UserName FROM USER WHERE UserID = ?`;
+    db.query(sql, CreatorID, (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/isFollowing', (req, res) => {
+    const UserID = req.body.UserID;
+    const ProfileID = req.body.ProfileID;
+    let sql = `SELECT * FROM FOLLOWS WHERE FollowerUserID = ? AND FolloweeUserID = ?`;
+    db.query(sql, [UserID, ProfileID], (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        res.send(result.length > 0);
+    })
+})
+
+app.post('/followUser', (req, res) => {
+    const UserID = req.body.UserID;
+    const ProfileID = req.body.ProfileID;
+    const values = [UserID, ProfileID];
+    let sql = `INSERT INTO FOLLOWS(FollowerUserID, FolloweeUserID) VALUES (?);`;
+    db.query(sql, [values], (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/unfollowUser', (req, res) => {
+    const UserID = req.body.UserID;
+    const ProfileID = req.body.ProfileID;
+    let sql = `DELETE FROM FOLLOWS WHERE FollowerUserID = ? AND FolloweeUserID = ?;`;
+    db.query(sql, [UserID, ProfileID], (err, result) => {
+        if(err){
+            console.log(err);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
