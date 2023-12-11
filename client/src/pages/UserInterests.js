@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import axios from "axios";
 import { useSignIn } from 'react-auth-kit';
+import sha256 from 'js-sha256'
 import FormHelperText from '@mui/material/FormHelperText';
 
 const UserInterests = () => {
@@ -17,17 +18,19 @@ const UserInterests = () => {
     const location = useLocation();
     const [userEmail, setUserEmail] = useState(location.state.UserEmail);
     const [userPass, setUserPass] = useState(location.state.UserPass);
-
     const [userID, setUserID] = useState(location.state.user);
     const [userInterest, setUserInterest] = useState([]);
     const [interestsList, setInterestsList] = useState([]);
-
     const [userNotReady, setUserNotReady] = useState(true);
     const signIn = useSignIn();
 
     const fetchInterests = async () => {
-      const res = await axios.get("http://localhost:3001/interests");
-      setInterestsList(res.data);
+      try{
+        const res = await axios.get("http://localhost:3001/interests");
+        setInterestsList(res.data);
+      } catch (err) {
+        navigate("/not-found");
+      }
   }
 
     const handleInterestSelected = (interestInput) => {
@@ -54,11 +57,10 @@ const UserInterests = () => {
                   InterestID: interest.InterestID, 
               };
   
-              // Make a separate call for each interest
-              const res = await axios.post("http://localhost:3001/createUserInterests", theInterest);
+              await axios.post("http://localhost:3001/createUserInterests", theInterest);
           }));
       } catch (err) {
-          console.error(err);
+        navigate("/not-found");
       }
   };
 
@@ -69,9 +71,10 @@ const UserInterests = () => {
   }
 
   const authenticateUser = async () => {
+    const hash = sha256(userPass);
     const cred = {
         Email: userEmail,
-        Password: userPass,
+        Password: hash,
     }
     try{
         const res = await axios.post("http://localhost:3001/authenticateUser", cred)
@@ -84,7 +87,7 @@ const UserInterests = () => {
         })
         
     } catch (err) {
-        throw(err);
+      navigate("/not-found");
     }
 }
 

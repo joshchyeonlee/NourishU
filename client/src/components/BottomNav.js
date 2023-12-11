@@ -25,8 +25,9 @@ function BottomNav(props){
                     href="/profile"
                     label="Profile"
                     icon={<AccountCircleIcon />} 
-                    children={() => <Profile userId={auth().values.userID}/>}
-                    />
+                    >
+                    <Profile userID={auth().values.userID}/>
+                </BottomNavigationAction>
             </BottomNavigation>
         </Box>
     )

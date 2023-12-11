@@ -1,22 +1,24 @@
-import { Box, Typography, Grid, Card, CardContent, CardActionArea, CircularProgress, Button } from "@mui/material";
+import { Box, Typography, Grid, Card, CardContent, CardActionArea, CircularProgress, Button, Snackbar } from "@mui/material";
 import MealItemList from "../components/MealItemList";
 import BottomNav from "../components/BottomNav";
 import { useState, useEffect } from "react";
 import { useAuthUser } from 'react-auth-kit'
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import formatRecipeData from "../utils/formatRecipeData";
 import SetGoal from "../components/SetGoal";
+import dayjs from "dayjs";
 
 const Dashboard = (props) => {
     const auth = useAuthUser();
+    const navigate = useNavigate();
     const [userId, setUserId] = useState((props.userID) ? props.userID : auth().values.userID);
-    const [isSelf, setIsSelf] = useState((props.userID) ? false : true);
     const [meals, setMeals] = useState([]);
     const [mealIDs, setMealIDs] = useState([]);
     const [goal, setGoal] = useState();
     const [totalCalories, setTotalCalories] = useState(0);
     const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+    const [isAchievementOpen, setIsAchievementOpen] = useState();
 
     const fetchUserGoal = async () => {
         const uid = {
@@ -25,8 +27,8 @@ const Dashboard = (props) => {
         try{
             const res = await axios.post("http://localhost:3001/fetchUserGoal", uid);
             setGoal(res.data[0]);
-        } catch(err) {
-            throw(err);
+        } catch (err) {
+            navigate("/not-found");
         }
     } 
 
@@ -40,7 +42,7 @@ const Dashboard = (props) => {
             return formatRecipeData(res.data).totalCalories;
 
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -50,13 +52,12 @@ const Dashboard = (props) => {
         }
         try{
             const res = await axios.post("http://localhost:3001/getUserMeals", uid);
-            console.log(res);
             setMeals(res.data);
             const mealIDs = res.data.map(x => x.MealID);
             setMealIDs(mealIDs);
 
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -87,10 +88,9 @@ const Dashboard = (props) => {
             MealID: mealID,
         }
         try{
-            const res = await axios.post("http://localhost:3001/deleteMeal", mealObj);
-            console.log(res.data);
+            await axios.post("http://localhost:3001/deleteMeal", mealObj);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -101,23 +101,47 @@ const Dashboard = (props) => {
         setMeals(newMeals);
     }
 
+    const handleAchievementClose = (event, reason) => {
+        if(reason === 'clickaway') return;
+        setIsAchievementOpen(false);
+    }
+
+    const checkIfFirstGoal = async () => {
+        const UserID = {
+            UserID: userId,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/isFirstGoal", UserID);
+            if(res.data === false) return;
+
+            setIsAchievementOpen(true);
+            UserID.Time = dayjs().format("YYYY-MM-DD hh:mm:ss");
+            await axios.post("http://localhost:3001/assignGoalAchievement", UserID);
+
+        } catch (err) {
+            throw(err);
+        }
+    }
+
     useEffect(() => {
         if(mealIDs.length <= 0) return;
         calculateCaloricIntake()
     }, [mealIDs, meals ])
 
     useEffect(() => {
+        if(userId === -1 || typeof userId === 'undefined') return;
         fetchUserMeals();
         fetchUserGoal();
-    }, []);
+    }, [userId, isGoalModalOpen]);
 
     useEffect(() => {
-        fetchUserMeals();
-        fetchUserGoal();
-    }, [isGoalModalOpen])
+        if(goal === null) return;
+        if(goal && totalCalories >= goal.CalculatedCaloricIntake) checkIfFirstGoal();
+    }, [totalCalories, goal])
 
     return(   
         <div>
+            <Snackbar open={isAchievementOpen} autoHideDuration={1500} onClose={handleAchievementClose} message="Achievement Unlocked! First Goal Complete"/>
             <SetGoal open={isGoalModalOpen} onClose={handleCloseSetGoal} goal={goal}/>
             <Box display="flex" flexDirection="column" padding={4} justifyContent="center" textAlign="center">
                 <Typography variant="h5">Dashboard</Typography>

@@ -1,14 +1,14 @@
 import React from 'react';
-import { Typography, TextField, Grid, Button, Box, IconButton, FormControl, InputLabel, Select, MenuItem, InputAdornment, Checkbox } from '@mui/material';
+import { Typography, TextField, Grid, Button, Box, FormControl, InputLabel, Select, MenuItem, InputAdornment, Checkbox } from '@mui/material';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import { useState, useEffect } from "react";
-import axios from 'axios';
 import { Link, useLocation } from "react-router-dom"
 
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { formatNumber, formatString } from '../utils/inputCheck';
 
 const SignUpInfo = () => {
     const location = useLocation();
@@ -21,13 +21,10 @@ const SignUpInfo = () => {
     const [userDiet, setUserDiet] = useState("");
     const [userDietDescription, setUserDietDescription] = useState("");
     const [userAge, setUserAge] = useState(-1);
-
     const[userDietDescSize, setUserDietDescSize] = useState(true);
-
     const[userDone, setUserDone] = useState(true);
-
-    const today = dayjs();
     const earlyDate = dayjs('1920-01-01')
+    const today = dayjs();
 
     const dietNames = [
         'None',
@@ -55,11 +52,11 @@ const SignUpInfo = () => {
     };
 
     const handleUserHeight = (inputHeight) => {
-        setUserHeight(inputHeight)
+        setUserHeight(formatNumber(inputHeight, 120, 215))
     }
 
     const handleUserWeight = (inputWeight) => {
-        setUserWeight(inputWeight)
+        setUserWeight(formatNumber(inputWeight, 1, 140))
     }
 
     const handleUserDiet = (inputDiet) => {
@@ -67,12 +64,13 @@ const SignUpInfo = () => {
     }
 
     const handleUserDietDescription = (inputDietDesc) => {
-        setUserDietDescription(inputDietDesc)
-        checkDietDescriptionLength(inputDietDesc)
+        var formattedDesc = formatString(inputDietDesc, 50)
+        setUserDietDescription(formattedDesc)
+        checkDietDescriptionLength(formattedDesc)
     }
 
     const checkDietDescriptionLength = (inputDietDesc) => {
-        if (inputDietDesc.length >= 50) {
+        if (inputDietDesc.length > 50) {
             setUserDietDescSize(false)
             return;
         }
@@ -97,9 +95,9 @@ const SignUpInfo = () => {
     }
 
     const calculateUserAge = (theDate) => {
-    const calculation = today.diff(theDate, "y")
+        const calculation = today.diff(theDate, "y")
 
-    setUserAge(calculation)
+        setUserAge(calculation)
     }
 
     useEffect(() => {
@@ -181,7 +179,6 @@ const SignUpInfo = () => {
                 onChange = {(e) => {handleUserDietDescription(e.target.value)}}
                 error = {(!userDietDescSize)} helperText = {(userDietDescSize)? "" : "Description is blank or TOO long!" }/>
                 
-
                 <Grid item style={{ marginTop: '10px' }}>
                     <Button variant="contained" size="small" disabled={userDone || !userDietDescSize}
                     component = {Link}

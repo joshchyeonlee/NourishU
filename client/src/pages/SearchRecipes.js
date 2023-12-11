@@ -4,13 +4,14 @@ import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import AddFoodModal from "../components/AddFoodModal";
+import { formatString } from "../utils/inputCheck";
 
 const SearchRecipes = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [prevPageData, setPrevPageData] = useState(location.state)
-    console.log(location.state);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
@@ -19,13 +20,13 @@ const SearchRecipes = () => {
 
     const searchRecipes = async () => {
         const searchQuery = {
-            Search: search,
+            Search: formatString(search, 255),
         }
         try{
             const res = await axios.post("http://localhost:3001/searchRecipes", searchQuery);
             setSearchResults(res.data);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -73,7 +74,12 @@ const SearchRecipes = () => {
                     <IconButton disabled>
                         <SearchIcon/>
                     </IconButton>
-                    <InputBase placeholder="search recipes" sx={{ width:"80%" }} onChange={(event) => handleSearchBar(event.target.value)}></InputBase>
+                    <InputBase
+                        inputProps={{maxLength: 255}}
+                        placeholder="search recipes"
+                        sx={{ width:"80%" }}
+                        onChange={(event) => handleSearchBar(event.target.value)}
+                    />
                     <Button onClick={() => handleSearch()}>
                         Search
                     </Button>

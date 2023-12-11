@@ -1,8 +1,9 @@
-import { Modal, Box, Typography, IconButton, Slider, Button, Divider } from "@mui/material";
+import { Modal, Box, Typography, IconButton, Slider, Button } from "@mui/material";
 import Close from '@mui/icons-material/Close';
 import { useState } from "react";
 import { useAuthUser } from 'react-auth-kit'
 import axios from 'axios';
+import { formatNumber } from "../utils/inputCheck";
 
 const modalFormat = {
     position: 'absolute',
@@ -23,7 +24,6 @@ const SetGoal = (props) => {
     const [userId, setUserId] = useState(auth().values.userID);
     const [calorieDiff, setCalorieDiff] = useState(props.goal ? (props.goal.CalculatedCaloricIntake - props.goal.InitialCaloricIntake) : 0)
     const [initialCalories, setInitialCalories] = useState(2500);
-
 
     const updateGoal = async () => {
         const goal = {
@@ -46,8 +46,7 @@ const SetGoal = (props) => {
             Initial: initialCalories
         }
         try{
-            const res = await axios.post("http://localhost:3001/createGoal", goal);
-            console.log(res.data)
+            await axios.post("http://localhost:3001/createGoal", goal);
         } catch (err) {
             throw(err);
         }
@@ -77,6 +76,18 @@ const SetGoal = (props) => {
     const handleUpdate = () => {
         props.goal ? updateGoal() : createGoal()
         props.onClose();
+    }
+
+    const handleUpdateChangVal = (val) => {
+        setCalorieDiff(formatNumber(val, -700, 700));
+    }
+
+    const handleInitialValue = (val) => {
+        setInitialCalories(formatNumber(val, 1800, 3200));
+    }
+
+    const handleCalorieDiff = (val) => {
+        setCalorieDiff(formatNumber(val, -700, 700));
     }
 
     return(
@@ -111,7 +122,7 @@ const SetGoal = (props) => {
                             <Box paddingTop={8} paddingBottom={8}>
                                 <Slider
                                     value={calorieDiff ? calorieDiff : 0}
-                                    onChange={(e) => setCalorieDiff(e.target.value)}
+                                    onChange={(e) => handleUpdateChangVal(e.target.value)}
                                     min={-700}
                                     max={700}
                                     step={100}
@@ -124,7 +135,7 @@ const SetGoal = (props) => {
                             <Typography>What is your current Caloric Intake?</Typography>
                             <Slider
                                 value={initialCalories}
-                                onChange={(e) => setInitialCalories(e.target.value)}
+                                onChange={(e) => handleInitialValue(e.target.value)}
                                 min={1800}
                                 max={3200}
                                 defaultValue={2500}
@@ -135,7 +146,7 @@ const SetGoal = (props) => {
                             <Typography>What is your goal?</Typography>
                         <Slider
                                 value={calorieDiff ? calorieDiff : 0}
-                                onChange={(e) => setCalorieDiff(e.target.value)}
+                                onChange={(e) => handleCalorieDiff(e.target.value)}
                                 min={-700}
                                 max={700}
                                 step={100}

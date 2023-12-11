@@ -19,7 +19,7 @@ const EditRecipeIngredients = () => {
             const res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
             setState(res.data);
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -47,8 +47,11 @@ const EditRecipeIngredients = () => {
             IngredientID: ingredient.IngredientID,
             AmountIngredient: ingredient.AmountIngredient
         }
-
-        await axios.post("http://localhost:3001/updateRecipeIngredient", ing);
+        try{
+            await axios.post("http://localhost:3001/updateRecipeIngredient", ing);
+        } catch (err) {
+            navigate("/not-found");
+        }
     }
 
     const handleUpdate = () => {

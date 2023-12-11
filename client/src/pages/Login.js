@@ -3,64 +3,58 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useSignIn } from 'react-auth-kit';
+import sha256 from 'js-sha256'
+import { formatString } from '../utils/inputCheck';
 
 const Login = () => {
-    const[emailInput, setEmailInput] = useState("")
-    const[passwordInput, setPasswordInput] = useState("")
-    const[isEmailValid, setIsEmailValid] = useState(false)
-    const[isPasswordValid, setisPasswordValid] = useState(false)
-    const[isButtonClicked, setIsButtonClicked] = useState(false)
-    const[userID, setUserID] = useState();
+    const [emailInput, setEmailInput] = useState("")
+    const [passwordInput, setPasswordInput] = useState("")
+    const [isCredentialValid, setIsCredentialValid] = useState(false);
+    const [isButtonClicked, setIsButtonClicked] = useState(false)
+    const [userID, setUserID] = useState();
     const navigate = useNavigate()
     const signIn = useSignIn();
 
     const handleEmailChange = (value) => {
-        setEmailInput(value)
+        setEmailInput(formatString(value))
     }
 
     const handlePasswordChange = (value) => {
-        setPasswordInput(value)
+        setPasswordInput(formatString(value))
     }
 
-    const checkUserEmail = async () => {
-        const usereml = {
-            userEmail: emailInput
-        }
-        try{
-            const res = await axios.post("http://localhost:3001/getUserEmail", usereml)
-            if (res.data.length > 0) {
-                setUserID(res.data[0].UserID)
-                setIsEmailValid(true)
-            }
-            else {
-                setIsEmailValid(false)
-            }
-        } catch(err){
-            throw(err);
-        }
+    // Checks if email is in valid format
+    // Regex from: https://stackoverflow.com/questions/46155/how-can-i-validate-an-email-address-in-javascript
+    const checkUserEmail = (email) => {
+        const check = email.toLowerCase()
+        .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+
+        return (check !== null && email.length <= 50 && email.length > 0);
     }
 
-    const checkUserPassword = async () => {
-        const userPass = {
-            userPassword: passwordInput
+    const checkUserCredentials = async () => {
+        if(!checkUserEmail(emailInput)) return;
+        const hash = sha256(passwordInput);
+        const userCredentials = {
+            Email: emailInput,
+            Password: hash,
         }
         try{
-            const res = await axios.post("http://localhost:3001/getUserPassword", userPass)
-            if (res.data.length > 0) {
-                setisPasswordValid(true)
-            }
-            else {
-                setisPasswordValid(false)
+            const res = await axios.post("http://localhost:3001/checkUserCredentials", userCredentials);
+            if(res.data.length > 0){
+                setUserID(res.data[0].UserID);
+                setIsCredentialValid(true);
             }
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
     const authenticateUser = async () => {
+        const hash = sha256(passwordInput);
         const cred = {
             Email: emailInput,
-            Password: passwordInput,
+            Password: hash,
         }
         try{
             const res = await axios.post("http://localhost:3001/authenticateUser", cred)
@@ -78,23 +72,19 @@ const Login = () => {
     }
 
     const checkUserCred = () => {
-        checkUserEmail()
-        checkUserPassword()
-        authenticateUser();
+        checkUserCredentials();
         setIsButtonClicked(true)
     }
-    
+
     useEffect(() => {
-        const check = async () => {
-            if (isEmailValid && isPasswordValid) {
-                await authenticateUser()
-    
-                navigate("/Dashboard");
-            }
+        const auth = async () => {
+            await authenticateUser();
+            navigate("/Dashboard");
         }
 
-        check();
-    },[isEmailValid, isPasswordValid]);
+        if(typeof userID === 'undefined' || !isCredentialValid) return;
+        auth();
+    },[userID, isCredentialValid])
 
     return (
         <div>
@@ -103,10 +93,10 @@ const Login = () => {
             </Box>
             <Grid container spacing={3} direction="column" alignItems="center">
                 <Grid item>
-                    <TextField error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Email" variant="outlined" helperText={(!isEmailValid && isButtonClicked) ? "Invalid Email" : ""} onChange={(event)=>{handleEmailChange(event.target.value)}}/>
+                    <TextField error={!isCredentialValid && isButtonClicked} id="outlined-basic" label="Email" variant="outlined" helperText={(!isCredentialValid && isButtonClicked) ? "Invalid Email" : ""} onChange={(event)=>{handleEmailChange(event.target.value)}}/>
                 </Grid>
                 <Grid item>
-                    <TextField type='password' error={!isEmailValid && isButtonClicked} id="outlined-basic" label="Password" variant="outlined" helperText={(!isPasswordValid && isButtonClicked) ? "Invalid Password" : ""} onChange={(event)=>{handlePasswordChange(event.target.value)}} />
+                    <TextField type='password' error={!isCredentialValid && isButtonClicked} id="outlined-basic" label="Password" variant="outlined" helperText={(!isCredentialValid && isButtonClicked) ? "Invalid Password" : ""} onChange={(event)=>{handlePasswordChange(event.target.value)}} />
                 </Grid>
                 <Grid item>
                     <Box padding={4}>
