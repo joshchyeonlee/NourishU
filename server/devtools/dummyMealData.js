@@ -21,7 +21,8 @@ const meal3 = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(2, '2023-11-
 const meal4 = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(3, '2023-11-20 9:30:00', "Breakfast" );`;
 const meal5 = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(4, '2023-11-20 9:35:00', "Breakfast" );`;
 const meal6 = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(4, '2023-11-20 11:00:00', "Brunch" );`;
+const meal7 = `INSERT INTO MEAL(UserID, DateTime, MealTitle) VALUES(1, '2023-11-20 7:00:00', "Dinner" );`;
 
-const data = [meal0, meal1, meal2, meal3, meal4, meal5, meal6];
+const data = [meal0, meal1, meal2, meal3, meal4, meal5, meal6, meal7];
 
 module.exports = { checkTable, createTable, data };
