@@ -1,5 +1,5 @@
 import { Typography, Button, Box, Grid} from "@mui/material";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -9,41 +9,26 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import axios from "axios";
 import { useSignIn } from 'react-auth-kit';
+import FormHelperText from '@mui/material/FormHelperText';
 
 const UserInterests = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const [userName, setUserName] = useState(location.state.UserName);
     const [userEmail, setUserEmail] = useState(location.state.UserEmail);
     const [userPass, setUserPass] = useState(location.state.UserPass);
-    const [userBirthDate, setUserBirthDate] = useState(location.state.UserBirthDate);
-    const [userHeight, setUserHeight] = useState(location.state.UserHeight);
-    const [userWeight, setUserWeight] = useState(location.state.UserWeight);
-    const [userDiet, setUserDiet] = useState(location.state.UserDiet);
-    const [userDietDescription, setUserDietDescription] = useState(location.state.UserDietDescription);
-    const [userAge, setUserAge] = useState(location.state.UserAge);
 
     const [userID, setUserID] = useState(location.state.user);
-    const [userInterest, setUserInterest] = useState("");
+    const [userInterest, setUserInterest] = useState([]);
+    const [interestsList, setInterestsList] = useState([]);
 
     const [userNotReady, setUserNotReady] = useState(true);
     const signIn = useSignIn();
 
-    const interestsList = [
-        'Reading',
-        'Video Games',
-        'Traveling',
-        'Cooking',
-        'Sports',
-        'Programming',
-        'Dancing',
-        'Fitness',
-        'Fashion',
-        'Technology',
-        'Movies/Tv Shows',
-    
-      ];
+    const fetchInterests = async () => {
+      const res = await axios.get("http://localhost:3001/interests");
+      setInterestsList(res.data);
+  }
 
     const handleInterestSelected = (interestInput) => {
         setUserInterest(interestInput)
@@ -51,7 +36,7 @@ const UserInterests = () => {
     }
 
     const checkInterest = (interestInput) => {
-        if (interestInput === "") {
+        if (interestInput.length === 0) {
             setUserNotReady(true);
         }
         
@@ -61,17 +46,24 @@ const UserInterests = () => {
     }
 
     const insertUserInterest = async () => {
-      const theInterests = {
-        UserID: userID,
-        UserInterests: userInterest
-
+      try {
+          // Use Promise.all to wait for all asynchronous calls to complete
+          await Promise.all(userInterest.map(async (interest) => {
+              const theInterest = {
+                  UserID: userID,
+                  InterestID: interest.InterestID, 
+              };
+  
+              // Make a separate call for each interest
+              const res = await axios.post("http://localhost:3001/createUserInterests", theInterest);
+          }));
+      } catch (err) {
+          console.error(err);
       }
-      const res = await axios.post("http://localhost:3001/createUserInterests", theInterests);
-  }
-    
+  };
 
   const handleContinue = async () => {
-    insertUserInterest();
+    await insertUserInterest();
     await authenticateUser();
     navigate("/dashboard", {state:{UserID: userID}});
   }
@@ -95,6 +87,11 @@ const UserInterests = () => {
         throw(err);
     }
 }
+
+useEffect(() => {
+  fetchInterests();
+}, []);
+
     return (
         <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
         <Box padding={8}>
@@ -102,22 +99,29 @@ const UserInterests = () => {
         </Box>
   
         <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="demo-multiple-chip-label">What is your top interest?</InputLabel>
+          <InputLabel id="demo-multiple-chip-label">What are your interests?</InputLabel>
           <Select
-            labelId="What is your top interest?"
-            id="What is your top interest?"
+            labelId="What are your interests?"
+            id="What are your interests?"
+            multiple
+            value = {userInterest}
             onChange={(e) => handleInterestSelected(e.target.value)}
-            input={<OutlinedInput id="What is your top interest?" label="What is your top interest?" />}
+            input={<OutlinedInput id="What are your interests?" label="What are your interests?" />}
             renderValue={(selected) => (
-              <Chip key={selected} label={selected} />
-            )}
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value.InterestID} label={value.InterestName} />
+              ))}
+            </Box>
+          )}
           >
             {interestsList.map((name) => (
-              <MenuItem key={name} value={name}>
-                {name}
+              <MenuItem key={name.InterestID} value={name}>
+                {name.InterestName}
               </MenuItem>
             ))}
           </Select>
+          <FormHelperText>At least one interest must be selected!</FormHelperText>
         </FormControl>
 
         <Grid item style={{ marginTop: '10px' }}>

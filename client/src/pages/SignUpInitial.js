@@ -172,7 +172,7 @@ const SignUpInitial = () => {
              <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={4}>
              <IconButton sx={{position: "absolute", top:10, left: 10}}                     
              component = {Link}
-            to={{pathname:"/welcome"}}>
+            to={{pathname:"/"}}>
                 <ArrowBackIcon fontSize="large"/>
                 </IconButton>
             <Typography variant="h4" padding={2}>Sign up - Let's get started!</Typography>

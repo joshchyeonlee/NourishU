@@ -618,11 +618,13 @@ app.post('/removeAllSteps', (req, res) => {
 
 app.post('/createUserInterests', (req, res) => {
     const userID = req.body.UserID;
-    const userInt = req.body.UserInterests;
+    const interestID = req.body.InterestID;
 
-    let sql = `INSERT INTO USER_INTERESTS(UserID, UserInterests)
-    VALUES (${userID}, "${userInt}");`;
-    db.query(sql, (err, result) => {
+    const values = [userID, interestID];
+
+    let sql = `INSERT INTO USER_INTERESTS(UserID, InterestID)
+    VALUES (?);`;
+    db.query(sql, [values], (err, result) => {
         if(err){
             throw(err);
         }
@@ -747,6 +749,16 @@ app.post("/setIngredientPerServing", (req, res) => {
     const IngredientID = req.body.IngredientID;
     const Weight = req.body.ServingSize;
     let sql = `INSERT INTO INGREDIENT_PER_SERVING(IngredientID, Weight) VALUES(${IngredientID}, ${Weight});`;
+    db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.get('/interests', (req, res) => {
+    let sql = `SELECT * FROM INTERESTS`;
     db.query(sql, (err, result) => {
         if(err){
             throw(err);
