@@ -1,4 +1,4 @@
-import { Box, Typography, Grid, Card, CardContent, CardActionArea, CircularProgress, Button } from "@mui/material";
+import { Box, Typography, Grid, Card, CardContent, CardActionArea, CircularProgress, Button, Snackbar } from "@mui/material";
 import MealItemList from "../components/MealItemList";
 import BottomNav from "../components/BottomNav";
 import { useState, useEffect } from "react";
@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 import formatRecipeData from "../utils/formatRecipeData";
 import SetGoal from "../components/SetGoal";
+import dayjs from "dayjs";
 
 const Dashboard = (props) => {
     const auth = useAuthUser();
@@ -17,6 +18,7 @@ const Dashboard = (props) => {
     const [goal, setGoal] = useState();
     const [totalCalories, setTotalCalories] = useState(0);
     const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+    const [isAchievementOpen, setIsAchievementOpen] = useState();
 
     const fetchUserGoal = async () => {
         const uid = {
@@ -99,6 +101,28 @@ const Dashboard = (props) => {
         setMeals(newMeals);
     }
 
+    const handleAchievementClose = (event, reason) => {
+        if(reason === 'clickaway') return;
+        setIsAchievementOpen(false);
+    }
+
+    const checkIfFirstGoal = async () => {
+        const UserID = {
+            UserID: userId,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/isFirstGoal", UserID);
+            if(res.data === false) return;
+
+            setIsAchievementOpen(true);
+            UserID.Time = dayjs().format("YYYY-MM-DD hh:mm:ss");
+            await axios.post("http://localhost:3001/assignGoalAchievement", UserID);
+
+        } catch (err) {
+            throw(err);
+        }
+    }
+
     useEffect(() => {
         if(mealIDs.length <= 0) return;
         calculateCaloricIntake()
@@ -110,8 +134,14 @@ const Dashboard = (props) => {
         fetchUserGoal();
     }, [userId, isGoalModalOpen]);
 
+    useEffect(() => {
+        if(goal === null) return;
+        if(goal && totalCalories >= goal.CalculatedCaloricIntake) checkIfFirstGoal();
+    }, [totalCalories, goal])
+
     return(   
         <div>
+            <Snackbar open={isAchievementOpen} autoHideDuration={1500} onClose={handleAchievementClose} message="Achievement Unlocked! First Goal Complete"/>
             <SetGoal open={isGoalModalOpen} onClose={handleCloseSetGoal} goal={goal}/>
             <Box display="flex" flexDirection="column" padding={4} justifyContent="center" textAlign="center">
                 <Typography variant="h5">Dashboard</Typography>
