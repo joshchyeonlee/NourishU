@@ -60,6 +60,7 @@ function App() {
         <Route path="/signup-initial" element={<SignUpInitial />} />
         <Route path="/signup-info" element={<SignUpInfo />} />
         <Route path="/signup-userinterests" element={<UserInterests />} />
+        <Route path="/cookingConfidence" element={<CookingConfidence />} />
         <Route path="*" element={<Navigate replace to="/dashboard" />} />
     </Routes>
     </ThemeProvider>
