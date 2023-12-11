@@ -1,9 +1,11 @@
 import { Box, Typography, Select, MenuItem, Button, FormControl } from "@mui/material";
 import { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { formatNumber } from "../utils/inputCheck";
 
 const EditFood = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const food = location.state.food;
     const meal = location.state.meal;
@@ -11,23 +13,20 @@ const EditFood = () => {
 
     const [qConsumed, setQConsumed] = useState(food.quantityConsumed);
 
-    const handleQSelect = (event) => {
-        setQConsumed(event.target.value);
+    const handleQSelect = (val) => {
+        setQConsumed(formatNumber(val, 1, 10));
     }
 
     const handleConfirm = async () => {
-        console.log(food);
         const MealID = {
             RecipeID: food.recipeID,
             QuantityConsumed: qConsumed,
         };
 
-        console.log(MealID);
         try{
-            const res = await axios.post("http://localhost:3001/editFood", MealID);
-            console.log(res);
+            await axios.post("http://localhost:3001/editFood", MealID);
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -41,7 +40,7 @@ const EditFood = () => {
                 <Box padding={2} display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" sx={{ width:1/2 }}>
                     <Typography>Quantity Consumed</Typography>
                     <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-                        <Select value={qConsumed} onChange={handleQSelect} label="Quantity Consumed" defaultValue={food.quantityConsumed}>
+                        <Select value={qConsumed} onChange={(e) => handleQSelect(e.target.value)} label="Quantity Consumed" defaultValue={food.quantityConsumed}>
                             {Array.from(Array(10), (e, i) => {
                                 return(
                                     <MenuItem key={i} value={i + 1}>{i + 1}</MenuItem>

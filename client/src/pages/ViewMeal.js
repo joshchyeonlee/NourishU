@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Typography, IconButton } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import formatRecipeData from "../utils/formatRecipeData";
@@ -8,6 +8,7 @@ import NutrInfo from "../components/NutrInfo";
 
 const ViewMeal = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const meal = location.state.meal;
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [nutrInfo, setNutrInfo] = useState();
@@ -23,7 +24,7 @@ const ViewMeal = () => {
             setRecipeIngredients(obj.recipeIngredients);
 
         } catch(err){
-            throw(err);
+            navigate("/not-found");
         }
     }
 

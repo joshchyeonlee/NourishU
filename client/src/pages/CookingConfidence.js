@@ -7,6 +7,8 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { formatNumber } from "../utils/inputCheck";
+import { sha256 } from 'js-sha256';
 import dayjs from "dayjs";
 
 const ConfidenceIcon = (props) => {
@@ -42,11 +44,11 @@ const CookingConfidence = () => {
   }
 
   const changeSliderValue = (value) => {
-    setValue(value)
-    setUserCookingConf(value)
+    setValue(formatNumber(value));
   }
 
   const insertUser = async () => {
+    const hash = sha256(location.state.UserPass);
     const user = {
       UserName:location.state.UserName,
       UserEmail: location.state.UserEmail,
@@ -57,10 +59,14 @@ const CookingConfidence = () => {
       DietName: location.state.UserDiet,
       DietDescription: location.state.UserDietDescription,
       CookingConfidence: userCookingConf,
-      UserPassword: location.state.UserPass
+      UserPassword: hash
     }
-    const res = await axios.post("http://localhost:3001/createUser", user);
-    setUserID(res.data.insertId);
+    try{
+      const res = await axios.post("http://localhost:3001/createUser", user);
+      setUserID(res.data.insertId);
+    } catch (err) {
+      navigate("/not-found");
+    }
   }
 
   const assignAchievement = async () => {
@@ -122,8 +128,7 @@ const CookingConfidence = () => {
           />
         </Box>
         <Box position="absolute" bottom={50}>
-          <Button variant="contained" sx={{width: '400px'}} onClick={insertUser}
-          disabled = {userCookingConf == -1}>Create my account!</Button>
+          <Button variant="contained" sx={{width: '400px'}} onClick={insertUser}>Create my account!</Button>
         </Box>
     </Box>
     </div>

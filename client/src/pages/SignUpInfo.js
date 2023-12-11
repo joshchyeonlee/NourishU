@@ -8,6 +8,7 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { formatNumber, formatString } from '../utils/inputCheck';
 
 const SignUpInfo = () => {
     const location = useLocation();
@@ -51,11 +52,11 @@ const SignUpInfo = () => {
     };
 
     const handleUserHeight = (inputHeight) => {
-        setUserHeight(inputHeight)
+        setUserHeight(formatNumber(inputHeight, 120, 215))
     }
 
     const handleUserWeight = (inputWeight) => {
-        setUserWeight(inputWeight)
+        setUserWeight(formatNumber(inputWeight, 1, 140))
     }
 
     const handleUserDiet = (inputDiet) => {
@@ -63,12 +64,13 @@ const SignUpInfo = () => {
     }
 
     const handleUserDietDescription = (inputDietDesc) => {
-        setUserDietDescription(inputDietDesc)
-        checkDietDescriptionLength(inputDietDesc)
+        var formattedDesc = formatString(inputDietDesc, 50)
+        setUserDietDescription(formattedDesc)
+        checkDietDescriptionLength(formattedDesc)
     }
 
     const checkDietDescriptionLength = (inputDietDesc) => {
-        if (inputDietDesc.length >= 50) {
+        if (inputDietDesc.length > 50) {
             setUserDietDescSize(false)
             return;
         }
@@ -177,7 +179,6 @@ const SignUpInfo = () => {
                 onChange = {(e) => {handleUserDietDescription(e.target.value)}}
                 error = {(!userDietDescSize)} helperText = {(userDietDescSize)? "" : "Description is blank or TOO long!" }/>
                 
-
                 <Grid item style={{ marginTop: '10px' }}>
                     <Button variant="contained" size="small" disabled={userDone || !userDietDescSize}
                     component = {Link}

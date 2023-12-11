@@ -27,6 +27,7 @@ import EditRecipeRedirect from './pages/EditRecipeRedirect.js';
 import SignUpInitial from './pages/SignUpInitial.js';
 import SignUpInfo from './pages/SignUpInfo.js';
 import UserInterests from './pages/UserInterests.js';
+import NotFound from './pages/NotFound.js';
 
 // redirect to /dashboard from
 // https://stackoverflow.com/questions/63690695/react-redirect-is-not-exported-from-react-router-dom
@@ -61,6 +62,7 @@ function App() {
         <Route path="/signup-info" element={<SignUpInfo />} />
         <Route path="/signup-userinterests" element={<UserInterests />} />
         <Route path="/cookingConfidence" element={<CookingConfidence />} />
+        <Route path="/not-found" element={<NotFound />} />
         <Route path="*" element={<Navigate replace to="/dashboard" />} />
     </Routes>
     </ThemeProvider>

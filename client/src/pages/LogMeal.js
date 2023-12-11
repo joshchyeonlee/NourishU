@@ -4,7 +4,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { Link, useNavigate } from "react-router-dom";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { formatString } from "../utils/inputCheck";
 import dayjs from "dayjs";
 import axios from 'axios';
 
@@ -20,7 +21,7 @@ const LogMeal = () => {
     const navigate = useNavigate();
 
     const handleMealTitleChange = (val) => {
-        setMealTitle(val);
+        setMealTitle(formatString(val, 50));
         setSelectedTextField(true);
     }
 
@@ -45,7 +46,7 @@ const LogMeal = () => {
             navigate("/searchRecipes", {state:{meal: meal, from:"/logMeal", recipes:[]}});
 
         } catch (err) {
-            throw(err);
+            navigate("/not-found");
         }
     }
 
@@ -100,7 +101,6 @@ const LogMeal = () => {
         if(isAchievementOpen === false){
             addMeal();
         }
-
     }, [isAchievementOpen])
 
     useEffect(() => {

@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import dayjs from "dayjs";
+import { formatString } from "../utils/inputCheck";
 
 const SetRecipeInstructions = () => {
     const auth = useAuthUser();
@@ -15,6 +16,7 @@ const SetRecipeInstructions = () => {
     const [recipeID, setRecipeID] = useState(location.state.recipeID);
     const [instructions, setInstructions] = useState([]);
     const [isAchievementOpen, setIsAchievementOpen] = useState();
+    const [valid, setValid] = useState(false);
     
     const insertInstruction = async () => {
         for(var i = 0; i < instructions.length; i++){
@@ -27,7 +29,7 @@ const SetRecipeInstructions = () => {
             try{
                 await axios.post("http://localhost:3001/setRecipeInstruction", recipeStep)
             } catch (err) {
-                throw(err);
+                navigate("/not-found");
             }
         }
     }
@@ -49,10 +51,9 @@ const SetRecipeInstructions = () => {
     const handleChange = (e, i) => {
         const { value, instruction } = e.target;
         const newState = [...instructions];
-
         newState[i] = {
             ...newState[i],
-            instructions: value
+            instructions: formatString(value, 255)
         };
 
         setInstructions(newState);
@@ -104,9 +105,17 @@ const SetRecipeInstructions = () => {
         }
     },[isAchievementOpen])
 
+    useEffect(() => {
+        var check = true;
+        for(var i = 0; i < instructions.length; i++) {
+            check &= instructions[i].instructions.length > 0;
+        }
+        setValid(check && instructions.length > 0);
+    }, [instructions])
+
     //need to set limits on text fields and put in db
     return (
-    <div>
+        <div>
         <Snackbar open={isAchievementOpen} autoHideDuration={1500} onClose={handleAchievementClose} message="Achievement Unlocked! First Recipe Created"/>
         <Box display="flex" justifyContent="center" padding={2} flexDirection="column" alignItems="center">
             <Box display="flex" justifyContent="center" padding={2}>
@@ -143,7 +152,7 @@ const SetRecipeInstructions = () => {
                 </Box>
             </Card>
             <Box position="absolute" bottom={30}>
-                <Button variant="contained" onClick={handleContinue}>Done</Button>
+                <Button variant="contained" disabled={!valid} onClick={handleContinue}>Done</Button>
             </Box>
         </Box>
     </div>
