@@ -47,7 +47,6 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     res.json("This is the backend");
-
 })
 
 app.get('/login', (req,res) => {
