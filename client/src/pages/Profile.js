@@ -9,10 +9,13 @@ import AchievementModal from "../components/AchievementModal";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuthUser } from 'react-auth-kit'
 import YourRecipesList from "../components/YourRecipesList";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useSignOut } from 'react-auth-kit'
 
 const Profile = ( props ) => {
     const auth = useAuthUser();
     const location = useLocation();
+    const signOut = useSignOut();
     const navigate = useNavigate();
     const [userId, setUserId] = useState();
     const [isSelf, setIsSelf] = useState(true);
@@ -188,15 +191,25 @@ const Profile = ( props ) => {
         handleAchievementOpen();
     }
 
+    const handleLogOut = () => {
+        signOut();
+        navigate("/");
+    }
+
     return(
         <div>
             <AchievementModal open={achievementOpen} onClose={handleAchievementClose} value={selectedAchievement}/>
             <ListModal open={followingOpen} onClose={handleFollowingClose} values={following} setUserId={setUserId}/>
             <ListModal open={followerOpen} onClose={handleFollowerClose} values={followers} setUserId={setUserId}/>
-            {isSelf ? 
-            <Button variant="outlined" startIcon={<EditIcon/>} sx={{position:"fixed", top:10, right:10}}>
-                Edit Profile
-            </Button>
+            {isSelf ?
+            <Box display="flex" sx={{position:"fixed", top:10, right:10}} flexDirection="row">
+                <IconButton>
+                    <EditIcon/>
+                </IconButton>
+                <IconButton onClick={handleLogOut}>
+                    <LogoutIcon/>
+                </IconButton>
+            </Box>
             : <></>
             }
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={4}>
