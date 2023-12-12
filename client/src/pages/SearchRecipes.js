@@ -57,7 +57,7 @@ const SearchRecipes = () => {
     }
 
     return(
-        <div>
+        <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
             <AddFoodModal open={isAddModalOpen} setOpen={setIsAddModalOpen} recipe={addRecipe} recipeTitle={addRecipeTitle} meal={prevPageData.meal}/>
             {prevPageData.from !== "/logMeal" ?
             <IconButton sx={{position: "absolute", top:10, left: 10}}
@@ -69,7 +69,7 @@ const SearchRecipes = () => {
             <Box display="flex" justifyContent="center" padding={4}>
                 <Typography variant="h5">{prevPageData.from === "/editMeal" ? "Add Food" :"Search Recipes"}</Typography>
             </Box>
-            <Box display="flex" justifyContent="center" padding={2}>
+            <Box display="flex" justifyContent="center" padding={2} sx={{width:"100%"}}>
                 <Paper variant="outlined" square={false} sx={{ width:1/2 }}>
                     <IconButton disabled>
                         <SearchIcon/>
@@ -90,10 +90,14 @@ const SearchRecipes = () => {
                 <Typography>No results</Typography>
             </Box>
             :
-            <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center" padding={2} sx={{ width:1/2 }}>
+            <Box display="flex"
+                flexDirection="column"
+                alignItems="center"
+                padding={2}
+                sx={{ width:1/2, height:"450px", overflowY:"auto", overflowX:"visible"}}>
                 {searchResults.map((value, key) => {
                     return(
-                        <Box key={key} display="flex" justifyContent="space-between" padding={1} sx={{ width:"100%" }} marginLeft="100%">
+                        <Box key={key} display="flex" justifyContent="space-between" padding={1} sx={{ width:"100%" }}>
                             <Box>
                                 <Typography variant="h6">{value.RecipeTitle}</Typography>
                                 <Box display="flex" flexDirection="row">
@@ -143,7 +147,7 @@ const SearchRecipes = () => {
                     </Button>
                 </Box>
             </Box>
-        </div>
+        </Box>
     )
 }
 
