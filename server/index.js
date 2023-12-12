@@ -171,12 +171,12 @@ app.post('/editFood', (req, res) => {
 
     const quantityConsumed = Number(req.body.QuantityConsumed);
     if(!isValidNumber(quantityConsumed)){
-
+        res.status(500).send();
         return;
     }
 
     let sql = `UPDATE MEAL_CONTAINS_RECIPE SET QuantityConsumed = ? WHERE RecipeID = ?;`;
-    db.query(sql, [recipeID, quantityConsumed], (err, result) => {
+    db.query(sql, [quantityConsumed, recipeID], (err, result) => {
         if(err){
             res.status(500);
         }
@@ -275,7 +275,6 @@ app.post('/setRecipeIngredient', (req, res) => {
     const iid = Number(req.body.IngredientID);
     const quantity = Number(req.body.Quantity);
     const values = [rid, iid, quantity];
-    console.log(values);
     if(!isValidNumber(rid) || !isValidNumber(iid) || !isValidNumber(quantity)) {
         res.status(500).send();
         return;
@@ -1237,6 +1236,19 @@ app.post('/unfollowUser', (req, res) => {
 app.get('/interests', (req, res) => {
     let sql = `SELECT * FROM INTERESTS`;
     db.query(sql, (err, result) => {
+        if(err){
+            throw(err);
+        }
+        res.send(result);
+    })
+})
+
+app.post('/removeIngredientFromRecipe', (req, res) => {
+    const IngredientID = req.body.IngredientID;
+    const RecipeID = req.body.RecipeID;
+
+    let sql = `DELETE FROM RECIPE_CONTAINS_INGREDIENT WHERE IngredientID = ? AND RecipeID = ?`;
+    db.query(sql, [IngredientID, RecipeID], (err, result) => {
         if(err){
             throw(err);
         }
