@@ -66,6 +66,9 @@ const ViewRecipe = () => {
             setRecipeTitle(res.data[0].RecipeTitle);
             setRecipeDescription(res.data[0].RecipeDescription);
             setIsSelf(auth().values.userID === res.data[0].UserID);
+            const obj = formatRecipeData(res.data);
+
+            setNutrInfo(obj);
             
             const creator = {UserID: res.data[0].UserID};
             res = await axios.post("http://localhost:3001/fetchRecipeCreator", creator);
