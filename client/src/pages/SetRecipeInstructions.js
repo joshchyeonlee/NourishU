@@ -61,7 +61,11 @@ const SetRecipeInstructions = () => {
 
     const handleDelete = (i) => {
         const newInstr = [...instructions];
+        console.log(instructions);
+        console.log(newInstr);
+        console.log(newInstr[i]);
         newInstr.splice(i, 1);
+        console.log(newInstr);
         setInstructions(newInstr);
     }
 
@@ -133,6 +137,7 @@ const SetRecipeInstructions = () => {
                                             error={instructions[key].instructions.length === 0}
                                             helperText={(instructions[key].instructions.length === 0) ? "Cannot be blank" : ""}
                                             sx={{width:"90%"}}
+                                            value={instructions[key].instructions}
                                             onChange={(e) => handleChange(e, key)}/>
                                         <Box display="flex">
                                             <IconButton onClick={() => handleDelete(key)}>
