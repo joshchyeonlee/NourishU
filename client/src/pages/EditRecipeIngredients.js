@@ -36,9 +36,22 @@ const EditRecipeIngredients = () => {
     }
 
     const handleDelete = (index) => {
+        deleteIngredient(state[index].RecipeID, state[index].IngredientID);
         var newState = [...state];
         newState.splice(index, 1);
         setState(newState);
+    }
+
+    const deleteIngredient = async (rID, iID) => {
+        const recipeInfo = {
+            RecipeID: rID,
+            IngredientID: iID,
+        }
+        try{
+            await axios.post("http://localhost:3001/removeIngredientFromRecipe", recipeInfo);
+        } catch (err) {
+            navigate("/not-found");
+        }
     }
 
     const updateRecipeIngredient = async (ingredient) => {
