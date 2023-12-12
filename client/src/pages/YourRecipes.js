@@ -34,7 +34,7 @@ const YourRecipes = () => {
                 <ArrowBackIcon fontSize="large"/>
             </IconButton>
             <Box display="flex" sx={{ width:"60%" }}>
-                <YourRecipesList recipes={userRecipes} from="/viewYourRecipes" title="h5" />
+                <YourRecipesList isSelf={true} recipes={userRecipes} from="/viewYourRecipes" title="h5" />
             </Box>
         </Box>
     )

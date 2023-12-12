@@ -21,6 +21,7 @@ const ViewMeal = () => {
             const res = await axios.post("http://localhost:3001/getMealContains", MealID);
             const obj = formatRecipeData(res.data);
             setNutrInfo(obj);
+            // console.log(obj);
             setRecipeIngredients(obj.recipeIngredients);
 
         } catch(err){

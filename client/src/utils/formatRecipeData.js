@@ -50,10 +50,10 @@ const formatRecipeData = (data) =>{
         if(!mult) mult = 1;
 
         totalCalories += (calories * mult);
-        totalProtein += Number(mult * protein).toFixed(2);
-        totalSaturatedFats += Number(mult * saturatedFats).toFixed(2);
-        totalUnsaturatedFats += Number(mult * unsaturatedFats).toFixed(2);
-        totalCarbohydrates += Number(mult * carbohydrates).toFixed(2);
+        totalProtein += Number(mult * protein)
+        totalSaturatedFats += Number(mult * saturatedFats)
+        totalUnsaturatedFats += Number(mult * unsaturatedFats)
+        totalCarbohydrates += Number(mult * carbohydrates)
 
         recipeIngr.push(recipeIngredient);
     })
