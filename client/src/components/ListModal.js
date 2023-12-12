@@ -30,7 +30,11 @@ const ListModal = (props) => {
                     <Close/>
                 </IconButton>
             </Box>
-            <Typography padding={1} variant="h5">Following</Typography>
+            {props.isFollower
+            ?
+            <Typography padding={1} variant="h5">Followers</Typography>
+            :<Typography padding={1} variant="h5">Following</Typography>
+            }
             <Box sx={{width:"100%"}}>
                 <List>
                     {props.values.map((value, key) => {

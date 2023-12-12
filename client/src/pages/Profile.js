@@ -199,8 +199,8 @@ const Profile = ( props ) => {
     return(
         <div>
             <AchievementModal open={achievementOpen} onClose={handleAchievementClose} value={selectedAchievement}/>
-            <ListModal open={followingOpen} onClose={handleFollowingClose} values={following} setUserId={setUserId}/>
-            <ListModal open={followerOpen} onClose={handleFollowerClose} values={followers} setUserId={setUserId}/>
+            <ListModal isFollower={false} open={followingOpen} onClose={handleFollowingClose} values={following} setUserId={setUserId}/>
+            <ListModal isFollower={true} open={followerOpen} onClose={handleFollowerClose} values={followers} setUserId={setUserId}/>
             {isSelf ?
             <Box display="flex" sx={{position:"fixed", top:10, right:10}} flexDirection="row">
                 <IconButton>
