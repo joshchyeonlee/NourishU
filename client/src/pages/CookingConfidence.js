@@ -24,7 +24,7 @@ const ConfidenceIcon = (props) => {
 const CookingConfidence = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [userCookingConf, setUserCookingConf] = useState(-1);
+  const [userCookingConf, setUserCookingConf] = useState(3);
   const [isAchievementOpen, setIsAchievementOpen] = useState();
   const [userID, setUserID] = useState(-1);
   const [value, setValue] = useState(3);
@@ -45,6 +45,7 @@ const CookingConfidence = () => {
 
   const changeSliderValue = (value) => {
     setValue(formatNumber(value));
+    setUserCookingConf(formatNumber(value));
   }
 
   const insertUser = async () => {
