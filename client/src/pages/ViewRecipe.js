@@ -60,7 +60,7 @@ const ViewRecipe = () => {
         }
 
         try{
-            const res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
+            var res = await axios.post("http://localhost:3001/getRecipeIngredients", rID);
             setRecipeIngredients(res.data);
             setRecipeDifficulty(res.data[0].RDifficulty);
             setRecipeTitle(res.data[0].RecipeTitle);
@@ -178,7 +178,7 @@ const ViewRecipe = () => {
             Time: dayjs().format("YYYY-MM-DD hh:mm:ss"),
         }
         try{
-            const res = await axios.post("http://localhost:3001/assignFirstReviewAchievement", UID);
+            await axios.post("http://localhost:3001/assignFirstReviewAchievement", UID);
         } catch (err) {
             throw (err)
         }
