@@ -29,11 +29,14 @@ const YourRecipesList = (props) => {
                                 </Button>
                             </Box>
                             <Box padding={1}>
+                            { props.isSelf ?
                                 <Button
-                                    component={Link}
-                                    to={{pathname: "/editRecipe"}}
-                                    state={{from: props.from, recipeID: val.RecipeID}}
+                                component={Link}
+                                to={{pathname: "/editRecipe"}}
+                                state={{from: props.from, recipeID: val.RecipeID}}
                                 >Edit</Button>
+                                :<></>
+                            }
                             </Box>
                         </Box>
                     </Box>
