@@ -4,8 +4,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import axios from 'axios';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatString } from "../utils/inputCheck";
+import formatRecipeData from "../utils/formatRecipeData";
 
 const EditMeal = () => {
     const location = useLocation();
@@ -22,6 +23,20 @@ const EditMeal = () => {
         try{
             await axios.post("http://localhost:3001/removeRecipeFromMeal", RecipeID)
         } catch (err) {
+            navigate("/not-found");
+        }
+    }
+
+    const fetchMealContains = async () => {
+        const MealID = {
+            MealID: meal.MealID,
+        }
+        try{
+            const res = await axios.post("http://localhost:3001/getMealContains", MealID);
+            const obj = formatRecipeData(res.data);
+            setRecipes(obj.recipeIngredients);
+
+        } catch(err){
             navigate("/not-found");
         }
     }
@@ -59,6 +74,11 @@ const EditMeal = () => {
     const handleMealNameChange = (val) => {
         setMealName(formatString(val, 50));
     }
+
+    useEffect(() => {
+        if(meal === null) return;
+        fetchMealContains();
+    }, [])
 
     return(
         <div>
