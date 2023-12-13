@@ -1,4 +1,4 @@
-66//check table based off of:
+//check table based off of:
 //https://stackoverflow.com/questions/8829102/check-if-mysql-table-exists-without-using-select-from-syntax
 const checkTable =
 `SELECT * 
