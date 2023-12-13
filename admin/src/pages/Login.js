@@ -30,8 +30,8 @@ const Login = () => {
             Password: hash,
         }
         try{
-            const res = await axios.post("http://localhost:3001/checkUserCredentials", userCredentials);
-            setAdminID(res.data[0].UserID);
+            const res = await axios.post("http://localhost:3001/checkAdminCredentials", userCredentials);
+            setAdminID(res.data[0].AdminID);
             setIsCredentialValid(res.data.length > 0);
         } catch(err){
             throw(err);
