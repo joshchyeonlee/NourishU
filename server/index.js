@@ -1256,6 +1256,24 @@ app.post('/removeIngredientFromRecipe', (req, res) => {
     })
 })
 
+app.post('/checkAdminCredentials', (req, res) => {
+    const AdminEmail = String(req.body.Email);
+    const hash = String(req.body.Password);
+
+    if(!isValidEmail(AdminEmail)){
+        res.status(500).send();
+        return;
+    }
+
+    let sql = `SELECT AdminID FROM ADMIN WHERE AdminEmail = ? AND AdminPassword = ?`;
+    db.query(sql, [AdminEmail, hash], (err, result) => {
+        if(err){
+            res.status(500);
+        }
+        res.send(result);
+    })
+})
+
 app.listen(3001, () => {
     console.log("Server started on port 3001");
 });
